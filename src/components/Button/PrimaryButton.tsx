@@ -38,6 +38,8 @@ const styles = StyleSheet.create({
     borderRadius: theme.shapes.rounded.lg,
     backgroundColor: theme.colors.primary,
     elevation: 4,
+    shadowColor: theme.colors.backdrop,
+    shadowRadius: 12,
   },
   label: {
     fontSize: 16,

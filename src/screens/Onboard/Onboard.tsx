@@ -35,7 +35,7 @@ export function OnboardingScreen() {
 
 const styles = StyleSheet.create({
   body: {
-    marginTop: 8,
+    marginTop: 12,
   },
   button: {
     marginTop: 36,

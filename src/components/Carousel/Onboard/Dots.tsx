@@ -1,30 +1,20 @@
 import { theme } from "@exploriana/config";
-import { StyleSheet, useWindowDimensions } from "react-native";
+import { useMemo } from "react";
+import { StyleSheet } from "react-native";
 import Animated, { interpolate, interpolateColor, useAnimatedStyle } from "react-native-reanimated";
 
 interface DotProps {
   index: number;
   scrollX: Animated.SharedValue<number>;
-  length: number;
+  input: Array<number>;
 }
 
-export function Dots({ index, scrollX, length }: DotProps) {
-  const { width } = useWindowDimensions();
-
+export function Dots({ index, scrollX, input }: DotProps) {
   const activeColor = theme.colors.primary;
   const inactiveColor = theme.colors.tint;
 
-  const input = Array(length)
-    .fill(0)
-    .map((_, i) => i * width);
-
-  const backgroundOutput = Array(length)
-    .fill(0)
-    .map((_, i) => (i === index ? activeColor : inactiveColor));
-
-  const widthOutput = Array(length)
-    .fill(0)
-    .map((_, i) => (i === index ? 30 : 5));
+  const widthOutput = useMemo(() => input.map((_, i) => (i === index ? 30 : 5)), [input, index]);
+  const backgroundOutput = useMemo(() => input.map((_, i) => (i === index ? activeColor : inactiveColor)), [index, input]);
 
   const style = useAnimatedStyle(() => {
     const backgroundColor = interpolateColor(scrollX.value, input, backgroundOutput, "RGB") as string;

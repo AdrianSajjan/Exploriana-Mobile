@@ -29,7 +29,7 @@ export function Item({ index, input, item, scrollX }: ItemProps) {
   return (
     <Box width={width} alignItems="center">
       <Animated.View style={[styles.container, { width: width - 64 }, style]}>
-        <Animated.Image source={source} style={[styles.image]} />
+        <Animated.Image accessibilityLabel="carousel-image" source={source} style={[styles.image]} />
       </Animated.View>
     </Box>
   );

@@ -36,6 +36,7 @@ export function OnboardCarousel({ images }: CarouselProps) {
         horizontal
         data={images}
         renderItem={renderItem}
+        accessibilityLabel="carousel"
       />
       <Box flexDirection="row" alignItems="center" justifyContent="center" marginTop={12}>
         {images.map(({ key }, index) => (

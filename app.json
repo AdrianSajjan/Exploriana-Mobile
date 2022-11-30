@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Exploriana",
+    "slug": "exploriana",
+    "version": "1.0.0",
+    "icon": "./assets/images/app-icon.png",
+    "assetBundlePatterns": ["**/*"],
+    "splash": {
+      "image": "./assets/images/splashscreen.png",
+      "backgroundColor": "#FFFFFF",
+      "resizeMode": "contain"
+    }
+  }
+}

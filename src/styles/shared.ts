@@ -11,6 +11,9 @@ export const sharedStyles = StyleSheet.create({
   minGrow: {
     flexGrow: 0,
   },
+  pvSmall: {
+    paddingVertical: 16,
+  },
   pv: {
     paddingVertical: 24,
   },

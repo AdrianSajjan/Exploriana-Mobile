@@ -10,7 +10,7 @@ module.exports = function (api) {
           root: ["."],
           alias: {
             "@exploriana": "./src",
-            "@resources/": "./assets",
+            "@resources": "./assets",
           },
         },
       ],

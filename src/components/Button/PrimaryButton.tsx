@@ -47,19 +47,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 32,
     justifyContent: "center",
     borderRadius: theme.shapes.rounded.lg,
-    ...Platform.select({
-      android: {
-        elevation: 3,
-      },
-      ios: {
-        shadowColor: theme.colors.backdrop,
-        shadowRadius: 12,
-      },
-      default: {
-        shadowColor: theme.colors.backdrop,
-        shadowRadius: 12,
-      },
-    }),
+    ...theme.shadows.md,
   },
   label: {
     fontSize: 16,

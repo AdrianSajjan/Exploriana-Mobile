@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 export const theme = {
   colors: {
     primary: "#FF863C",
@@ -5,7 +7,7 @@ export const theme = {
     text: "#6A7F87",
     heading: "#000000",
     placeholder: "#999999",
-    background: "#F0F0F0",
+    background: "#F4F4F4",
     surface: "#FFFFFF",
     backdrop: "#00000033",
     error: "#DC2626",
@@ -24,5 +26,46 @@ export const theme = {
     regular: "Montserrat",
     medium: "Montserrat-Medium",
     bold: "Montserrat-Bold",
+  },
+  shadows: {
+    sm: Platform.select({
+      android: {
+        elevation: 1,
+      },
+      ios: {
+        shadowColor: "#00000033",
+        shadowRadius: 8,
+      },
+      default: {
+        shadowColor: "#00000033",
+        shadowRadius: 8,
+      },
+    }),
+    md: Platform.select({
+      android: {
+        elevation: 3,
+      },
+      ios: {
+        shadowColor: "#00000033",
+        shadowRadius: 12,
+      },
+      default: {
+        shadowColor: "#00000033",
+        shadowRadius: 12,
+      },
+    }),
+    lg: Platform.select({
+      android: {
+        elevation: 5,
+      },
+      ios: {
+        shadowColor: "#00000033",
+        shadowRadius: 16,
+      },
+      default: {
+        shadowColor: "#00000033",
+        shadowRadius: 16,
+      },
+    }),
   },
 };

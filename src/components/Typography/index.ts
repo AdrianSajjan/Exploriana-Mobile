@@ -1,3 +1,3 @@
 export * from "./Body";
 export * from "./Heading";
-// export * from './Caption'
+export * from "./Caption";

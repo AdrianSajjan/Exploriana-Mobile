@@ -2,8 +2,7 @@ import { useCallback } from "react";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { OnboardingScreen } from "@exploriana/screens/Onboard";
-import { ForgotPasswordScreen, LoginScreen, RegisterScreen, ResetPasswordScreen } from "@exploriana/screens/Authentication";
+import { HomeScreen } from "@exploriana/screens/Home";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -24,7 +23,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
-      <ResetPasswordScreen />
+      <HomeScreen />
     </SafeAreaProvider>
   );
 }

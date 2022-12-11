@@ -28,15 +28,12 @@ export function ResetPasswordScreen({}: ResetPasswordScreenProps) {
     <SafeAreaView style={sharedStyles.fullHeight}>
       <StatusBar backgroundColor="white" style="dark" />
       <ScrollView contentContainerStyle={[sharedStyles.fullGrow, sharedStyles.justifyBetween, sharedStyles.pv]}>
-        <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} flexDirection="row">
-          <Clouds height={65} width={250} />
-          <Box marginLeft={18} marginTop={24}>
-            <Clouds height={65} width={250} />
-          </Box>
+        <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} alignItems="center">
+          <Clouds />
         </Box>
         <View style={[sharedStyles.ph]}>
           <Heading textAlign="center">Reset your password?</Heading>
-          <Body style={styles.caption} textAlign="center">
+          <Body style={styles.caption} textAlign="center" lineHeight={26}>
             Use a strong password with letters, numbers and symbols. Change it often.
           </Body>
           <Box marginTop={32}>

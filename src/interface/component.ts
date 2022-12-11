@@ -11,6 +11,7 @@ export interface TypographyProps extends TextProps {
   textAlign?: "center" | "right" | "left";
   size?: "sm" | "md" | "lg";
   color?: string;
+  lineHeight?: number;
 }
 
 export interface ButtonProps extends PressableProps {

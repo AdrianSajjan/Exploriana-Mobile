@@ -1,3 +1,4 @@
+import { theme } from "@exploriana/config";
 import { StyleSheet } from "react-native";
 
 export const sharedStyles = StyleSheet.create({
@@ -30,5 +31,9 @@ export const sharedStyles = StyleSheet.create({
   },
   justifyBetween: {
     justifyContent: "space-between",
+  },
+  inputIcon: {
+    fontSize: 18,
+    color: theme.colors.placeholder,
   },
 });

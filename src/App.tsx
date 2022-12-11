@@ -3,6 +3,7 @@ import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { OnboardingScreen } from "@exploriana/screens/Onboard";
+import { ForgotPasswordScreen, LoginScreen, RegisterScreen, ResetPasswordScreen } from "@exploriana/screens/Authentication";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -23,7 +24,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
-      <OnboardingScreen />
+      <ResetPasswordScreen />
     </SafeAreaProvider>
   );
 }

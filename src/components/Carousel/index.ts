@@ -1,1 +1,1 @@
-export * from "./Onboard/Onboard";
+export * from "./Onboard/Carousel";

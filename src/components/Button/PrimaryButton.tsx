@@ -1,11 +1,19 @@
+import * as React from "react";
 import { theme } from "@exploriana/config";
+import { Box } from "@exploriana/components/Box";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import { Platform, Pressable, StyleSheet, Text, ViewStyle } from "react-native";
 import { ButtonProps } from "@exploriana/interface";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export function PrimaryButton({ label, fullWidth, style, onPress }: ButtonProps) {
+interface PrimaryButtonProps extends ButtonProps {
+  background?: string;
+  color?: string;
+  icon?: React.ReactNode;
+}
+
+export function PrimaryButton({ label, fullWidth, style, color, icon, background, onPress }: PrimaryButtonProps) {
   const scale = useSharedValue(1);
 
   const rStyle = useAnimatedStyle(() => {
@@ -19,11 +27,13 @@ export function PrimaryButton({ label, fullWidth, style, onPress }: ButtonProps)
 
   const pStyle: ViewStyle = {
     width: fullWidth ? "100%" : "auto",
+    backgroundColor: background || theme.colors.primary,
   };
 
   return (
     <AnimatedPressable style={[styles.button, rStyle, pStyle, style]} onPressIn={onPressIn} onPressOut={onPressOut} onPress={onPress}>
-      <Text style={styles.label}>{label}</Text>
+      {icon ? <Box marginRight={12}>{icon}</Box> : null}
+      <Text style={[styles.label, { color: color || theme.colors.surface }]}>{label}</Text>
     </AnimatedPressable>
   );
 }
@@ -33,17 +43,26 @@ const styles = StyleSheet.create({
     height: 48,
     minWidth: 120,
     alignItems: "center",
+    flexDirection: "row",
     paddingHorizontal: 32,
     justifyContent: "center",
     borderRadius: theme.shapes.rounded.lg,
-    backgroundColor: theme.colors.primary,
-    elevation: 4,
-    shadowColor: theme.colors.backdrop,
-    shadowRadius: 12,
+    ...Platform.select({
+      android: {
+        elevation: 3,
+      },
+      ios: {
+        shadowColor: theme.colors.backdrop,
+        shadowRadius: 12,
+      },
+      default: {
+        shadowColor: theme.colors.backdrop,
+        shadowRadius: 12,
+      },
+    }),
   },
   label: {
     fontSize: 16,
     fontFamily: theme.font.medium,
-    color: theme.colors.surface,
   },
 });

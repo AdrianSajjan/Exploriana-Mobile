@@ -8,8 +8,19 @@ import { sharedStyles } from "@exploriana/styles/shared";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { onboardCarousel } from "@exploriana/constants";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { AuthStackParamList } from "@exploriana/interface/navigation";
+
+type NavigationProps = NativeStackNavigationProp<AuthStackParamList, "Onboard">;
 
 export function OnboardingScreen() {
+  const navigation = useNavigation<NavigationProps>();
+
+  function handleOnClick() {
+    navigation.navigate("Login");
+  }
+
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
       <StatusBar backgroundColor="white" style="dark" />
@@ -26,7 +37,7 @@ export function OnboardingScreen() {
             As one of the leading travel agencies in the world, Exploriana is here to help you plan the perfect trip. We are budget friendly and won't
             hurt your wallet.
           </Body>
-          <PrimaryButton label="Get Started" fullWidth style={styles.button} />
+          <PrimaryButton label="Get Started" fullWidth style={styles.button} onPress={handleOnClick} />
         </View>
       </ScrollView>
     </SafeAreaView>

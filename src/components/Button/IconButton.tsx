@@ -12,7 +12,6 @@ export function IconButton({ children }: IconButton) {
       style={{
         paddingVertical: 2,
         paddingHorizontal: 4,
-        backgroundColor: "red",
       }}
     >
       {children}

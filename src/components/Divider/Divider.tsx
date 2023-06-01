@@ -24,9 +24,9 @@ const styles = StyleSheet.create({
 export function Divider({ caption, style }: DividerProps) {
   return (
     <View style={[styles.container, style]}>
-      <Box flex={1} height={1.5} backgroundColor={theme.colors.background}></Box>
+      <Box flex={1} height={1.5} backgroundColor={theme.colors.divider}></Box>
       {caption ? <Text style={styles.text}>{caption}</Text> : null}
-      <Box flex={1} height={1.5} backgroundColor={theme.colors.background}></Box>
+      <Box flex={1} height={1.5} backgroundColor={theme.colors.divider}></Box>
     </View>
   );
 }

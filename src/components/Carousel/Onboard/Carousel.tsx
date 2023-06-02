@@ -1,8 +1,10 @@
-import { Box } from "@exploriana/components/Box";
-import { CarouselProps, ListImageItem } from "@exploriana/interface";
 import { useCallback, useMemo } from "react";
 import { FlatList, ListRenderItem, StyleSheet, useWindowDimensions } from "react-native";
 import Animated, { useAnimatedScrollHandler, useSharedValue } from "react-native-reanimated";
+
+import { Box } from "@exploriana/components/Box";
+import { CarouselProps, ListImageItem } from "@exploriana/interface";
+
 import { Dots } from "./Dots";
 import { Item } from "./Item";
 
@@ -19,10 +21,7 @@ export function OnboardCarousel({ images }: CarouselProps) {
     scrollX.value = x;
   });
 
-  const renderItem: ListRenderItem<ListImageItem> = useCallback(
-    ({ item, index }) => <Item item={item} index={index} input={input} scrollX={scrollX} />,
-    [images, width, scrollX]
-  );
+  const renderItem: ListRenderItem<ListImageItem> = useCallback(({ item, index }) => <Item item={item} index={index} input={input} scrollX={scrollX} />, [images, width, scrollX]);
 
   return (
     <Box>

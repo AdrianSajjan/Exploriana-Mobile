@@ -1,17 +1,15 @@
-import { Box } from "@exploriana/components/Box";
-import { IconButton } from "@exploriana/components/Button";
-import { CarouselDestinationCard, CarouselOfferCard, ServiceCard } from "@exploriana/components/Card";
-import { Bus, Flight, Hotel, Restro, Tours, Train } from "@exploriana/components/Icons";
-import { SearchBar } from "@exploriana/components/Input";
-import { SectionHeader } from "@exploriana/components/Layout";
-import { theme } from "@exploriana/config";
-import { sharedStyles } from "@exploriana/styles/shared";
-import { Feather } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
-import { Image, ScrollView, StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-interface HomeScreenProps {}
+import { Box } from "@exploriana/components/Box";
+import { SearchBar } from "@exploriana/components/Input";
+import { SectionHeader } from "@exploriana/components/Layout";
+import { Bus, Flight, Hotel, Restro, Tours, Train } from "@exploriana/components/Icons";
+import { CarouselDestinationCard, CarouselOfferCard, ServiceCard } from "@exploriana/components/Card";
+
+import { theme } from "@exploriana/config";
+import { sharedStyles } from "@exploriana/styles/shared";
 
 const styles = StyleSheet.create({
   brand: {
@@ -21,28 +19,20 @@ const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
     paddingRight: 24,
-    paddingVertical: 12,
+    paddingTop: 10,
+    paddingBottom: 12,
   },
   container: {
     flexGrow: 0,
   },
 });
 
-export function HomeScreen({}: HomeScreenProps) {
+export function HomeScreen() {
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
       <StatusBar backgroundColor={theme.colors.background} style="dark" />
       <ScrollView contentContainerStyle={[sharedStyles.fullGrow, sharedStyles.pvSmall]}>
-        <Box flexDirection="row" alignItems="center" justifyContent="space-between" paddingHorizontal={24}>
-          <IconButton>
-            <Feather name="menu" size={24} color={theme.colors.placeholder} />
-          </IconButton>
-          <Image source={require("@resources/images/brand-1.png")} style={styles.brand} resizeMode="contain" />
-          <IconButton>
-            <Feather name="bell" size={24} color={theme.colors.placeholder} />
-          </IconButton>
-        </Box>
-        <Box paddingHorizontal={24} marginTop={24}>
+        <Box paddingHorizontal={24}>
           <SearchBar placeholder="Search for places, hotels, flights ..." />
         </Box>
         <Box flexWrap="wrap" flexDirection="row" paddingHorizontal={16} paddingTop={8}>

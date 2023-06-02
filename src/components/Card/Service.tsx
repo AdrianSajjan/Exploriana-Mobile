@@ -11,7 +11,7 @@ interface ServiceCardProp {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.surface,
     flex: 1,
     minWidth: 95,
     minHeight: 90,

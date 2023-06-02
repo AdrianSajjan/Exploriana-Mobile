@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingLeft: 12,
     paddingRight: 16,
-    ...theme.shadows.sm,
   },
   image: {
     height: 120,

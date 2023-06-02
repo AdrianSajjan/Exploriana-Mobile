@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     height: 56,
     paddingHorizontal: 18,
     flexDirection: "row",
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.surface,
     borderRadius: theme.shapes.rounded.lg,
   },
   invalid: {

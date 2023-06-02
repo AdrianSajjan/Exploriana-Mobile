@@ -44,6 +44,7 @@ export default function App() {
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Forgot-Password" component={ForgotPasswordScreen} />
           <Stack.Screen name="Reset-Password" component={ResetPasswordScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

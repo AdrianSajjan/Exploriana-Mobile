@@ -1,35 +1,62 @@
 import { Box } from "@exploriana/components/Box";
+import { LinkButton, PrimaryButton } from "@exploriana/components/Button";
+import { Divider } from "@exploriana/components/Divider";
 import { Airplane } from "@exploriana/components/Icons";
 import { PasswordField, TextField } from "@exploriana/components/Input";
 import { Body, Heading } from "@exploriana/components/Typography";
+import { theme } from "@exploriana/config";
+import { AuthStackParamList } from "@exploriana/interface/navigation";
 import { sharedStyles } from "@exploriana/styles/shared";
+import { Ionicons, Zocial } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
-import { Ionicons, Zocial } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { PrimaryButton, TextButton } from "@exploriana/components/Button";
-import { Divider } from "@exploriana/components/Divider";
-import { theme } from "@exploriana/config";
 
-interface RegisterScreenProps {}
+type NavigationProps = NativeStackNavigationProp<AuthStackParamList, "Register">;
 
 const styles = StyleSheet.create({
   textField: {
     marginTop: 16,
   },
-  button: {
+  facebook: {
+    flex: 1,
+    marginRight: 8,
+  },
+  google: {
+    flex: 1,
+    marginLeft: 8,
+  },
+  register: {
     marginTop: 20,
   },
-  forgotPassword: {
-    marginTop: 4,
-    alignSelf: "flex-end",
+  footer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  login: {
+    marginLeft: 4,
   },
 });
 
-export function RegisterScreen({}: RegisterScreenProps) {
+const GoogleIconSource = { uri: "https://assets.stickpng.com/images/5847f9cbcef1014c0b5e48c8.png", height: 24, width: 24 };
+
+export function RegisterScreen() {
+  const navigation = useNavigation<NavigationProps>();
+
+  function handleRegisterWithEmailAndPassword() {
+    navigation.navigate("Home");
+  }
+
+  function handleLogin() {
+    navigation.navigate("Login");
+  }
+
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
-      <StatusBar backgroundColor="white" style="dark" />
+      <StatusBar backgroundColor={theme.colors.background} style="dark" />
       <ScrollView contentContainerStyle={[sharedStyles.fullGrow, sharedStyles.justifyBetween, sharedStyles.pv]}>
         <View style={[sharedStyles.ph]}>
           <Box alignItems="center">
@@ -63,33 +90,29 @@ export function RegisterScreen({}: RegisterScreenProps) {
               helperText="Re-enter your password"
               errorText="Passwords doesn't match"
             />
-            <PrimaryButton style={styles.button} label="Register" />
+            <PrimaryButton style={styles.register} label="Register" onPress={handleRegisterWithEmailAndPassword} />
           </Box>
           <Divider style={{ marginTop: 24 }} caption="Or Register With" />
           <Box flexDirection="row" marginTop={24}>
             <PrimaryButton
               label="Facebook"
-              style={{ flex: 1, marginRight: 8 }}
+              style={styles.facebook}
               background="#1E63B5"
               color={theme.colors.surface}
               icon={<Zocial name="facebook" size={20} color={theme.colors.surface} />}
             />
             <PrimaryButton
-              icon={
-                <Image
-                  resizeMode="contain"
-                  source={{ uri: "https://assets.stickpng.com/images/5847f9cbcef1014c0b5e48c8.png", height: 24, width: 24 }}
-                />
-              }
-              style={{ flex: 1, marginLeft: 8 }}
+              icon={<Image resizeMode="contain" source={GoogleIconSource} />}
+              style={styles.google}
               label="Google"
               color={theme.colors.heading}
               background={theme.colors.surface}
             />
           </Box>
         </View>
-        <View>
-          <Body textAlign="center">Already have an account? Login</Body>
+        <View style={styles.footer}>
+          <Body textAlign="center">Already have an account?</Body>
+          <LinkButton label="Login" style={styles.login} onPress={handleLogin} />
         </View>
       </ScrollView>
     </SafeAreaView>

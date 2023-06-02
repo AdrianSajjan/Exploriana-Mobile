@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     height: 56,
     paddingLeft: 24,
     flexDirection: "row",
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.surface,
     borderRadius: theme.shapes.rounded.lg,
   },
   input: {

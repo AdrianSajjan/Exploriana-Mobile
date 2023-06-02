@@ -1,35 +1,78 @@
+import { SafeAreaView } from "react-native-safe-area-context";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
+
+import { StatusBar } from "expo-status-bar";
+import { Ionicons, Zocial } from "@expo/vector-icons";
+
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
 import { Box } from "@exploriana/components/Box";
 import { Airplane } from "@exploriana/components/Icons";
-import { PasswordField, TextField } from "@exploriana/components/Input";
-import { Body, Heading } from "@exploriana/components/Typography";
-import { sharedStyles } from "@exploriana/styles/shared";
-import { StatusBar } from "expo-status-bar";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
-import { Ionicons, Zocial } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { PrimaryButton, TextButton } from "@exploriana/components/Button";
 import { Divider } from "@exploriana/components/Divider";
-import { theme } from "@exploriana/config";
+import { Body, Heading } from "@exploriana/components/Typography";
+import { PasswordField, TextField } from "@exploriana/components/Input";
+import { LinkButton, PrimaryButton, TextButton } from "@exploriana/components/Button";
 
-interface LoginScreenProps {}
+import { theme } from "@exploriana/config";
+import { sharedStyles } from "@exploriana/styles/shared";
+
+import { AuthStackParamList } from "@exploriana/interface/navigation";
+
+type NavigationProps = NativeStackNavigationProp<AuthStackParamList, "Login">;
 
 const styles = StyleSheet.create({
   textField: {
     marginTop: 16,
   },
-  button: {
+  divider: {
+    marginTop: 12,
+  },
+  facebook: {
+    flex: 1,
+    marginRight: 8,
+  },
+  google: {
+    flex: 1,
+    marginLeft: 8,
+  },
+  login: {
     marginTop: 20,
   },
   forgotPassword: {
-    marginTop: 4,
+    marginTop: 0,
     alignSelf: "flex-end",
+  },
+  footer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  registerNow: {
+    marginLeft: 4,
   },
 });
 
-export function LoginScreen({}: LoginScreenProps) {
+const GoogleIconSource = { uri: "https://assets.stickpng.com/images/5847f9cbcef1014c0b5e48c8.png", height: 24, width: 24 };
+
+export function LoginScreen() {
+  const navigation = useNavigation<NavigationProps>();
+
+  function handleLoginWithEmailAndPassword() {
+    navigation.navigate("Home");
+  }
+
+  function handleRegisterNow() {
+    navigation.navigate("Register");
+  }
+
+  function handleForgotPassword() {
+    navigation.navigate("Forgot-Password");
+  }
+
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
-      <StatusBar backgroundColor="white" style="dark" />
+      <StatusBar backgroundColor={theme.colors.background} style="dark" />
       <ScrollView contentContainerStyle={[sharedStyles.fullGrow, sharedStyles.justifyBetween, sharedStyles.pv]}>
         <View style={sharedStyles.ph}>
           <Box alignItems="center">
@@ -50,34 +93,30 @@ export function LoginScreen({}: LoginScreenProps) {
               helperText="Enter your password"
               errorText="Please provide your password"
             />
-            <PrimaryButton style={styles.button} label="Login" />
+            <PrimaryButton style={styles.login} label="Login" onPress={handleLoginWithEmailAndPassword} />
           </Box>
-          <TextButton style={styles.forgotPassword} label="Forgot Password?" />
-          <Divider style={{ marginTop: 12 }} caption="Or Login With" />
+          <TextButton style={styles.forgotPassword} label="Forgot Password?" onPress={handleForgotPassword} />
+          <Divider style={styles.divider} caption="Or Login With" />
           <Box flexDirection="row" marginTop={24}>
             <PrimaryButton
               label="Facebook"
-              style={{ flex: 1, marginRight: 8 }}
               background="#1E63B5"
+              style={styles.facebook}
               color={theme.colors.surface}
               icon={<Zocial name="facebook" size={20} color={theme.colors.surface} />}
             />
             <PrimaryButton
-              icon={
-                <Image
-                  resizeMode="contain"
-                  source={{ uri: "https://assets.stickpng.com/images/5847f9cbcef1014c0b5e48c8.png", height: 24, width: 24 }}
-                />
-              }
-              style={{ flex: 1, marginLeft: 8 }}
               label="Google"
+              style={styles.google}
               color={theme.colors.heading}
               background={theme.colors.surface}
+              icon={<Image resizeMode="contain" source={GoogleIconSource} />}
             />
           </Box>
         </View>
-        <View>
-          <Body textAlign="center">Don't have an account? Register Now</Body>
+        <View style={styles.footer}>
+          <Body textAlign="center">Don't have an account?</Body>
+          <LinkButton label="Register Now" style={styles.registerNow} onPress={handleRegisterNow} />
         </View>
       </ScrollView>
     </SafeAreaView>

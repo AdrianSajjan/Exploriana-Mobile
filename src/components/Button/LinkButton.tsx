@@ -1,19 +1,11 @@
-import * as React from "react";
 import { theme } from "@exploriana/config";
-import { Box } from "@exploriana/components/Box";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
-import { Platform, Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
 import { ButtonProps } from "@exploriana/interface";
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-interface PrimaryButtonProps extends ButtonProps {
-  background?: string;
-  color?: string;
-  icon?: React.ReactNode;
-}
-
-export function PrimaryButton({ label, fullWidth, style, color, icon, background, onPress }: PrimaryButtonProps) {
+export function LinkButton({ label, fullWidth, style, onPress }: ButtonProps) {
   const scale = useSharedValue(1);
 
   const rStyle = useAnimatedStyle(() => {
@@ -22,18 +14,16 @@ export function PrimaryButton({ label, fullWidth, style, color, icon, background
     };
   });
 
-  const onPressIn = () => (scale.value = 0.98);
+  const onPressIn = () => (scale.value = 0.95);
   const onPressOut = () => (scale.value = 1);
 
   const pStyle: ViewStyle = {
     width: fullWidth ? "100%" : "auto",
-    backgroundColor: background || theme.colors.primary,
   };
 
   return (
     <AnimatedPressable style={[styles.button, rStyle, pStyle, style]} onPressIn={onPressIn} onPressOut={onPressOut} onPress={onPress}>
-      {icon ? <Box marginRight={12}>{icon}</Box> : null}
-      <Text style={[styles.label, { color: color || theme.colors.surface }]}>{label}</Text>
+      <Text style={styles.label}>{label}</Text>
     </AnimatedPressable>
   );
 }
@@ -41,15 +31,13 @@ export function PrimaryButton({ label, fullWidth, style, color, icon, background
 const styles = StyleSheet.create({
   button: {
     height: 48,
-    minWidth: 120,
     alignItems: "center",
-    flexDirection: "row",
-    paddingHorizontal: 32,
     justifyContent: "center",
-    borderRadius: theme.shapes.rounded.lg,
   },
   label: {
     fontSize: 16,
-    fontFamily: theme.font.medium,
+    color: theme.colors.text,
+    textDecorationLine: "underline",
+    fontFamily: theme.font.regular,
   },
 });

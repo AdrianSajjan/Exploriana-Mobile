@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 export function HomeScreen({}: HomeScreenProps) {
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
-      <StatusBar backgroundColor="white" style="dark" />
+      <StatusBar backgroundColor={theme.colors.background} style="dark" />
       <ScrollView contentContainerStyle={[sharedStyles.fullGrow, sharedStyles.pvSmall]}>
         <Box flexDirection="row" alignItems="center" justifyContent="space-between" paddingHorizontal={24}>
           <IconButton>
@@ -54,24 +54,12 @@ export function HomeScreen({}: HomeScreenProps) {
           <ServiceCard caption="Trains" icon={<Train height={36} />} />
         </Box>
         <SectionHeader button="See All" title="Offers" />
-        <ScrollView
-          horizontal
-          overScrollMode="never"
-          style={styles.container}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.content}
-        >
+        <ScrollView horizontal overScrollMode="never" style={styles.container} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.content}>
           <CarouselOfferCard />
           <CarouselOfferCard />
         </ScrollView>
         <SectionHeader button="See All" title="Popular Destinations" marginTop={16} />
-        <ScrollView
-          horizontal
-          overScrollMode="never"
-          style={styles.container}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.content}
-        >
+        <ScrollView horizontal overScrollMode="never" style={styles.container} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.content}>
           <CarouselDestinationCard />
           <CarouselDestinationCard />
         </ScrollView>

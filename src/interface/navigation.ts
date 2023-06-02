@@ -4,8 +4,8 @@ export type AuthStackParamList = {
   Register: undefined;
   "Forgot-Password": undefined;
   "Reset-Password": undefined;
-};
+} & AppStackParamList;
 
-type AppStackParamList = {
+export type AppStackParamList = {
   Home: undefined;
 };

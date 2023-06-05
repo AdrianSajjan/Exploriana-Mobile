@@ -1,7 +1,7 @@
 import * as React from "react";
-import { ButtonProps, PressableProps, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native";
 
-interface IconButton extends PressableProps {
+interface IconButton extends TouchableOpacityProps {
   style?: StyleProp<ViewStyle>;
   children: React.ReactNode;
 }
@@ -13,9 +13,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export function IconButton({ style, children }: IconButton) {
+export function IconButton({ style, children, ...props }: IconButton) {
   return (
-    <TouchableOpacity activeOpacity={0.6} style={[style, styles.button]}>
+    <TouchableOpacity activeOpacity={0.6} style={[style, styles.button]} {...props}>
       {children}
     </TouchableOpacity>
   );

@@ -42,4 +42,7 @@ export const sharedStyles = StyleSheet.create({
     fontSize: 18,
     color: theme.colors.placeholder,
   },
+  headerDescription: {
+    marginTop: -2,
+  },
 });

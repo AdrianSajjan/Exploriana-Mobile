@@ -8,14 +8,14 @@ import { NativeStackNavigationOptions, createNativeStackNavigator } from "@react
 
 import { HomeScreen } from "@exploriana/screens/Home";
 import { OnboardingScreen } from "@exploriana/screens/Onboard";
+import { SearchTrainResultScreen, SearchTrainScreen } from "@exploriana/screens/Trains";
 import { ForgotPasswordScreen, LoginScreen, RegisterScreen, ResetPasswordScreen } from "@exploriana/screens/Authentication";
 
 import { AuthStackParamList } from "@exploriana/interface/navigation";
-import { TrainSearchScreen } from "@exploriana/screens/Trains";
 
 SplashScreen.preventAutoHideAsync();
 
-const Stack = createNativeStackNavigator</*AuthStackParamList*/ any>();
+const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 const screenOptions: NativeStackNavigationOptions = {
   headerShown: false,
@@ -40,13 +40,14 @@ export default function App() {
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <NavigationContainer>
         <Stack.Navigator screenOptions={screenOptions}>
-          <Stack.Screen name="Train-Search" component={TrainSearchScreen} />
-          {/* <Stack.Screen name="Onboard" component={OnboardingScreen} />
+          <Stack.Screen name="Onboard" component={OnboardingScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Register" component={RegisterScreen} />
           <Stack.Screen name="Forgot-Password" component={ForgotPasswordScreen} />
           <Stack.Screen name="Reset-Password" component={ResetPasswordScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} /> */}
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Search-Trains" component={SearchTrainScreen} />
+          <Stack.Screen name="Search-Train-Results" component={SearchTrainResultScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

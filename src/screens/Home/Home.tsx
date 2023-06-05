@@ -14,6 +14,11 @@ import { theme } from "@exploriana/config";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { IconButton } from "@exploriana/components/Button";
 import { Avatar } from "@exploriana/components/Avatar/Avatar";
+import { AppStackParamList } from "@exploriana/interface/navigation";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
+
+type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Search-Trains">;
 
 const styles = StyleSheet.create({
   brand: {
@@ -24,7 +29,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingRight: 24,
     paddingTop: 10,
-    paddingBottom: 12,
   },
   container: {
     flexGrow: 0,
@@ -35,6 +39,8 @@ const styles = StyleSheet.create({
 });
 
 export function HomeScreen() {
+  const navigation = useNavigation<NavigationProps>();
+
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
       <StatusBar backgroundColor={theme.colors.background} style="dark" />
@@ -62,14 +68,14 @@ export function HomeScreen() {
           <ServiceCard caption="Restro" icon={<Restro height={36} />} />
           <ServiceCard caption="Tours" icon={<Tours height={36} />} />
           <ServiceCard caption="Bus" icon={<Bus height={36} />} />
-          <ServiceCard caption="Trains" icon={<Train height={36} />} />
+          <ServiceCard caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
         </Box>
-        <SectionHeader button="See All" title="Offers" />
+        <SectionHeader button="See All" title="Offers" marginTop={28} />
         <ScrollView horizontal overScrollMode="never" style={styles.container} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.content}>
           <CarouselOfferCard />
           <CarouselOfferCard />
         </ScrollView>
-        <SectionHeader button="See All" title="Popular Destinations" marginTop={16} />
+        <SectionHeader button="See All" title="Popular Destinations" marginTop={24} />
         <ScrollView horizontal overScrollMode="never" style={styles.container} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.content}>
           <CarouselDestinationCard />
           <CarouselDestinationCard />

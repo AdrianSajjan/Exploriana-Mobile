@@ -8,17 +8,20 @@ export const sharedStyles = StyleSheet.create({
   fullGrow: {
     flexGrow: 1,
   },
+  flexRow: {
+    flexDirection: "row",
+  },
   minGrow: {
     flexGrow: 0,
+  },
+  ph: {
+    paddingHorizontal: 24,
   },
   pvSmall: {
     paddingVertical: 16,
   },
   pv: {
     paddingVertical: 24,
-  },
-  ph: {
-    paddingHorizontal: 24,
   },
   pvMedium: {
     paddingVertical: 36,

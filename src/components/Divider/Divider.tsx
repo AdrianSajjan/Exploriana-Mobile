@@ -4,6 +4,7 @@ import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
 interface DividerProps {
   caption?: string;
+  color?: string;
   style?: StyleProp<ViewStyle>;
 }
 
@@ -15,18 +16,17 @@ const styles = StyleSheet.create({
     marginHorizontal: 8,
   },
   container: {
-    width: "100%",
     flexDirection: "row",
     alignItems: "center",
   },
 });
 
-export function Divider({ caption, style }: DividerProps) {
+export function Divider({ caption, style, color = theme.colors.divider }: DividerProps) {
   return (
     <View style={[styles.container, style]}>
-      <Box flex={1} height={1} backgroundColor={theme.colors.divider}></Box>
+      <Box flex={1} height={1} backgroundColor={color}></Box>
       {caption ? <Text style={styles.text}>{caption}</Text> : null}
-      <Box flex={1} height={1} backgroundColor={theme.colors.divider}></Box>
+      <Box flex={1} height={1} backgroundColor={color}></Box>
     </View>
   );
 }

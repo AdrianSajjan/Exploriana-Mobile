@@ -1,15 +1,19 @@
 import { StatusBar } from "expo-status-bar";
-import { ScrollView, StyleSheet } from "react-native";
+import { Image, ScrollView, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Box } from "@exploriana/components/Box";
 import { SearchBar } from "@exploriana/components/Input";
+import { Heading, Body } from "@exploriana/components/Typography";
 import { SectionHeader } from "@exploriana/components/Layout";
 import { Bus, Flight, Hotel, Restro, Tours, Train } from "@exploriana/components/Icons";
 import { CarouselDestinationCard, CarouselOfferCard, ServiceCard } from "@exploriana/components/Card";
 
 import { theme } from "@exploriana/config";
 import { sharedStyles } from "@exploriana/styles/shared";
+import { IconButton } from "@exploriana/components/Button";
+import { Avatar } from "@exploriana/components/Avatar/Avatar";
 
 const styles = StyleSheet.create({
   brand: {
@@ -25,6 +29,9 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 0,
   },
+  notification: {
+    marginLeft: 12,
+  },
 });
 
 export function HomeScreen() {
@@ -32,7 +39,21 @@ export function HomeScreen() {
     <SafeAreaView style={sharedStyles.fullHeight}>
       <StatusBar backgroundColor={theme.colors.background} style="dark" />
       <ScrollView contentContainerStyle={[sharedStyles.fullGrow, sharedStyles.pvSmall]}>
-        <Box paddingHorizontal={24}>
+        <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} flexDirection="row" alignItems="center" justifyContent="space-between">
+          <Box>
+            <Body>Welcome back,</Body>
+            <Heading>Adrian Sajjan</Heading>
+          </Box>
+          <Box flexDirection="row" alignItems="center">
+            <IconButton>
+              <Avatar size={32} source="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzDIdIEoKmi101JPpAOEpsDz65yTL315CgWly8LwDI&s" />
+            </IconButton>
+            <IconButton style={styles.notification}>
+              <Ionicons name="notifications" size={20} color={theme.colors.text} />
+            </IconButton>
+          </Box>
+        </Box>
+        <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={24}>
           <SearchBar placeholder="Search for places, hotels, flights ..." />
         </Box>
         <Box flexWrap="wrap" flexDirection="row" paddingHorizontal={16} paddingTop={8}>

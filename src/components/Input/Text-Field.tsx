@@ -12,7 +12,7 @@ interface TextFieldProps extends Omit<TextInputProps, "style"> {
 const styles = StyleSheet.create({
   wrapper: {
     height: 56,
-    paddingLeft: 24,
+    paddingLeft: 16,
     flexDirection: "row",
     backgroundColor: theme.colors.surface,
     borderRadius: theme.shapes.rounded.lg,
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     height: 56,
     flex: 1,
     fontFamily: theme.font.regular,
-    fontSize: 16,
+    fontSize: 15,
     borderRadius: theme.shapes.rounded.lg,
   },
   icon: {

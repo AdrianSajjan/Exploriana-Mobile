@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
-import { ImageBackground, ScrollView, StyleSheet } from "react-native";
+import { ImageBackground, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Box } from "@exploriana/components/Box";
@@ -8,7 +8,7 @@ import { CarouselDestinationCard, ServiceCard } from "@exploriana/components/Car
 import { Bus, Flight, Hotel, Restro, Tours, Train } from "@exploriana/components/Icons";
 import { SearchBar } from "@exploriana/components/Input";
 import { SectionHeader } from "@exploriana/components/Layout";
-import { Body, Heading } from "@exploriana/components/Typography";
+import { Body, Caption, Heading, Text } from "@exploriana/components/Typography";
 
 import { IconButton } from "@exploriana/components/Button";
 import { theme } from "@exploriana/config";
@@ -34,6 +34,18 @@ const styles = StyleSheet.create({
   },
   notification: {
     marginLeft: 12,
+  },
+  banner: {
+    position: "relative",
+    height: 180,
+  },
+  overlay: {
+    padding: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: theme.shapes.rounded.lg,
+    backgroundColor: theme.colors.backdrop,
+    ...StyleSheet.absoluteFillObject,
   },
 });
 
@@ -61,15 +73,23 @@ export function HomeScreen() {
         <Box flexWrap="wrap" flexDirection="row" paddingHorizontal={16} paddingTop={8}>
           <ServiceCard caption="Flights" icon={<Flight height={36} />} />
           <ServiceCard caption="Hotels" icon={<Hotel height={36} />} />
-          <ServiceCard caption="Restro" icon={<Restro height={36} />} />
           <ServiceCard caption="Tours" icon={<Tours height={36} />} />
-          <ServiceCard caption="Bus" icon={<Bus height={36} />} />
           <ServiceCard caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
         </Box>
+
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={32}>
-          <ImageBackground source={require("assets/images/banner.png")} style={{ height: 200 }} borderRadius={theme.shapes.rounded.lg}></ImageBackground>
+          <ImageBackground source={require("assets/images/banner.jpeg")} style={styles.banner} borderRadius={theme.shapes.rounded.lg}>
+            <View style={styles.overlay}>
+              <Text color={theme.colors.surface} size={18} fontWeight="medium">
+                Indigo Airlines offering upto 50% off
+              </Text>
+              <Body size="sm" color={theme.colors.divider}>
+                Travel to your favourite places for cheap. T&C apply.
+              </Body>
+            </View>
+          </ImageBackground>
         </Box>
-        <SectionHeader button="See All" title="Ongoing Tours" marginTop={32} />
+        <SectionHeader button="See All" title="Ongoing Tours" marginTop={24} />
         <ScrollView horizontal overScrollMode="never" style={styles.container} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.content}>
           <CarouselDestinationCard />
           <CarouselDestinationCard />

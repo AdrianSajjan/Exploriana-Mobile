@@ -10,7 +10,7 @@ export const theme = {
     divider: "#CCCCCC",
     background: "#F1F1F1",
     surface: "#FFFFFF",
-    backdrop: "#00000033",
+    backdrop: "#00000080",
     error: "#DC2626",
     success: "#16A34A",
     warning: "#D97706",

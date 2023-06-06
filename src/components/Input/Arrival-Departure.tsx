@@ -1,7 +1,8 @@
 import { Box } from "@exploriana/components/Box";
 import { theme } from "@exploriana/config";
+import { sharedStyles } from "@exploriana/styles/shared";
 import { Octicons } from "@expo/vector-icons";
-import { StyleProp, StyleSheet, Text, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, Text, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle, PressableProps } from "react-native";
 
 interface ArrivalDepartureInputProps {
   isInvalid?: boolean;
@@ -12,8 +13,8 @@ interface ArrivalDepartureInputProps {
   icon?: React.ReactNode;
   style?: StyleProp<ViewStyle>;
 
-  arrival?: Omit<TextInputProps, "style">;
-  departure?: Omit<TextInputProps, "style">;
+  arrival?: Omit<TextInputProps, "style"> & Pick<PressableProps, "onPress">;
+  departure?: Omit<TextInputProps, "style"> & Pick<PressableProps, "onPress">;
 
   onSwitch?: () => void;
 }
@@ -65,7 +66,9 @@ export function ArrivalDepartureInput({ icon, isInvalid, helperText, errorText, 
     <View style={style}>
       <View style={[styles.wrapper, isInvalid && styles.invalid]}>
         <Box flexDirection="row" paddingLeft={16} paddingTop={10}>
-          <TextInput placeholderTextColor={theme.colors.placeholder} style={styles.input} {...departure}></TextInput>
+          <TouchableOpacity activeOpacity={0.7} style={sharedStyles.fullHeight} onPress={departure.onPress}>
+            <TextInput placeholderTextColor={theme.colors.placeholder} pointerEvents="none" editable={false} style={styles.input} {...departure} />
+          </TouchableOpacity>
           {icon ? <View style={styles.icon}>{icon}</View> : null}
         </Box>
         <Box flexDirection="row" alignItems="center">
@@ -76,7 +79,9 @@ export function ArrivalDepartureInput({ icon, isInvalid, helperText, errorText, 
           <Box flex={1} height={StyleSheet.hairlineWidth} backgroundColor={theme.colors.divider} />
         </Box>
         <Box flexDirection="row" paddingLeft={16} paddingBottom={10}>
-          <TextInput placeholderTextColor={theme.colors.placeholder} style={styles.input} {...arrival}></TextInput>
+          <TouchableOpacity activeOpacity={0.7} style={sharedStyles.fullHeight} onPress={arrival.onPress}>
+            <TextInput placeholderTextColor={theme.colors.placeholder} pointerEvents="none" editable={false} style={styles.input} {...arrival} />
+          </TouchableOpacity>
           {icon ? <View style={styles.icon}>{icon}</View> : null}
         </Box>
       </View>

@@ -1,24 +1,31 @@
 import * as React from "react";
+import * as SQLite from "expo-sqlite";
 import { StatusBar } from "expo-status-bar";
-import { Ionicons } from "@expo/vector-icons";
+import { useQuery } from "@tanstack/react-query";
 import { ScrollView, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Box } from "@exploriana/components/Box";
 import { PrimaryButton } from "@exploriana/components/Button";
 import { RecentBookingCard } from "@exploriana/components/Card";
 import { Divider } from "@exploriana/components/Divider";
-import { Train } from "@exploriana/components/Icons";
-import { ArrivalDepartureInput, TextField } from "@exploriana/components/Input";
-import { PageHeader } from "@exploriana/components/Layout";
-import { Body, Heading, Text } from "@exploriana/components/Typography";
 import { HelperText } from "@exploriana/components/Form";
+import { Train } from "@exploriana/components/Icons";
+import { PageHeader } from "@exploriana/components/Layout";
+import { ArrivalDepartureInput, TextField } from "@exploriana/components/Input";
+import { Body, Heading, Text } from "@exploriana/components/Typography";
 import { TripType, TripTypeSwitch } from "@exploriana/components/Switch";
 
+import { useSQLiteDatabase } from "@exploriana/hooks/use-database";
+
 import { theme } from "@exploriana/config";
+import { createFactory } from "@exploriana/lib/core";
 import { sharedStyles } from "@exploriana/styles/shared";
+
+import { Schedule } from "@exploriana/interface/core";
 import { AppStackParamList } from "@exploriana/interface/navigation";
 
 type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Search-Trains">;
@@ -48,6 +55,39 @@ export function SearchTrainScreen() {
   const navigation = useNavigation<NavigationProps>();
 
   const [trip, setTrip] = React.useState<TripType>("one-way");
+  const [placeOfDeparture, setPlaceOfDeparture] = React.useState("");
+
+  const [database] = useSQLiteDatabase();
+
+  const suggestions = useQuery(
+    ["cities", { placeOfDeparture }] as const,
+    async (context) => {
+      const params = context.queryKey[1];
+      const sql = await createFactory(Promise<SQLite.SQLTransaction>, (resolve) => database.transaction(resolve));
+      const results = await createFactory(Promise<string[]>, (resolve, reject) =>
+        sql.executeSql(
+          `SELECT * FROM cities WHERE cities.city LIKE ?;`,
+          ["%" + params.placeOfDeparture + "%"],
+          (_, result) => {
+            resolve(result.rows._array);
+          },
+          (_, error) => {
+            reject(error.message);
+            return false;
+          }
+        )
+      );
+      return results;
+    },
+    {
+      enabled: Boolean(database) && placeOfDeparture.length >= 3,
+      retry: false,
+    }
+  );
+
+  React.useEffect(() => {
+    console.log(JSON.stringify(suggestions.data, null, 4));
+  }, [suggestions]);
 
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
@@ -62,7 +102,7 @@ export function SearchTrainScreen() {
           <ArrivalDepartureInput
             icon={<Train height={20} width={20} />}
             helperText="Enter your arrival and departure locations"
-            {...{ departure: { placeholder: "Where From?" }, arrival: { placeholder: "Where To?" } }}
+            {...{ departure: { value: placeOfDeparture, placeholder: "Where From?" }, arrival: { placeholder: "Where To?" } }}
           />
           <Box marginTop={20}>
             <TripTypeSwitch value={trip} onChange={(trip) => setTrip(trip)} />

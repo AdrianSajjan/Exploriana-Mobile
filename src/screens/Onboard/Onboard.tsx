@@ -1,3 +1,4 @@
+import * as React from "react";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScrollView, StyleSheet, View } from "react-native";
@@ -22,10 +23,6 @@ type NavigationProps = NativeStackNavigationProp<AuthStackParamList, "Onboard">;
 export function OnboardingScreen() {
   const navigation = useNavigation<NavigationProps>();
 
-  function handleGetStarted() {
-    navigation.navigate("Login");
-  }
-
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
       <StatusBar backgroundColor={theme.colors.background} style="dark" />
@@ -41,7 +38,7 @@ export function OnboardingScreen() {
           <Body textAlign="center" lineHeight={26} style={styles.body}>
             As one of the leading travel agencies in the world, Exploriana is here to help you plan the perfect trip. We are budget friendly and won't hurt your wallet.
           </Body>
-          <PrimaryButton label="Get Started" fullWidth style={styles.button} onPress={handleGetStarted} />
+          <PrimaryButton label="Get Started" fullWidth style={styles.button} onPress={() => navigation.navigate("Login")} />
         </View>
       </ScrollView>
     </SafeAreaView>

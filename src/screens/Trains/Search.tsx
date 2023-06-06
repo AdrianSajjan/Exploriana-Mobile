@@ -1,21 +1,24 @@
+import * as React from "react";
 import { StatusBar } from "expo-status-bar";
-import { ScrollView, StyleSheet } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
+import { ScrollView, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 import { Box } from "@exploriana/components/Box";
 import { PrimaryButton } from "@exploriana/components/Button";
 import { RecentBookingCard } from "@exploriana/components/Card";
 import { Divider } from "@exploriana/components/Divider";
 import { Train } from "@exploriana/components/Icons";
-import { ArrivalDepartureInput } from "@exploriana/components/Input";
+import { ArrivalDepartureInput, TextField } from "@exploriana/components/Input";
 import { PageHeader } from "@exploriana/components/Layout";
 import { Body, Heading, Text } from "@exploriana/components/Typography";
+import { HelperText } from "@exploriana/components/Form";
+import { TripType, TripTypeSwitch } from "@exploriana/components/Switch";
 
 import { theme } from "@exploriana/config";
 import { sharedStyles } from "@exploriana/styles/shared";
-import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "@exploriana/interface/navigation";
 
 type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Search-Trains">;
@@ -31,17 +34,20 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   divider: {
-    marginTop: 42,
-    marginBottom: 32,
+    marginTop: 36,
+    marginBottom: 24,
   },
-  dateSwitch: {
-    paddingBottom: 20,
-    marginHorizontal: 8,
+  dateInput: {
+    flex: 1,
   },
 });
 
+const CalendarIcon = <Ionicons name="calendar" size={16} color={theme.colors.text} />;
+
 export function SearchTrainScreen() {
   const navigation = useNavigation<NavigationProps>();
+
+  const [trip, setTrip] = React.useState<TripType>("one-way");
 
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
@@ -58,12 +64,14 @@ export function SearchTrainScreen() {
             helperText="Enter your arrival and departure locations"
             {...{ departure: { placeholder: "Where From?" }, arrival: { placeholder: "Where To?" } }}
           />
-          <ArrivalDepartureInput
-            style={styles.input}
-            helperText="Enter your departure date and arrival date"
-            icon={<Ionicons name="calendar" size={16} color={theme.colors.text} />}
-            {...{ departure: { placeholder: "Departure Date" }, arrival: { placeholder: "Arrival Date - Optional" } }}
-          />
+          <Box marginTop={20}>
+            <TripTypeSwitch value={trip} onChange={(trip) => setTrip(trip)} />
+            <HelperText>Select the type of your journey</HelperText>
+          </Box>
+          <Box marginTop={20} flexDirection="row">
+            <TextField helperText="Date of departure" placeholder="6 Jun 2023" icon={CalendarIcon} style={styles.dateInput} />
+            {trip === "return-trip" && <TextField helperText="Date of return" placeholder="Return Date" icon={CalendarIcon} style={[styles.dateInput, { marginLeft: 12 }]} />}
+          </Box>
           <PrimaryButton label="Search Trains" style={styles.button} onPress={() => navigation.navigate("Search-Train-Results")} />
         </Box>
         <Divider style={styles.divider} />

@@ -13,7 +13,7 @@ interface PrimaryButtonProps extends ButtonProps {
   icon?: React.ReactNode;
 }
 
-export function PrimaryButton({ label, fullWidth, style, color, icon, background, onPress }: PrimaryButtonProps) {
+export function PrimaryButton({ label, fullWidth, style, color, icon, background, ...props }: PrimaryButtonProps) {
   const scale = useSharedValue(1);
 
   const rStyle = useAnimatedStyle(() => {
@@ -31,7 +31,7 @@ export function PrimaryButton({ label, fullWidth, style, color, icon, background
   };
 
   return (
-    <AnimatedPressable style={[styles.button, rStyle, pStyle, style]} onPressIn={onPressIn} onPressOut={onPressOut} onPress={onPress}>
+    <AnimatedPressable style={[styles.button, rStyle, pStyle, style]} onPressIn={onPressIn} onPressOut={onPressOut} {...props}>
       {icon ? <Box marginRight={12}>{icon}</Box> : null}
       <Text style={[styles.label, { color: color || theme.colors.surface }]}>{label}</Text>
     </AnimatedPressable>

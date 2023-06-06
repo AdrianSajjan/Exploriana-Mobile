@@ -1,10 +1,13 @@
-import { Box } from "@exploriana/components/Box";
+import { Fragment } from "react";
 import { theme } from "@exploriana/config";
+import { Box } from "@exploriana/components/Box";
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 
 interface DividerProps {
   caption?: string;
   color?: string;
+  width?: number;
+  type?: "solid" | "dotted" | "dashed";
   style?: StyleProp<ViewStyle>;
 }
 
@@ -21,12 +24,16 @@ const styles = StyleSheet.create({
   },
 });
 
-export function Divider({ caption, style, color = theme.colors.divider }: DividerProps) {
+export function Divider({ caption, width = StyleSheet.hairlineWidth, style, type = "solid", color = theme.colors.divider }: DividerProps) {
   return (
     <View style={[styles.container, style]}>
-      <Box flex={1} height={1} backgroundColor={color}></Box>
-      {caption ? <Text style={styles.text}>{caption}</Text> : null}
-      <Box flex={1} height={1} backgroundColor={color}></Box>
+      <Box flex={1} borderTopWidth={width} borderStyle={type} borderTopColor={color}></Box>
+      {Boolean(caption) && (
+        <Fragment>
+          <Text style={styles.text}>{caption}</Text>
+          <Box flex={1} borderTopWidth={width} borderStyle={type} borderTopColor={color}></Box>
+        </Fragment>
+      )}
     </View>
   );
 }

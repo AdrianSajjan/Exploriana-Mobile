@@ -5,7 +5,7 @@ import { Text } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config";
 import { useNavigation } from "@react-navigation/native";
 
-export function PageHeader({ title }: { title: string }) {
+export function PageHeader({ title, color = theme.colors.heading }: { title: string; color?: string }) {
   const navigation = useNavigation();
 
   function handleGoBack() {
@@ -17,10 +17,10 @@ export function PageHeader({ title }: { title: string }) {
     <Box flexDirection="row" alignItems="center">
       <Box flex={1}>
         <IconButton onPress={handleGoBack}>
-          <Ionicons name="arrow-back" size={24} />
+          <Ionicons name="arrow-back" size={24} color={color} />
         </IconButton>
       </Box>
-      <Text size={20} color={theme.colors.heading} fontWeight="medium">
+      <Text size={20} color={color} fontWeight="medium">
         {title}
       </Text>
       <Box flex={1}></Box>

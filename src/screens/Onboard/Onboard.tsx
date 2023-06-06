@@ -38,7 +38,7 @@ export function OnboardingScreen() {
         </Box>
         <View style={[sharedStyles.ph]}>
           <Heading textAlign="center">Enjoy your trip</Heading>
-          <Body textAlign="center" lineHeight={28} style={styles.body}>
+          <Body textAlign="center" lineHeight={26} style={styles.body}>
             As one of the leading travel agencies in the world, Exploriana is here to help you plan the perfect trip. We are budget friendly and won't hurt your wallet.
           </Body>
           <PrimaryButton label="Get Started" fullWidth style={styles.button} onPress={handleGetStarted} />
@@ -50,9 +50,9 @@ export function OnboardingScreen() {
 
 const styles = StyleSheet.create({
   body: {
-    marginTop: 12,
+    marginTop: 8,
   },
   button: {
-    marginTop: 36,
+    marginTop: 24,
   },
 });

@@ -69,11 +69,11 @@ export function ArrivalDepartureInput({ icon, isInvalid, helperText, errorText, 
           {icon ? <View style={styles.icon}>{icon}</View> : null}
         </Box>
         <Box flexDirection="row" alignItems="center">
-          <Box flex={1} height={1} backgroundColor={theme.colors.divider} />
+          <Box flex={1} height={StyleSheet.hairlineWidth} backgroundColor={theme.colors.divider} />
           <TouchableOpacity activeOpacity={0.6} style={styles.switcher} onPress={onSwitch}>
             <Octicons name="arrow-switch" size={14} color={theme.colors.surface} style={{ transform: [{ rotateZ: "90deg" }] }} />
           </TouchableOpacity>
-          <Box flex={1} height={1} backgroundColor={theme.colors.divider} />
+          <Box flex={1} height={StyleSheet.hairlineWidth} backgroundColor={theme.colors.divider} />
         </Box>
         <Box flexDirection="row" paddingLeft={16} paddingBottom={10}>
           <TextInput placeholderTextColor={theme.colors.placeholder} style={styles.input} {...arrival}></TextInput>

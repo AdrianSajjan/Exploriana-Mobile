@@ -24,11 +24,11 @@ export function Item({ index, input, item, scrollX }: ItemProps) {
     };
   });
 
-  const source = { uri: item.uri, width: width - 64 };
+  const source = { uri: item.uri, width: width - 48 };
 
   return (
     <Box width={width} alignItems="center">
-      <Animated.View style={[styles.container, { width: width - 64 }, style]}>
+      <Animated.View style={[styles.container, { width: width - 48 }, style]}>
         <Animated.Image accessibilityLabel="carousel-image" source={source} style={[styles.image]} />
       </Animated.View>
     </Box>

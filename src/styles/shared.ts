@@ -15,7 +15,7 @@ export const sharedStyles = StyleSheet.create({
     flexGrow: 0,
   },
   ph: {
-    paddingHorizontal: 24,
+    paddingHorizontal: 20,
   },
   pvSmall: {
     paddingVertical: 16,

@@ -17,7 +17,14 @@ const TrainIcon = <Train height={20} width={20} fill={theme.colors.text} />;
 const IRCTC = require("assets/images/IRCTC.png");
 
 export function SearchTrainResultScreen() {
+  const [selected, setSelected] = React.useState<string>();
+
   const bottomSheet = React.useRef<BottomSheet>(null);
+
+  const details = React.useMemo(() => {
+    if (!selected) return null;
+    return {};
+  }, [selected]);
 
   return (
     <GestureHandlerRootView style={sharedStyles.fullHeight}>
@@ -42,10 +49,10 @@ export function SearchTrainResultScreen() {
           </Box>
           <Box marginTop={20}></Box>
         </Box>
-        <ScrollView contentContainerStyle={[sharedStyles.fullGrow, sharedStyles.ph, { paddingVertical: 24 }]}>
+        <ScrollView contentContainerStyle={[sharedStyles.fullGrow, sharedStyles.ph, sharedStyles.pv]}>
           <TransportCard price={4500} timeOfArrival="13:40" placeOfArrival="Chennai" placeOfDeparture="Howrah" timeOfDeparture="09:50" name="Rajdhani Express" cover={IRCTC} icon={TrainIcon} />
         </ScrollView>
-        <BottomSheet ref={bottomSheet} enablePanDownToClose index={-1} snapPoints={["25%", "50%", "75%"]}>
+        <BottomSheet ref={bottomSheet} enablePanDownToClose index={-1} snapPoints={["50%", "75%"]}>
           <Box paddingHorizontal={16} alignItems="center" paddingTop={16}>
             <Body>Book Tickets</Body>
           </Box>

@@ -1,5 +1,7 @@
 -- sqlite
 
+DROP TABLE [cities];
+
 CREATE TABLE [cities] (
   [city] TEXT,
   [state] TEXT,

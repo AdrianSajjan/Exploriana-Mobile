@@ -22,8 +22,13 @@ export function PrimaryButton({ label, fullWidth, style, color, icon, background
     };
   });
 
-  const onPressIn = () => (scale.value = 0.98);
-  const onPressOut = () => (scale.value = 1);
+  const onPressIn = () => {
+    scale.value = 0.98;
+  };
+
+  const onPressOut = () => {
+    scale.value = 1;
+  };
 
   const pStyle: ViewStyle = {
     width: fullWidth ? "100%" : "auto",

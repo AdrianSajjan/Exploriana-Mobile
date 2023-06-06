@@ -10,7 +10,7 @@ import { NativeStackNavigationOptions, createNativeStackNavigator } from "@react
 
 import { HomeScreen } from "@exploriana/screens/Home";
 import { OnboardingScreen } from "@exploriana/screens/Onboard";
-import { SearchTrainResultScreen, SearchTrainScreen } from "@exploriana/screens/Trains";
+import { BookTrainScreen, SearchTrainScreen } from "@exploriana/screens/Trains";
 import { ForgotPasswordScreen, LoginScreen, RegisterScreen, ResetPasswordScreen } from "@exploriana/screens/Authentication";
 
 import { AuthStackParamList } from "@exploriana/interface/navigation";
@@ -49,7 +49,7 @@ export default function App() {
           <Stack.Screen name="Reset-Password" component={ResetPasswordScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Search-Trains" component={SearchTrainScreen} />
-          <Stack.Screen name="Search-Train-Results" component={SearchTrainResultScreen} />
+          <Stack.Screen name="Book-Trains" component={BookTrainScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

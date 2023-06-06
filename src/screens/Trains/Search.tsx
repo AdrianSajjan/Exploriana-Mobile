@@ -72,7 +72,7 @@ export function SearchTrainScreen() {
             <TextField helperText="Date of departure" placeholder="6 Jun 2023" icon={CalendarIcon} style={styles.dateInput} />
             {trip === "return-trip" && <TextField helperText="Date of return" placeholder="Return Date" icon={CalendarIcon} style={[styles.dateInput, { marginLeft: 12 }]} />}
           </Box>
-          <PrimaryButton label="Search Trains" style={styles.button} onPress={() => navigation.navigate("Search-Train-Results")} />
+          <PrimaryButton label="Search Trains" style={styles.button} onPress={() => navigation.navigate("Book-Trains")} />
         </Box>
         <Divider style={styles.divider} />
         <Box>

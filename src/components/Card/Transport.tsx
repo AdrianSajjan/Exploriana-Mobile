@@ -2,25 +2,32 @@ import { Box } from "@exploriana/components/Box";
 import { Connector, Divider } from "@exploriana/components/Divider";
 import { Body, Caption, Heading } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config";
+import { Schedule } from "@exploriana/interface/core";
 import { formatToIndianCurrency } from "@exploriana/lib/format";
 import { sharedStyles } from "@exploriana/styles/shared";
-import { Image, ImageSourcePropType, Pressable, PressableProps } from "react-native";
+import { Image, ImageSourcePropType, Pressable, PressableProps, StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 interface TransportCardProps extends PressableProps {
-  name?: string;
+  data?: Schedule;
   icon?: React.ReactNode;
-  timeOfArrival?: string;
-  placeOfArrival?: string;
-  timeOfDeparture?: string;
-  placeOfDeparture?: string;
-  price?: string | number;
   cover?: ImageSourcePropType;
 }
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export function TransportCard({ cover, icon, name, placeOfArrival, placeOfDeparture, price, timeOfArrival, timeOfDeparture, style, ...props }: TransportCardProps) {
+const styles = StyleSheet.create({
+  brand: {
+    height: 32,
+    width: 32,
+    resizeMode: "contain",
+  },
+  name: {
+    marginLeft: 8,
+  },
+});
+
+export function TransportCard({ cover, icon, data, style, ...props }: TransportCardProps) {
   const scale = useSharedValue(1);
 
   const rStyle = useAnimatedStyle(() => {
@@ -41,32 +48,32 @@ export function TransportCard({ cover, icon, name, placeOfArrival, placeOfDepart
     <AnimatedPressable style={[style, rStyle]} onPressIn={onPressIn} onPressOut={onPressOut} {...props}>
       <Box backgroundColor={theme.colors.surface} borderRadius={theme.shapes.rounded.lg} paddingVertical={16} paddingHorizontal={24}>
         <Box flexDirection="row" alignItems="center">
-          <Image source={cover} style={{ height: 32, width: 32, resizeMode: "contain" }} />
-          <Body color={theme.colors.secondary} size="md" fontWeight="medium" style={{ marginLeft: 8 }}>
-            {name}
+          <Image source={cover} style={styles.brand} />
+          <Body color={theme.colors.secondary} size="md" fontWeight="medium" style={styles.name}>
+            {data?.name}
           </Body>
         </Box>
         <Box flexDirection="row" alignItems="center" justifyContent="space-between" marginTop={16}>
           <Body fontWeight="bold" color={theme.colors.secondary}>
-            {timeOfDeparture}
+            {data?.timeOfDeparture}
           </Body>
           <Connector icon={icon} />
           <Body fontWeight="bold" color={theme.colors.secondary}>
-            {timeOfArrival}
+            {data?.timeOfArrival}
           </Body>
         </Box>
         <Box flexDirection="row" alignItems="center" marginTop={4}>
           <Caption fontWeight="medium" color={theme.colors.text} style={[sharedStyles.fullHeight]} textAlign="left">
-            {placeOfDeparture}
+            {data?.placeOfDeparture}
           </Caption>
           <Caption textAlign="center">7h 50m</Caption>
           <Caption fontWeight="medium" color={theme.colors.text} style={[sharedStyles.fullHeight]} textAlign="right">
-            {placeOfArrival}
+            {data?.placeOfArrival}
           </Caption>
         </Box>
         <Divider width={1} type="dashed" style={{ marginTop: 20 }} />
         <Box flexDirection="row" alignItems="center" justifyContent="flex-end" marginTop={12}>
-          <Heading size="sm">{formatToIndianCurrency(price ?? "0")}</Heading>
+          <Heading size="sm">{formatToIndianCurrency(data?.price || 0)}</Heading>
         </Box>
       </Box>
     </AnimatedPressable>

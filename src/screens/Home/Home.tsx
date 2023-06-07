@@ -59,7 +59,7 @@ export function HomeScreen() {
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} flexDirection="row" alignItems="center" justifyContent="space-between">
           <Box>
             <Body>Welcome back,</Body>
-            <Heading>Adrian Sajjan</Heading>
+            <Heading color={theme.colors.secondary}>Adrian Sajjan</Heading>
           </Box>
           <Box flexDirection="row" alignItems="center">
             <IconButton style={styles.notification}>

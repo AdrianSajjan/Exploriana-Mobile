@@ -18,6 +18,7 @@ import { theme } from "@exploriana/config";
 import { sharedStyles } from "@exploriana/styles/shared";
 
 import { AuthStackParamList } from "@exploriana/interface/navigation";
+import { TouchableOpacity } from "react-native";
 
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList, "Login">;
 
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
   divider: {
-    marginTop: 12,
+    marginTop: 24,
   },
   facebook: {
     flex: 1,
@@ -40,10 +41,11 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   forgotPassword: {
-    marginTop: 0,
+    marginTop: 16,
     alignSelf: "flex-end",
   },
   footer: {
+    paddingBottom: 4,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -62,14 +64,6 @@ export function LoginScreen() {
     navigation.navigate("Home");
   }
 
-  function handleRegisterNow() {
-    navigation.navigate("Register");
-  }
-
-  function handleForgotPassword() {
-    navigation.navigate("Forgot-Password");
-  }
-
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
       <StatusBar backgroundColor={theme.colors.background} style="dark" />
@@ -78,7 +72,9 @@ export function LoginScreen() {
           <Box alignItems="center">
             <Airplane height={150} width={150} />
           </Box>
-          <Heading textAlign="center">Welcome to Exploriana</Heading>
+          <Heading textAlign="center" color={theme.colors.secondary}>
+            Welcome to Exploriana
+          </Heading>
           <Body textAlign="center">Login to your account</Body>
           <Box marginTop={36}>
             <TextField
@@ -87,36 +83,27 @@ export function LoginScreen() {
               errorText="Please provide a valid phone number"
               icon={<Ionicons name="call" style={sharedStyles.inputIcon} />}
             />
-            <PasswordField
-              style={styles.textField}
-              placeholder="Password"
-              helperText="Enter your password"
-              errorText="Please provide your password"
-            />
+            <PasswordField style={styles.textField} placeholder="Password" helperText="Enter your password" errorText="Please provide your password" />
             <PrimaryButton style={styles.login} label="Login" onPress={handleLoginWithEmailAndPassword} />
           </Box>
-          <TextButton style={styles.forgotPassword} label="Forgot Password?" onPress={handleForgotPassword} />
+          <TouchableOpacity style={styles.forgotPassword} onPress={() => navigation.navigate("Forgot-Password")}>
+            <Body size="sm" color={theme.colors.secondary}>
+              Forgot Password?
+            </Body>
+          </TouchableOpacity>
           <Divider style={styles.divider} caption="Or Login With" />
-          <Box flexDirection="row" marginTop={24}>
-            <PrimaryButton
-              label="Facebook"
-              background="#1E63B5"
-              style={styles.facebook}
-              color={theme.colors.surface}
-              icon={<Zocial name="facebook" size={20} color={theme.colors.surface} />}
-            />
-            <PrimaryButton
-              label="Google"
-              style={styles.google}
-              color={theme.colors.heading}
-              background={theme.colors.surface}
-              icon={<Image resizeMode="contain" source={GoogleIconSource} />}
-            />
+          <Box flexDirection="row" marginTop={32}>
+            <PrimaryButton label="Facebook" background="#1E63B5" style={styles.facebook} color={theme.colors.surface} icon={<Zocial name="facebook" size={20} color={theme.colors.surface} />} />
+            <PrimaryButton label="Google" style={styles.google} color={theme.colors.heading} background={theme.colors.surface} icon={<Image resizeMode="contain" source={GoogleIconSource} />} />
           </Box>
         </View>
         <View style={styles.footer}>
-          <Body textAlign="center">Don't have an account?</Body>
-          <LinkButton label="Register Now" style={styles.registerNow} onPress={handleRegisterNow} />
+          <Body color={theme.colors.text} textAlign="center">
+            Don't have an account?
+          </Body>
+          <TouchableOpacity style={styles.registerNow} onPress={() => navigation.navigate("Register")}>
+            <Body color={theme.colors.secondary}>Register Now</Body>
+          </TouchableOpacity>
         </View>
       </ScrollView>
     </SafeAreaView>

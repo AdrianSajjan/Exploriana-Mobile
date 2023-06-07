@@ -34,7 +34,9 @@ export function OnboardingScreen() {
           <OnboardCarousel images={onboardCarousel} />
         </Box>
         <View style={[sharedStyles.ph]}>
-          <Heading textAlign="center">Enjoy your trip</Heading>
+          <Heading textAlign="center" color={theme.colors.secondary}>
+            Enjoy your trip
+          </Heading>
           <Body textAlign="center" lineHeight={26} style={styles.body}>
             As one of the leading travel agencies in the world, Exploriana is here to help you plan the perfect trip. We are budget friendly and won't hurt your wallet.
           </Body>

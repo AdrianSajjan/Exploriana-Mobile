@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export function BookTransportModal({ data, icon, price, cover, visible, onRequestClose, ...props }: BookTransportModalProps) {
+export function BookTransportModal({ data, icon, cover, visible, onRequestClose, ...props }: BookTransportModalProps) {
   const translateY = useSharedValue(HEIGHT);
 
   const [isOpen, setOpen] = React.useState(false);
@@ -90,7 +90,7 @@ export function BookTransportModal({ data, icon, price, cover, visible, onReques
         <Box flexDirection="row" alignItems="center">
           <Image source={cover} style={styles.brand} />
           <Body color={theme.colors.secondary} size="md" fontWeight="medium" style={styles.name}>
-            Rajdhani Express
+            {data?.name}
           </Body>
         </Box>
         <Box flexDirection="row" alignItems="center" justifyContent="space-between" marginTop={16}>
@@ -104,11 +104,11 @@ export function BookTransportModal({ data, icon, price, cover, visible, onReques
         </Box>
         <Box flexDirection="row" alignItems="center" marginTop={4}>
           <Caption fontWeight="medium" color={theme.colors.text} style={[sharedStyles.fullHeight]} textAlign="left">
-            Howrah
+            {data?.placeOfDeparture}
           </Caption>
           <Caption textAlign="center">7h 50m</Caption>
           <Caption fontWeight="medium" color={theme.colors.text} style={[sharedStyles.fullHeight]} textAlign="right">
-            Chennai
+            {data?.placeOfArrival}
           </Caption>
         </Box>
         <Box marginTop={24} marginBottom={24}>

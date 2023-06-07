@@ -9,17 +9,17 @@ export interface Transport {
   id: string;
   name: string;
   price: number;
-  timeOfDeparture: Date;
+  timeOfDeparture: string;
   placeOfDeparture: string;
-  timeOfArrival: Date;
+  timeOfArrival: string;
   placeOfArrival: string;
 }
 
 export interface Schedule {
-  dateOfDeparture: Date;
+  dateOfDeparture: string;
   placeOfDeparture: string;
   placeOfArrival: string;
-  dateOfReturn: Nullable<Date>;
+  dateOfReturn: Nullable<string>;
 }
 
 export interface Location {

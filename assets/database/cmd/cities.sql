@@ -1800,6 +1800,7 @@ INSERT INTO [cities] VALUES
 ('Hnahthial','Mizoram','Lunglei'),
 ('Hodal','Haryana','Faridabad'),
 ('Hojai','Assam','Nagaon'),
+('Howrah','West Bengal','Howrah'),
 ('Holalkere','Karnataka','Chitradurga'),
 ('Holenarsipur','Karnataka','Hassan'),
 ('Homnabad','Karnataka','Bidar'),

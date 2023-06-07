@@ -10,6 +10,7 @@ export function useSQLiteDatabase() {
       return database;
     },
     {
+      staleTime: Infinity,
       retry: false,
     }
   );

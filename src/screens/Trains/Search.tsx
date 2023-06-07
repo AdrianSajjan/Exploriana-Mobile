@@ -40,7 +40,7 @@ type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Search-Trai
 
 type SuggestionSheetProps = { onSelect?: (value: string) => void; onClose?: () => void };
 
-type FormState = { placeOfDeparture: string; placeOfArrival: string; dateOfDeparture: Date; dateOfReturn: Nullable<Date>; trip: TripType; activeSuggestionKey: Nullable<string> };
+type FormState = { placeOfDeparture: string; placeOfArrival: string; dateOfDeparture: string; dateOfReturn: Nullable<string>; trip: TripType; activeSuggestionKey: Nullable<string> };
 
 type FormikRef = FormikProps<FormState>;
 
@@ -95,7 +95,7 @@ export function SearchTrainScreen() {
   const initialValues: FormState = {
     placeOfDeparture: schedule.details?.placeOfDeparture ?? "",
     placeOfArrival: schedule.details?.placeOfArrival ?? "",
-    dateOfDeparture: schedule.details?.dateOfDeparture ?? initializeDate(),
+    dateOfDeparture: schedule.details?.dateOfDeparture ?? initializeDate().toISOString(),
     dateOfReturn: schedule.details?.dateOfReturn ?? null,
     trip: schedule.details?.dateOfReturn ? "return-trip" : "one-way",
     activeSuggestionKey: "",

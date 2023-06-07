@@ -32,3 +32,8 @@ export interface State {
   code: string;
   name: string;
 }
+
+export interface Station {
+  code: string;
+  name: string;
+}

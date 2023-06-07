@@ -3,5 +3,5 @@ export function createFactory<T, R extends any[]>(_class: new (...args: R) => T,
 }
 
 export function initializeDate(value?: string | number | Date) {
-  return new Date(value);
+  return value ? new Date(value) : new Date();
 }

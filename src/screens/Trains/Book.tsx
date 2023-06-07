@@ -17,6 +17,7 @@ import { theme } from "@exploriana/config";
 import { useScheduleStore } from "@exploriana/store/schedule";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { useFetchTrainsByRouteQuery } from "@exploriana/api/trains";
+import { FlatList } from "react-native-gesture-handler";
 
 const TrainIcon = <Train height={20} width={20} fill={theme.colors.text} />;
 
@@ -75,12 +76,18 @@ export function BookTrainScreen() {
         </Box>
         <Box marginTop={20}></Box>
       </Box>
-      <ScrollView contentContainerStyle={[sharedStyles.fullGrow, sharedStyles.ph, sharedStyles.pv]}>
-        {trains.data.map((train) => (
-          <TransportCard key={train.id} onPress={onSelect(train.id)} data={train} cover={require("assets/images/IRCTC.png")} icon={TrainIcon} />
-        ))}
-      </ScrollView>
+      <FlatList
+        data={trains.data}
+        ItemSeparatorComponent={ItemSeparator}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={[sharedStyles.ph, sharedStyles.pv]}
+        renderItem={({ item }) => <TransportCard onPress={onSelect(item.id)} data={item} cover={require("assets/images/IRCTC.png")} icon={TrainIcon} />}
+      />
       <BookTransportModal visible={isModalOpen} onRequestClose={closeModal} data={details} cover={require("assets/images/IRCTC.png")} icon={TrainIcon} />
     </SafeAreaView>
   );
+}
+
+function ItemSeparator() {
+  return <Box height={20} />;
 }

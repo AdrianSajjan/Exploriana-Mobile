@@ -1,31 +1,30 @@
-import * as Yup from "yup";
-import utils from "lodash/fp";
 import { Ionicons } from "@expo/vector-icons";
-import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetBackdrop, BottomSheetView } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useQuery } from "@tanstack/react-query";
 import * as SQLite from "expo-sqlite";
 import { StatusBar } from "expo-status-bar";
 import { Formik, FormikProps } from "formik";
+import utils from "lodash/fp";
 import * as React from "react";
 import { ListRenderItem, ScrollView, StyleSheet } from "react-native";
 import { FlatList, TouchableOpacity } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Yup from "yup";
 
 import { Box } from "@exploriana/components/Box";
 import { PrimaryButton } from "@exploriana/components/Button";
-import { RecentBookingCard } from "@exploriana/components/Card";
 import { Divider } from "@exploriana/components/Divider";
 import { HelperText } from "@exploriana/components/Form";
 import { Train } from "@exploriana/components/Icons";
 import { ArrivalDepartureInput, SearchBar, TextField } from "@exploriana/components/Input";
 import { PageHeader } from "@exploriana/components/Layout";
 import { TripType, TripTypeSwitch } from "@exploriana/components/Switch";
-import { Body, Heading, Text } from "@exploriana/components/Typography";
+import { Body, Heading } from "@exploriana/components/Typography";
 
-import { useScheduleStore } from "@exploriana/store/schedule";
 import { useSQLiteDatabase } from "@exploriana/hooks/use-database";
+import { useScheduleStore } from "@exploriana/store/schedule";
 
 import { theme } from "@exploriana/config";
 import { createFactory, initializeDate } from "@exploriana/lib/core";
@@ -71,9 +70,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.colors.divider,
   },
+  handle: {
+    backgroundColor: theme.colors.secondary,
+  },
 });
 
-const snapPoints = [525];
+const snapPoints = ["25%", "50%", "75%"];
 
 const CalendarIcon = <Ionicons name="calendar" size={16} color={theme.colors.text} />;
 
@@ -134,7 +136,7 @@ export function SearchTrainScreen() {
 
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
-      <StatusBar style="dark" backgroundColor={theme.colors.background} />
+      <StatusBar style="dark" translucent />
       <ScrollView contentContainerStyle={[sharedStyles.fullGrow, sharedStyles.pvSmall, sharedStyles.ph]}>
         <PageHeader title="Trains" />
         <Box marginTop={28}>
@@ -221,7 +223,7 @@ const SuggestionBottomSheet = React.forwardRef<BottomSheet, SuggestionSheetProps
   }
 
   return (
-    <BottomSheet ref={ref} index={-1} backgroundStyle={theme.shadows.lg} enablePanDownToClose snapPoints={snapPoints} onClose={onClose}>
+    <BottomSheet ref={ref} index={-1} backgroundStyle={theme.shadows.lg} handleIndicatorStyle={styles.handle} backdropComponent={BottomSheetBackdrop} enablePanDownToClose {...{ snapPoints, onClose }}>
       <BottomSheetView>
         <Box paddingTop={8}>
           <SearchBar placeholder="Search for cities..." value={query} onChangeText={setQuery} />

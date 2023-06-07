@@ -13,8 +13,8 @@ export function Connector({ icon, label }: { icon: React.ReactNode; label?: stri
       <Box paddingHorizontal={4} position="relative">
         {icon}
         {Boolean(label) && (
-          <Box position="absolute" width={width} left={-width / 2 + 10} top={24}>
-            <Text size={12} textAlign="center">
+          <Box position="absolute" width={width} left={-width / 2 + 15} top={24}>
+            <Text size={13} textAlign="center" color={theme.colors.tint}>
               {label}
             </Text>
           </Box>

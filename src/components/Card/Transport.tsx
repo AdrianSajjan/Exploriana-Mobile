@@ -4,7 +4,7 @@ import { Body, Caption, Heading } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config";
 import { Transport } from "@exploriana/interface/core";
 import { initializeDate } from "@exploriana/lib/core";
-import { formatTimeInterval, formatToIndianCurrency } from "@exploriana/lib/format";
+import { formatTimeInterval, formatToIndianCurrency, formatToIndianLocale } from "@exploriana/lib/format";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { format, intervalToDuration, parse } from "date-fns";
 import { Image, ImageSourcePropType, Pressable, PressableProps, StyleSheet } from "react-native";
@@ -23,6 +23,9 @@ const styles = StyleSheet.create({
     height: 32,
     width: 32,
     resizeMode: "contain",
+  },
+  divider: {
+    marginTop: 20,
   },
   name: {
     marginLeft: 8,
@@ -73,9 +76,14 @@ export function TransportCard({ cover, icon, data, style, ...props }: TransportC
             {data.placeOfArrival}
           </Caption>
         </Box>
-        <Divider width={1} type="dashed" style={{ marginTop: 20 }} />
-        <Box flexDirection="row" alignItems="center" justifyContent="flex-end" marginTop={12}>
-          <Heading size="sm">{formatToIndianCurrency(data.price || 0)}</Heading>
+        <Divider width={1} type="dashed" style={styles.divider} />
+        <Box flexDirection="row" alignItems="center" justifyContent="flex-end" marginTop={14}>
+          <Heading size="sm">
+            <Body color={theme.colors.heading} size="md">
+              ₹{" "}
+            </Body>
+            {formatToIndianLocale(data.price)}
+          </Heading>
         </Box>
       </Box>
     </AnimatedPressable>

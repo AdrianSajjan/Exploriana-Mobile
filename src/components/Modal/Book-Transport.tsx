@@ -4,12 +4,14 @@ import { Connector, Divider } from "@exploriana/components/Divider";
 import { Body, Caption, Heading, Text } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config";
 import { Transport } from "@exploriana/interface/core";
-import { formatToIndianCurrency } from "@exploriana/lib/format";
+import { initializeDate } from "@exploriana/lib/core";
+import { formatTimeInterval, formatToIndianCurrency, formatToIndianLocale } from "@exploriana/lib/format";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { Ionicons } from "@expo/vector-icons";
+import { format, intervalToDuration } from "date-fns";
 import * as React from "react";
 import { Image, ImageSourcePropType, Modal, ModalProps, StyleSheet, View } from "react-native";
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
 
 interface BookTransportModalProps extends ModalProps {
   data?: Transport;
@@ -17,7 +19,7 @@ interface BookTransportModalProps extends ModalProps {
   cover?: ImageSourcePropType;
 }
 
-const HEIGHT = 300;
+const HEIGHT = 290;
 
 const styles = StyleSheet.create({
   backdrop: {
@@ -29,7 +31,7 @@ const styles = StyleSheet.create({
     height: HEIGHT,
     width: "100%",
     position: "absolute",
-    paddingTop: 24,
+    paddingTop: 20,
     paddingHorizontal: 20,
     backgroundColor: theme.colors.surface,
     borderTopRightRadius: theme.shapes.rounded.lg,
@@ -43,37 +45,31 @@ const styles = StyleSheet.create({
   name: {
     marginLeft: 8,
   },
+  price: {
+    marginTop: 2,
+  },
 });
 
 export function BookTransportModal({ data, icon, cover, visible, onRequestClose, ...props }: BookTransportModalProps) {
   const translateY = useSharedValue(HEIGHT);
 
-  const [isOpen, setOpen] = React.useState(false);
-
-  if (visible !== isOpen) {
-    if (visible === true) {
-      setOpen(true);
-      translateY.value = 0;
-    } else {
-      translateY.value = HEIGHT;
-    }
-  }
+  React.useEffect(() => {
+    if (visible) translateY.value = withDelay(150, withTiming(0, { duration: 250 }));
+    else translateY.value = withDelay(150, withTiming(HEIGHT, { duration: 0 }));
+  }, [visible]);
 
   const rStyle = useAnimatedStyle(() => {
     return {
       transform: [
         {
-          translateY: withTiming(translateY.value, { duration: visible ? 300 : 150 }, (finished) => {
-            if (!finished || visible) return;
-            runOnJS(setOpen)(false);
-          }),
+          translateY: translateY.value,
         },
       ],
     };
   });
 
   return (
-    <Modal visible={isOpen} animationType="fade" transparent statusBarTranslucent onRequestClose={onRequestClose} {...props}>
+    <Modal visible={visible} animationType="fade" transparent statusBarTranslucent onRequestClose={onRequestClose} {...props}>
       <View style={styles.backdrop} />
       <Animated.View style={[styles.sheet, rStyle]}>
         <Box alignItems="center" flexDirection="row" justifyContent="space-between">
@@ -95,30 +91,33 @@ export function BookTransportModal({ data, icon, cover, visible, onRequestClose,
         </Box>
         <Box flexDirection="row" alignItems="center" justifyContent="space-between" marginTop={16}>
           <Body fontWeight="bold" color={theme.colors.secondary}>
-            09:50
+            {format(initializeDate(data?.timeOfDeparture), "HH:mm")}
           </Body>
           <Connector icon={icon} />
           <Body fontWeight="bold" color={theme.colors.secondary}>
-            13:40
+            {format(initializeDate(data?.timeOfArrival), "HH:mm")}
           </Body>
         </Box>
         <Box flexDirection="row" alignItems="center" marginTop={4}>
-          <Caption fontWeight="medium" color={theme.colors.text} style={[sharedStyles.fullHeight]} textAlign="left">
+          <Caption color={theme.colors.text} style={[sharedStyles.fullHeight]} textAlign="left">
             {data?.placeOfDeparture}
           </Caption>
-          <Caption textAlign="center">7h 50m</Caption>
-          <Caption fontWeight="medium" color={theme.colors.text} style={[sharedStyles.fullHeight]} textAlign="right">
+          <Caption textAlign="center">{formatTimeInterval(intervalToDuration({ start: initializeDate(data?.timeOfDeparture), end: initializeDate(data?.timeOfArrival) }))}</Caption>
+          <Caption color={theme.colors.text} style={[sharedStyles.fullHeight]} textAlign="right">
             {data?.placeOfArrival}
           </Caption>
         </Box>
-        <Box marginTop={24} marginBottom={24}>
+        <Box marginTop={24} marginBottom={20}>
           <Divider width={1} type="dashed" />
         </Box>
         <Box flexDirection="row" alignItems="center" justifyContent="space-between">
           <Box>
             <Caption>Trip Total</Caption>
-            <Heading size="sm" color={theme.colors.secondary}>
-              {formatToIndianCurrency(4500)}
+            <Heading size="sm" style={styles.price}>
+              <Body color={theme.colors.heading} size="md">
+                ₹&nbsp;
+              </Body>
+              {formatToIndianLocale(data?.price ?? 0)}
             </Heading>
           </Box>
           <PrimaryButton label="Book Train" />

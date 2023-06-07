@@ -2,7 +2,7 @@ import utils from "lodash/fp";
 import { getLocales } from "expo-localization";
 
 export function formatToIndianCurrency(value: number | string) {
-  return getLocales().shift().currencySymbol + value.toString().replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",");
+  return getLocales()[0].currencySymbol + value.toString().replace(/\B(?=(?:(\d\d)+(\d)(?!\d))+(?!\d))/g, ",");
 }
 
 export function formatToIndianLocale(value: number | string) {

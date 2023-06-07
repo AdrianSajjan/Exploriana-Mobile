@@ -8,7 +8,7 @@ export function isInvalid<T = any>(field: string | string[], form: Pick<FormikPr
 export function errorText<T = any>(field: string | string[], form: Pick<FormikProps<T>, "touched" | "errors">): string {
   if (Array.isArray(field)) {
     const error = field.find((_field) => Boolean(form.touched[_field]) && Boolean(form.errors[_field]));
-    return (Boolean(form.touched[error]) && form.errors[error]) ?? "";
+    return (error && Boolean(form.touched[error]) && form.errors[error]) ?? "";
   }
   return (Boolean(form.touched[field]) && form.errors[field]) ?? "";
 }

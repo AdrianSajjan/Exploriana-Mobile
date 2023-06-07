@@ -3,7 +3,7 @@ import { IconButton, PrimaryButton } from "@exploriana/components/Button";
 import { Connector, Divider } from "@exploriana/components/Divider";
 import { Body, Caption, Heading, Text } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config";
-import { Schedule } from "@exploriana/interface/core";
+import { Transport } from "@exploriana/interface/core";
 import { formatToIndianCurrency } from "@exploriana/lib/format";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,7 +12,7 @@ import { Image, ImageSourcePropType, Modal, ModalProps, StyleSheet, View } from 
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 interface BookTransportModalProps extends ModalProps {
-  data?: Schedule;
+  data?: Transport;
   icon?: React.ReactNode;
   cover?: ImageSourcePropType;
 }

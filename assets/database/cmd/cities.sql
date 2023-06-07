@@ -5170,3 +5170,9 @@ INSERT INTO [cities] VALUES
 ('Zirakpur','Punjab','Patiala'),
 ('Ziro','Arunachal Pradesh','Lower Subansiri'),
 ('Zunheboto','Nagaland','Zunheboto');
+
+CREATE TABLE temp_cities as SELECT DISTINCT * FROM cities;
+
+DROP TABLE cities;
+
+ALTER TABLE temp_cities RENAME TO cities;

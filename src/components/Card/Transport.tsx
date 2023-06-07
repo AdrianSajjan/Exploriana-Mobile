@@ -2,14 +2,14 @@ import { Box } from "@exploriana/components/Box";
 import { Connector, Divider } from "@exploriana/components/Divider";
 import { Body, Caption, Heading } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config";
-import { Schedule } from "@exploriana/interface/core";
+import { Transport } from "@exploriana/interface/core";
 import { formatToIndianCurrency } from "@exploriana/lib/format";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { Image, ImageSourcePropType, Pressable, PressableProps, StyleSheet } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
 interface TransportCardProps extends PressableProps {
-  data?: Schedule;
+  data?: Transport;
   icon?: React.ReactNode;
   cover?: ImageSourcePropType;
 }

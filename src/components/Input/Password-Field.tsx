@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: theme.font.regular,
     fontSize: 16,
+    color: theme.colors.secondary,
     borderRadius: theme.shapes.rounded.lg,
   },
   icon: {

@@ -1,8 +1,7 @@
-import "react-native-gesture-handler";
-
 import { useFonts } from "expo-font";
 import * as React from "react";
 import * as SplashScreen from "expo-splash-screen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
@@ -17,6 +16,7 @@ import { ForgotPasswordScreen, LoginScreen, RegisterScreen, ResetPasswordScreen 
 import { createFactory } from "@exploriana/lib/core";
 import { AuthStackParamList } from "@exploriana/interface/navigation";
 import { useSQLiteDatabase } from "@exploriana/hooks/use-database";
+import { sharedStyles } from "@exploriana/styles/shared";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -43,18 +43,20 @@ export default function App() {
   return (
     <QueryClientProvider client={client}>
       <SafeAreaProvider onLayout={onLayoutRootView}>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={screenOptions}>
-            <Stack.Screen name="Onboard" component={OnboardingScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Register" component={RegisterScreen} />
-            <Stack.Screen name="Forgot-Password" component={ForgotPasswordScreen} />
-            <Stack.Screen name="Reset-Password" component={ResetPasswordScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Search-Trains" component={SearchTrainScreen} />
-            <Stack.Screen name="Book-Trains" component={BookTrainScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <GestureHandlerRootView style={sharedStyles.fullHeight}>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={screenOptions}>
+              <Stack.Screen name="Onboard" component={OnboardingScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="Register" component={RegisterScreen} />
+              <Stack.Screen name="Forgot-Password" component={ForgotPasswordScreen} />
+              <Stack.Screen name="Reset-Password" component={ResetPasswordScreen} />
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Search-Trains" component={SearchTrainScreen} />
+              <Stack.Screen name="Book-Trains" component={BookTrainScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </GestureHandlerRootView>
       </SafeAreaProvider>
     </QueryClientProvider>
   );

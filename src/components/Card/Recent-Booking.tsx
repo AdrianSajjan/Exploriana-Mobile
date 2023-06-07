@@ -5,12 +5,10 @@ import { theme } from "@exploriana/config";
 import { Fragment } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet } from "react-native";
+import { Schedule } from "@exploriana/interface/core";
 
 interface RecentBookingCardProps {
-  placeOfDeparture: string;
-  placeOfArrival: string;
-  dateOfDeparture: string;
-  dateOfReturn?: string;
+  details: Schedule;
 }
 
 const styles = StyleSheet.create({
@@ -27,27 +25,27 @@ const styles = StyleSheet.create({
   },
 });
 
-export function RecentBookingCard({ dateOfDeparture, placeOfArrival, placeOfDeparture, dateOfReturn }: RecentBookingCardProps) {
+export function RecentBookingCard({ details }: RecentBookingCardProps) {
   return (
     <Pressable style={styles.card}>
       <Box>
         <Box flexDirection="row">
           <Body color={theme.colors.heading} fontWeight="medium">
-            {placeOfDeparture}
+            {details.placeOfDeparture}
           </Body>
           <Body color={theme.colors.heading} fontWeight="medium">
             &nbsp;→&nbsp;
           </Body>
           <Body color={theme.colors.heading} fontWeight="medium">
-            {placeOfArrival}
+            {details.placeOfArrival}
           </Body>
         </Box>
         <Box flexDirection="row">
-          <Body size="md">{dateOfDeparture}</Body>
-          {Boolean(dateOfReturn) && (
+          <Body size="md">{details.dateOfDeparture.toISOString()}</Body>
+          {Boolean(details.dateOfReturn) && (
             <Fragment>
               <Body size="md">&nbsp;→&nbsp;</Body>
-              <Body size="md">{dateOfReturn}</Body>
+              <Body size="md">{details.dateOfReturn.toISOString()}</Body>
             </Fragment>
           )}
         </Box>

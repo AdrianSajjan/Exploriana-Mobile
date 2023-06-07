@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   input: {
     height: 56,
     flex: 1,
+    color: theme.colors.secondary,
     fontFamily: theme.font.regular,
     fontSize: 15,
     borderRadius: theme.shapes.rounded.lg,

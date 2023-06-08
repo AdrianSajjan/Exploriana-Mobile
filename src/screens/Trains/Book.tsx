@@ -19,6 +19,7 @@ import { sharedStyles } from "@exploriana/styles/shared";
 import { useFetchTrainsByRouteQuery } from "@exploriana/api/trains";
 import { initializeDate } from "@exploriana/lib/core";
 import { format } from "date-fns";
+import { ShimmerPlaceholder } from "@exploriana/components/Placeholder";
 
 const TrainIcon = <Train height={20} width={20} fill={theme.colors.text} />;
 
@@ -27,6 +28,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     paddingVertical: 24,
     paddingHorizontal: 20,
+  },
+  shimmer: {
+    marginTop: 20,
   },
 });
 
@@ -55,16 +59,24 @@ export function BookTrainScreen() {
   }, []);
 
   const renderEmptyList = React.useCallback(() => {
-    if (!schedule.details) return null;
+    if (trains.isLoading || trains.isFetching)
+      return (
+        <Box>
+          <ShimmerPlaceholder height={150} width="100%" borderRadius={theme.shapes.rounded.lg} />
+          <ShimmerPlaceholder height={150} width="100%" borderRadius={theme.shapes.rounded.lg} style={styles.shimmer} />
+          <ShimmerPlaceholder height={150} width="100%" borderRadius={theme.shapes.rounded.lg} style={styles.shimmer} />
+        </Box>
+      );
+
     return (
       <Box flex={1} alignItems="center" justifyContent="center">
         <Body color={theme.colors.error} size="md" lineHeight={24} textAlign="center">
-          No trains found on {format(initializeDate(schedule.details.dateOfDeparture), "do MMMM")} for {locationOfDeparture.data.city} - {locationOfArrival.data.city} route. Please select a different
+          No trains found on {format(initializeDate(schedule.details?.dateOfDeparture), "do MMMM")} for {locationOfDeparture.data.city} - {locationOfArrival.data.city} route. Please select a different
           date or route.
         </Body>
       </Box>
     );
-  }, [schedule.details]);
+  }, [schedule.details, locationOfDeparture, locationOfArrival, trains.isLoading, trains.isFetching]);
 
   function closeModal() {
     setSelected(undefined);
@@ -114,11 +126,11 @@ export function BookTrainScreen() {
       </Box>
       <FlatList
         data={trains.data}
-        ItemSeparatorComponent={renderItemSeparator}
-        ListEmptyComponent={renderEmptyList}
+        renderItem={renderItem}
         keyExtractor={keyExtractor}
         contentContainerStyle={styles.content}
-        renderItem={renderItem}
+        ListEmptyComponent={renderEmptyList}
+        ItemSeparatorComponent={renderItemSeparator}
       />
       <BookTransportModal visible={isModalOpen} onRequestClose={closeModal} data={details} cover={require("assets/images/IRCTC.png")} icon={TrainIcon} />
     </SafeAreaView>

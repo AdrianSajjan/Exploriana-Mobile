@@ -39,9 +39,6 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: theme.colors.surface,
     borderRadius: theme.shapes.rounded.lg,
-    elevation: 5,
-    shadowColor: theme.colors.backdrop,
-    shadowRadius: 10,
   },
   image: {
     borderRadius: theme.shapes.rounded.lg,

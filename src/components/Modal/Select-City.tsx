@@ -12,7 +12,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import * as SQLite from "expo-sqlite";
 import * as React from "react";
-import { ListRenderItem, Modal, ModalProps, StyleSheet, View, TouchableOpacity, FlatList } from "react-native";
+import { ListRenderItem, Modal, ModalProps, StyleSheet, View, TouchableOpacity, FlatList, KeyboardAvoidingView } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
 
 interface SelectCityModalProps extends ModalProps {
@@ -26,11 +26,13 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.backdrop,
     ...StyleSheet.absoluteFillObject,
   },
+  container: {
+    flex: 1,
+    alignItems: "stretch",
+    justifyContent: "flex-end",
+  },
   sheet: {
-    bottom: 0,
     height: HEIGHT,
-    width: "100%",
-    position: "absolute",
     backgroundColor: theme.colors.surface,
     borderTopRightRadius: theme.shapes.rounded.lg,
     borderTopLeftRadius: theme.shapes.rounded.lg,
@@ -107,21 +109,23 @@ export function SelectCityModal({ visible, onSelect, onRequestClose, ...props }:
   return (
     <Modal visible={visible} animationType="fade" transparent statusBarTranslucent onRequestClose={onRequestClose} {...props}>
       <View style={styles.backdrop} />
-      <Animated.View style={[styles.sheet, rStyle]}>
-        <Box alignItems="center" justifyContent="center" paddingTop={12} paddingBottom={8}>
-          <Box height={2} width={36} borderRadius={36} backgroundColor={theme.colors.divider} />
-        </Box>
-        <Box alignItems="center" flexDirection="row" paddingRight={20}>
-          <SearchBar placeholder="Search for cities..." value={query} onChangeText={setQuery} style={sharedStyles.fullHeight} />
-          <Box marginLeft={24}>
-            <IconButton onPress={onRequestClose}>
-              <Ionicons name="close" size={20} />
-            </IconButton>
+      <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <Animated.View style={[styles.sheet, rStyle]}>
+          <Box alignItems="center" justifyContent="center" paddingTop={12} paddingBottom={8}>
+            <Box height={2} width={36} borderRadius={36} backgroundColor={theme.colors.divider} />
           </Box>
-        </Box>
-        <Divider />
-        <FlatList data={suggestions.data} initialNumToRender={10} maxToRenderPerBatch={20} contentContainerStyle={styles.list} keyExtractor={keyExtractor} renderItem={renderItem} />
-      </Animated.View>
+          <Box alignItems="center" flexDirection="row" paddingRight={20}>
+            <SearchBar placeholder="Search for cities..." value={query} onChangeText={setQuery} style={sharedStyles.fullHeight} />
+            <Box marginLeft={24}>
+              <IconButton onPress={onRequestClose}>
+                <Ionicons name="close" size={20} />
+              </IconButton>
+            </Box>
+          </Box>
+          <Divider />
+          <FlatList data={suggestions.data} initialNumToRender={10} maxToRenderPerBatch={20} contentContainerStyle={styles.list} keyExtractor={keyExtractor} renderItem={renderItem} />
+        </Animated.View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }

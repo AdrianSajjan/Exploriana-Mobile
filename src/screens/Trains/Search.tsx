@@ -29,6 +29,7 @@ import { Schedule } from "@exploriana/interface/core";
 import { Nullable } from "@exploriana/interface/helper";
 import { AppStackParamList } from "@exploriana/interface/navigation";
 import { errorText, isInvalid } from "@exploriana/lib/form";
+import { DatePicker } from "@exploriana/components/Picker";
 
 interface FormState {
   placeOfDeparture: string;
@@ -152,8 +153,24 @@ export function SearchTrainScreen() {
             <HelperText>Select the type of your journey</HelperText>
           </Box>
           <Box marginTop={20} flexDirection="row">
-            <TextField helperText="Date of departure" placeholder="Departure Date" icon={CalendarIcon} style={styles.dateInput} />
-            {values.trip === "return-trip" && <TextField helperText="Date of return" placeholder="Return Date" icon={CalendarIcon} style={[styles.dateInput, { marginLeft: 12 }]} />}
+            <DatePicker
+              helperText="Date of departure"
+              title="Date of Departure"
+              value={values.dateOfDeparture}
+              onChange={handleChange("dateOfDeparture")}
+              placeholder="Departure Date"
+              style={styles.dateInput}
+            />
+            {values.trip === "return-trip" && (
+              <DatePicker
+                helperText="Date of return"
+                title="Date of Return"
+                value={values.dateOfReturn ?? undefined}
+                onChange={handleChange("dateOfReturn")}
+                placeholder="Return Date"
+                style={[styles.dateInput, { marginLeft: 12 }]}
+              />
+            )}
           </Box>
           <PrimaryButton label="Search Trains" style={styles.button} onPress={() => handleSubmit()} />
         </Box>

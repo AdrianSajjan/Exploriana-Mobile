@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.shapes.rounded.lg,
   },
   invalid: {
-    borderWidth: 1,
+    borderWidth: StyleSheet.hairlineWidth,
     borderColor: theme.colors.error,
   },
   input: {

@@ -5,7 +5,7 @@ import { Body, Caption, Heading, Text } from "@exploriana/components/Typography"
 import { theme } from "@exploriana/config";
 import { Transport } from "@exploriana/interface/core";
 import { initializeDate } from "@exploriana/lib/core";
-import { formatTimeInterval, formatToIndianCurrency, formatToIndianLocale } from "@exploriana/lib/format";
+import { formatTimeInterval, formatToIndianLocale } from "@exploriana/lib/format";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { Ionicons } from "@expo/vector-icons";
 import { format, intervalToDuration } from "date-fns";
@@ -80,7 +80,7 @@ export function BookTransportModal({ data, icon, cover, visible, onRequestClose,
             <Ionicons name="close" size={20} />
           </IconButton>
         </Box>
-        <Box marginTop={16} marginBottom={24}>
+        <Box marginTop={16} marginBottom={24} marginHorizontal={-20}>
           <Divider />
         </Box>
         <Box flexDirection="row" alignItems="center">

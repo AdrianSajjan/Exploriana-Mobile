@@ -18,6 +18,7 @@ import { AuthStackParamList } from "@exploriana/interface/navigation";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { stripePublishableKey } from "@exploriana/config/stripe";
+import { BoardingPassScreen } from "@exploriana/screens/Order";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -27,24 +28,23 @@ const Stack = createNativeStackNavigator<AuthStackParamList>();
 const screenOptions: NativeStackNavigationOptions = { headerShown: false };
 
 export default function App() {
-  const [fontsLoaded] = useFonts({
+  const [isFontsLoaded] = useFonts({
     Montserrat: require("assets/fonts/montserrat.ttf"),
     "Montserrat-Medium": require("assets/fonts/montserrat_medium.ttf"),
     "Montserrat-Bold": require("assets/fonts/montserrat_bold.ttf"),
   });
 
-  const onLayoutRootView = React.useCallback(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
+  const onInitialize = React.useCallback(() => {
+    if (!isFontsLoaded) return;
+    SplashScreen.hideAsync();
+  }, [isFontsLoaded]);
 
-  if (!fontsLoaded) return null;
+  if (!isFontsLoaded) return null;
 
   return (
-    <StripeProvider publishableKey={stripePublishableKey}>
-      <QueryClientProvider client={client}>
-        <SafeAreaProvider onLayout={onLayoutRootView}>
+    <SafeAreaProvider onLayout={onInitialize}>
+      <StripeProvider publishableKey={stripePublishableKey}>
+        <QueryClientProvider client={client}>
           <GestureHandlerRootView style={sharedStyles.fullHeight}>
             <NavigationContainer>
               <Stack.Navigator screenOptions={screenOptions}>
@@ -56,11 +56,12 @@ export default function App() {
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Search-Trains" component={SearchTrainScreen} />
                 <Stack.Screen name="Book-Trains" component={BookTrainScreen} />
+                <Stack.Screen name="Boarding-Pass" component={BoardingPassScreen} />
               </Stack.Navigator>
             </NavigationContainer>
           </GestureHandlerRootView>
-        </SafeAreaProvider>
-      </QueryClientProvider>
-    </StripeProvider>
+        </QueryClientProvider>
+      </StripeProvider>
+    </SafeAreaProvider>
   );
 }

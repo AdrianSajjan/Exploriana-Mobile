@@ -23,6 +23,7 @@ interface BookTransportModalProps extends ModalProps {
   data?: Transport;
   icon?: React.ReactNode;
   cover?: ImageSourcePropType;
+  onSuccess?: () => void;
 }
 
 const HEIGHT = 400;
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export function BookTransportModal({ data, icon, cover, visible, onRequestClose, ...props }: BookTransportModalProps) {
+export function BookTransportModal({ data, icon, cover, visible, onRequestClose, onSuccess, ...props }: BookTransportModalProps) {
   const translateY = useSharedValue(HEIGHT);
 
   const stripe = useStripe();
@@ -80,17 +81,18 @@ export function BookTransportModal({ data, icon, cover, visible, onRequestClose,
     try {
       const intent = await createPaymentIntent.mutateAsync({ amount: data.price * 100 });
       const init = await stripe.initPaymentSheet({ merchantDisplayName: "Exploriana Inc.", paymentIntentClientSecret: intent.client_secret, style: "alwaysLight" });
-      if (init.error) return ToastAndroid.show(init.error.message, ToastAndroid.LONG);
+      if (init.error) return Alert.alert("Payment Failed", init.error.message);
       setProcessingPaymentStatus(true);
       const present = await stripe.presentPaymentSheet();
-      if (present.error) return ToastAndroid.show(present.error.message, ToastAndroid.LONG);
-      Alert.alert("Order Confirmed", `Your booking for train number ${data.id} is created.`);
-      onRequestClose?.(event);
-    } catch (error) {
-      const message = isAxiosError(error) ? error.response?.data?.message ?? error.message : "Unable to complete this payment";
-      ToastAndroid.show(message, ToastAndroid.LONG);
-    } finally {
+      if (present.error) return Alert.alert("Payment Failed", present.error.message);
+      ToastAndroid.showWithGravity(`Your booking for train number ${data.id} is created.`, ToastAndroid.LONG, ToastAndroid.BOTTOM);
       setProcessingPaymentStatus(false);
+      onRequestClose?.(event);
+      onSuccess?.();
+    } catch (error) {
+      setProcessingPaymentStatus(false);
+      const message = isAxiosError(error) ? error.response?.data?.message ?? error.message : "Unable to complete this payment";
+      Alert.alert("Payment Failed", message);
     }
   }
 

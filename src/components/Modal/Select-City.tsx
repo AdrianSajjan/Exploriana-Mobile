@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     paddingTop: 12,
   },
   shimmer: {
-    marginTop: 12,
+    marginTop: 16,
   },
 });
 
@@ -60,11 +60,7 @@ export function SelectCityModal({ visible, onSelect, onRequestClose, ...props }:
 
   const rStyle = useAnimatedStyle(() => {
     return {
-      transform: [
-        {
-          translateY: translateY.value,
-        },
-      ],
+      transform: [{ translateY: translateY.value }],
     };
   });
 
@@ -108,7 +104,7 @@ export function SelectCityModal({ visible, onSelect, onRequestClose, ...props }:
 
   const renderEmptyList = React.useCallback(() => {
     return (
-      <Box paddingHorizontal={20}>
+      <Box paddingHorizontal={20} paddingTop={16}>
         <ShimmerPlaceholder height={36} width="100%" borderRadius={theme.shapes.rounded.md} />
         <ShimmerPlaceholder height={36} width="100%" borderRadius={theme.shapes.rounded.md} style={styles.shimmer} />
         <ShimmerPlaceholder height={36} width="100%" borderRadius={theme.shapes.rounded.md} style={styles.shimmer} />

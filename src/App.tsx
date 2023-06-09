@@ -10,7 +10,7 @@ import { NativeStackNavigationOptions, createNativeStackNavigator } from "@react
 
 import { HomeScreen } from "@exploriana/screens/Home";
 import { OnboardingScreen } from "@exploriana/screens/Onboard";
-import { BookTrainScreen, SearchTrainScreen } from "@exploriana/screens/Trains";
+import { BookTrainScreen, SearchTrainScreen, TrainCheckoutScreen } from "@exploriana/screens/Trains";
 import { ForgotPasswordScreen, LoginScreen, RegisterScreen, ResetPasswordScreen } from "@exploriana/screens/Authentication";
 
 import { createFactory } from "@exploriana/lib/core";
@@ -18,7 +18,7 @@ import { AuthStackParamList } from "@exploriana/interface/navigation";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { stripePublishableKey } from "@exploriana/config/stripe";
-import { BoardingPassScreen } from "@exploriana/screens/Order";
+import { BoardingPassScreen } from "@exploriana/screens/Booking";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -56,6 +56,7 @@ export default function App() {
                 <Stack.Screen name="Home" component={HomeScreen} />
                 <Stack.Screen name="Search-Trains" component={SearchTrainScreen} />
                 <Stack.Screen name="Book-Trains" component={BookTrainScreen} />
+                <Stack.Screen name="Train-Checkout" component={TrainCheckoutScreen} />
                 <Stack.Screen name="Boarding-Pass" component={BoardingPassScreen} />
               </Stack.Navigator>
             </NavigationContainer>

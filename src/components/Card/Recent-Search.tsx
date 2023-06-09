@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export function RecentBookingCard({ details }: RecentBookingCardProps) {
+export function RecentSearchCard({ details }: RecentBookingCardProps) {
   return (
     <Pressable style={styles.card}>
       <Box>
@@ -41,11 +41,11 @@ export function RecentBookingCard({ details }: RecentBookingCardProps) {
           </Body>
         </Box>
         <Box flexDirection="row">
-          <Body size="md">{details.dateOfDeparture.toISOString()}</Body>
+          <Body size="md">{details.dateOfDeparture}</Body>
           {Boolean(details.dateOfReturn) && (
             <Fragment>
               <Body size="md">&nbsp;→&nbsp;</Body>
-              <Body size="md">{details.dateOfReturn.toISOString()}</Body>
+              <Body size="md">{details.dateOfReturn}</Body>
             </Fragment>
           )}
         </Box>

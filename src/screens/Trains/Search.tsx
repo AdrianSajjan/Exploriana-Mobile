@@ -1,35 +1,33 @@
-import { Ionicons } from "@expo/vector-icons";
+import * as Yup from "yup";
+import utils from "lodash/fp";
+import * as React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
-import { Formik, FormikProps, useFormik } from "formik";
-import utils from "lodash/fp";
-import * as React from "react";
+import { useFormik } from "formik";
 import { ScrollView, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import * as Yup from "yup";
 
 import { Box } from "@exploriana/components/Box";
 import { PrimaryButton } from "@exploriana/components/Button";
 import { HelperText } from "@exploriana/components/Form";
 import { Train } from "@exploriana/components/Icons";
-import { ArrivalDepartureInput, TextField } from "@exploriana/components/Input";
+import { ArrivalDepartureInput } from "@exploriana/components/Input";
 import { PageHeader } from "@exploriana/components/Layout";
 import { TripType, TripTypeSwitch } from "@exploriana/components/Switch";
+import { DatePicker } from "@exploriana/components/Picker";
+import { SelectCityModal } from "@exploriana/components/Modal";
 import { Body, Heading } from "@exploriana/components/Typography";
-
-import { useScheduleStore } from "@exploriana/store/schedule";
 
 import { theme } from "@exploriana/config";
 import { initializeDate } from "@exploriana/lib/core";
 import { sharedStyles } from "@exploriana/styles/shared";
+import { errorText, isInvalid } from "@exploriana/lib/form";
+import { useScheduleStore } from "@exploriana/store/schedule";
 
-import { SelectCityModal } from "@exploriana/components/Modal";
 import { Schedule } from "@exploriana/interface/core";
 import { Nullable } from "@exploriana/interface/helper";
 import { AppStackParamList } from "@exploriana/interface/navigation";
-import { errorText, isInvalid } from "@exploriana/lib/form";
-import { DatePicker } from "@exploriana/components/Picker";
 
 interface FormState {
   placeOfDeparture: string;
@@ -40,7 +38,6 @@ interface FormState {
 }
 
 type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Search-Trains">;
-type FormikRef = FormikProps<FormState>;
 
 const styles = StyleSheet.create({
   subtitle: {
@@ -61,8 +58,6 @@ const styles = StyleSheet.create({
   },
 });
 
-const CalendarIcon = <Ionicons name="calendar" size={16} color={theme.colors.text} />;
-
 const ValidationSchema = Yup.object().shape({
   placeOfDeparture: Yup.string().required("Place of departure is required"),
   placeOfArrival: Yup.string()
@@ -80,11 +75,11 @@ export function SearchTrainScreen() {
 
   const { values, errors, touched, handleBlur, handleSubmit, handleChange, setFieldValue } = useFormik<FormState>({
     initialValues: {
-      placeOfDeparture: schedule.details?.placeOfDeparture ?? "",
-      placeOfArrival: schedule.details?.placeOfArrival ?? "",
-      dateOfDeparture: schedule.details?.dateOfDeparture ?? initializeDate().toISOString(),
-      dateOfReturn: schedule.details?.dateOfReturn ?? null,
-      trip: schedule.details?.dateOfReturn ? "return-trip" : "one-way",
+      placeOfDeparture: schedule.selected?.placeOfDeparture ?? "",
+      placeOfArrival: schedule.selected?.placeOfArrival ?? "",
+      dateOfDeparture: schedule.selected?.dateOfDeparture ?? initializeDate().toISOString(),
+      dateOfReturn: schedule.selected?.dateOfReturn ?? null,
+      trip: schedule.selected?.dateOfReturn ? "return-trip" : "one-way",
     },
     validationSchema: ValidationSchema,
     onSubmit: (values: FormState) => {
@@ -99,24 +94,8 @@ export function SearchTrainScreen() {
     setDepartureModalVisible(false);
   }
 
-  function handleOpenDepartureModal() {
-    setDepartureModalVisible(true);
-  }
-
-  function handleCloseDepartureModal() {
-    setDepartureModalVisible(false);
-  }
-
   function handleSelectArrivalCity(value: string) {
     setFieldValue("placeOfArrival", value);
-    setArrivalModalVisible(false);
-  }
-
-  function handleOpenArrivalModal() {
-    setArrivalModalVisible(true);
-  }
-
-  function handleCloseArrivalModal() {
     setArrivalModalVisible(false);
   }
 
@@ -144,8 +123,8 @@ export function SearchTrainScreen() {
             errorText={errorText(["placeOfDeparture", "placeOfArrival"], { errors, touched })}
             isInvalid={isInvalid(["placeOfDeparture", "placeOfArrival"], { errors, touched })}
             {...{
-              departure: { value: values.placeOfDeparture, onPress: handleOpenDepartureModal, placeholder: "Where From?", onBlur: handleBlur("placeOfDeparture") },
-              arrival: { value: values.placeOfArrival, onPress: handleOpenArrivalModal, placeholder: "Where To?", onBlur: handleBlur("placeOfArrival") },
+              departure: { value: values.placeOfDeparture, onPress: () => setDepartureModalVisible(true), placeholder: "Where From?", onBlur: handleBlur("placeOfDeparture") },
+              arrival: { value: values.placeOfArrival, onPress: () => setArrivalModalVisible(true), placeholder: "Where To?", onBlur: handleBlur("placeOfArrival") },
             }}
           />
           <Box marginTop={20}>
@@ -175,8 +154,8 @@ export function SearchTrainScreen() {
           <PrimaryButton label="Search Trains" style={styles.button} onPress={() => handleSubmit()} />
         </Box>
       </ScrollView>
-      <SelectCityModal onSelect={handleSelectDepartureCity} visible={isDepartureModalVisible} onRequestClose={handleCloseDepartureModal} />
-      <SelectCityModal onSelect={handleSelectArrivalCity} visible={isArrivalModalVisible} onRequestClose={handleCloseArrivalModal} />
+      <SelectCityModal onSelect={handleSelectDepartureCity} visible={isDepartureModalVisible} onRequestClose={() => setDepartureModalVisible(false)} />
+      <SelectCityModal onSelect={handleSelectArrivalCity} visible={isArrivalModalVisible} onRequestClose={() => setArrivalModalVisible(false)} />
     </SafeAreaView>
   );
 }

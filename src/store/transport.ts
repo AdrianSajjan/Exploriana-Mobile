@@ -3,11 +3,11 @@ import { Nullable } from "@exploriana/interface/helper";
 import { create } from "zustand";
 
 export interface TransportState {
-  details: Nullable<Transport>;
+  selected: Nullable<Transport>;
   update: (data: Transport) => void;
 }
 
 export const useTransportStore = create<TransportState>()((set) => ({
-  details: null,
-  update: (data) => set({ details: data }),
+  selected: null,
+  update: (data) => set({ selected: data }),
 }));

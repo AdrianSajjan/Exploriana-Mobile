@@ -1,11 +1,11 @@
 import { theme } from "@exploriana/config";
+import { TouchableOpacity } from "react-native";
 import { Box } from "@exploriana/components/Box";
 import { Body, Caption } from "@exploriana/components/Typography";
-import { IconButton } from "@exploriana/components/Button";
 
 interface SectionHeaderProps {
   title: string;
-  button: string;
+  button?: string;
   marginTop?: number;
   onPress?: () => void;
 }
@@ -16,9 +16,11 @@ export function SectionHeader({ button, title, marginTop = 24 }: SectionHeaderPr
       <Body size="lg" fontWeight="bold" color={theme.colors.heading}>
         {title}
       </Body>
-      <IconButton>
-        <Caption>{button}</Caption>
-      </IconButton>
+      {Boolean(button) && (
+        <TouchableOpacity>
+          <Caption>{button}</Caption>
+        </TouchableOpacity>
+      )}
     </Box>
   );
 }

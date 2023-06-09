@@ -75,7 +75,7 @@ export function CalendarModal({ width, date, visible, title, dateFormat = "do LL
           </Box>
           <Calendar {...{ width, date, onChange }} />
           <Box marginTop={24}>
-            <PrimaryButton label={label} onPress={onRequestClose} />
+            <PrimaryButton label={label} background={theme.colors.secondary} onPress={onRequestClose} />
           </Box>
         </Animated.View>
       </KeyboardAvoidingView>

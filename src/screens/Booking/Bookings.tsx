@@ -5,7 +5,7 @@ import { sharedStyles } from "@exploriana/styles/shared";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-export function OrdersScreen() {
+export function BookingsScreen() {
   return (
     <SafeAreaView style={[sharedStyles.fullHeight]}>
       <StatusBar backgroundColor={theme.colors.secondary} style="light" />

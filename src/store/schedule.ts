@@ -3,11 +3,11 @@ import { Nullable } from "@exploriana/interface/helper";
 import { create } from "zustand";
 
 export interface ScheduleState {
-  details: Nullable<Schedule>;
+  selected: Nullable<Schedule>;
   update: (data: Schedule) => void;
 }
 
 export const useScheduleStore = create<ScheduleState>()((set) => ({
-  details: null,
-  update: (data) => set({ details: data }),
+  selected: null,
+  update: (data) => set({ selected: data }),
 }));

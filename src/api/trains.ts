@@ -25,7 +25,7 @@ export function useFetchTrainsByRouteQuery(placeOfDeparture: string, placeOfArri
                 const minutesLeftTillMidnight = differenceInMinutes(endOfToday(), currentDate); // Random
                 const timeOfDeparture = addMinutes(currentDate, utils.random(minutesLeftTillMidnight)).toISOString(); // Random
                 const timeOfArrival = addMinutes(initializeDate(timeOfDeparture), averageTimeTaken + utils.random(60)).toISOString(); // Random
-                return { ...train, price, timeOfDeparture, timeOfArrival };
+                return { ...train, price, timeOfDeparture, timeOfArrival, type: "train" };
               });
               resolve(data);
             },

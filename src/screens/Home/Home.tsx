@@ -17,7 +17,7 @@ import { sharedStyles } from "@exploriana/styles/shared";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Search-Trains">;
+type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Home">;
 
 const styles = StyleSheet.create({
   brand: {
@@ -68,7 +68,7 @@ export function HomeScreen() {
           </Box>
         </Box>
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={24}>
-          <SearchBar placeholder="Search for places, hotels, flights ..." />
+          <SearchBar editable={false} placeholder="Search for places, hotels, flights ..." />
         </Box>
         <Box flexWrap="wrap" flexDirection="row" paddingHorizontal={16} paddingTop={8}>
           <ServiceCard caption="Flights" icon={<Flight height={36} />} />
@@ -76,7 +76,6 @@ export function HomeScreen() {
           <ServiceCard caption="Tours" icon={<Tours height={36} />} />
           <ServiceCard caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
         </Box>
-
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={32}>
           <ImageBackground source={require("assets/images/banner.jpeg")} style={styles.banner} borderRadius={theme.shapes.rounded.lg}>
             <View style={styles.overlay}>

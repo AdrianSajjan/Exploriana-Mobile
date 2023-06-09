@@ -10,5 +10,6 @@ export type AppStackParamList = {
   Home: undefined;
   "Book-Trains": undefined;
   "Search-Trains": undefined;
+  "Train-Checkout": undefined;
   "Boarding-Pass": undefined;
 };

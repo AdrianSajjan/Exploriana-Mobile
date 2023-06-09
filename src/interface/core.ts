@@ -9,16 +9,19 @@ export interface Transport {
   id: string;
   name: string;
   price: number;
-  timeOfDeparture: string;
-  placeOfDeparture: string;
   timeOfArrival: string;
+  timeOfDeparture: string;
   placeOfArrival: string;
+  placeOfDeparture: string;
+  type: "flight" | "train" | "bus";
 }
 
+export interface Booking {}
+
 export interface Schedule {
+  placeOfArrival: string;
   dateOfDeparture: string;
   placeOfDeparture: string;
-  placeOfArrival: string;
   dateOfReturn: Nullable<string>;
 }
 

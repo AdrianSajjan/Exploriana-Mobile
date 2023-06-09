@@ -71,12 +71,14 @@ export function HomeScreen() {
           <SearchBar editable={false} placeholder="Search for places, hotels, flights ..." />
         </Box>
         <Box flexWrap="wrap" flexDirection="row" paddingHorizontal={16} paddingTop={8}>
+          <ServiceCard caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
           <ServiceCard caption="Flights" icon={<Flight height={36} />} />
           <ServiceCard caption="Hotels" icon={<Hotel height={36} />} />
           <ServiceCard caption="Tours" icon={<Tours height={36} />} />
-          <ServiceCard caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
+          <ServiceCard caption="Places" icon={<Tours height={36} />} />
+          <ServiceCard caption="Weather" icon={<Tours height={36} />} />
         </Box>
-        <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={32}>
+        <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={24}>
           <ImageBackground source={require("assets/images/banner.jpeg")} style={styles.banner} borderRadius={theme.shapes.rounded.lg}>
             <View style={styles.overlay}>
               <Text color={theme.colors.surface} size={18} fontWeight="medium">

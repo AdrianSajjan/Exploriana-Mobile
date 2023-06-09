@@ -12,7 +12,7 @@ interface ServiceCardProp extends PressableProps {
 const styles = StyleSheet.create({
   card: {
     flex: 1,
-    minWidth: 120,
+    minWidth: 90,
     minHeight: 90,
     paddingVertical: 12,
     paddingHorizontal: 16,

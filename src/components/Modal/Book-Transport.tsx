@@ -1,16 +1,22 @@
+import { useConfig } from "@exploriana/api/config";
+import { useCreatePaymentIntent } from "@exploriana/api/payments";
 import { Box } from "@exploriana/components/Box";
 import { IconButton, PrimaryButton } from "@exploriana/components/Button";
 import { Connector, Divider } from "@exploriana/components/Divider";
 import { Body, Caption, Heading, Text } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config";
+import { stripeSecretKey } from "@exploriana/config/app";
 import { Transport } from "@exploriana/interface/core";
 import { initializeDate } from "@exploriana/lib/core";
 import { formatTimeInterval, formatToIndianLocale } from "@exploriana/lib/format";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { Ionicons } from "@expo/vector-icons";
+import { useStripe } from "@stripe/stripe-react-native";
 import { format, intervalToDuration } from "date-fns";
 import * as React from "react";
-import { Image, ImageSourcePropType, Modal, ModalProps, StyleSheet, View, KeyboardAvoidingView } from "react-native";
+import { isAxiosError } from "axios";
+import { Alert } from "react-native";
+import { Image, ImageSourcePropType, Modal, ModalProps, StyleSheet, View, KeyboardAvoidingView, ToastAndroid } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
 
 interface BookTransportModalProps extends ModalProps {
@@ -53,6 +59,11 @@ const styles = StyleSheet.create({
 export function BookTransportModal({ data, icon, cover, visible, onRequestClose, ...props }: BookTransportModalProps) {
   const translateY = useSharedValue(HEIGHT);
 
+  const stripe = useStripe();
+  const createPaymentIntent = useCreatePaymentIntent();
+
+  const [isProcessingPayment, setProcessingPaymentStatus] = React.useState(false);
+
   React.useEffect(() => {
     if (visible) translateY.value = withDelay(150, withTiming(0, { duration: 250 }));
     else translateY.value = withDelay(150, withTiming(HEIGHT, { duration: 0 }));
@@ -63,6 +74,25 @@ export function BookTransportModal({ data, icon, cover, visible, onRequestClose,
       transform: [{ translateY: translateY.value }],
     };
   });
+
+  async function handleBookNow(event) {
+    if (!data) return;
+    try {
+      const intent = await createPaymentIntent.mutateAsync({ amount: data.price * 100 });
+      const init = await stripe.initPaymentSheet({ merchantDisplayName: "Exploriana Inc.", paymentIntentClientSecret: intent.client_secret, style: "alwaysLight" });
+      if (init.error) return ToastAndroid.show(init.error.message, ToastAndroid.LONG);
+      setProcessingPaymentStatus(true);
+      const present = await stripe.presentPaymentSheet();
+      if (present.error) return ToastAndroid.show(present.error.message, ToastAndroid.LONG);
+      Alert.alert("Order Confirmed", `Your booking for train number ${data.id} is created.`);
+      onRequestClose?.(event);
+    } catch (error) {
+      const message = isAxiosError(error) ? error.response?.data?.message ?? error.message : "Unable to complete this payment";
+      ToastAndroid.show(message, ToastAndroid.LONG);
+    } finally {
+      setProcessingPaymentStatus(false);
+    }
+  }
 
   return (
     <Modal visible={visible} animationType="fade" transparent statusBarTranslucent onRequestClose={onRequestClose} {...props}>
@@ -118,7 +148,7 @@ export function BookTransportModal({ data, icon, cover, visible, onRequestClose,
                 {formatToIndianLocale(data?.price ?? 0)}
               </Heading>
             </Box>
-            <PrimaryButton label="Book Train" />
+            <PrimaryButton disabled={isProcessingPayment} onPress={handleBookNow} label="Book Now" />
           </Box>
         </Animated.View>
       </KeyboardAvoidingView>

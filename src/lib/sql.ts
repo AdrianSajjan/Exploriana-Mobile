@@ -9,3 +9,7 @@ export async function connectToSQLiteDatabase(): Promise<SQLite.WebSQLDatabase> 
   await FileSystem.downloadAsync(Asset.fromModule(require("../../assets/database/database.db")).uri, FileSystem.documentDirectory + "SQLite/main.db");
   return SQLite.openDatabase("main.db");
 }
+
+export function connectToAppDatabase() {
+  return SQLite.openDatabase("app.db");
+}

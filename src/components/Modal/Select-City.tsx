@@ -2,6 +2,7 @@ import { Box } from "@exploriana/components/Box";
 import { IconButton } from "@exploriana/components/Button";
 import { Divider } from "@exploriana/components/Divider";
 import { SearchBar } from "@exploriana/components/Input";
+import { ShimmerPlaceholder } from "@exploriana/components/Placeholder";
 import { Body } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config";
 import { useSQLiteDatabase } from "@exploriana/hooks/use-database";
@@ -40,6 +41,9 @@ const styles = StyleSheet.create({
   list: {
     paddingTop: 12,
   },
+  shimmer: {
+    marginTop: 12,
+  },
 });
 
 export function SelectCityModal({ visible, onSelect, onRequestClose, ...props }: SelectCityModalProps) {
@@ -64,8 +68,8 @@ export function SelectCityModal({ visible, onSelect, onRequestClose, ...props }:
     };
   });
 
-  const suggestions = useQuery(
-    ["cities", { query }] as const,
+  const cities = useQuery(
+    ["cities", { query }],
     async () => {
       const sql = await createFactory(Promise<SQLite.SQLTransaction>, (resolve) => database!.transaction(resolve));
       const results = await createFactory(Promise<Location[]>, (resolve, reject) =>
@@ -102,6 +106,16 @@ export function SelectCityModal({ visible, onSelect, onRequestClose, ...props }:
     );
   }, []);
 
+  const renderEmptyList = React.useCallback(() => {
+    return (
+      <Box paddingHorizontal={20}>
+        <ShimmerPlaceholder height={36} width="100%" borderRadius={theme.shapes.rounded.md} />
+        <ShimmerPlaceholder height={36} width="100%" borderRadius={theme.shapes.rounded.md} style={styles.shimmer} />
+        <ShimmerPlaceholder height={36} width="100%" borderRadius={theme.shapes.rounded.md} style={styles.shimmer} />
+      </Box>
+    );
+  }, []);
+
   function keyExtractor(item: Location) {
     return [item.city, item.district, item.state].join("-");
   }
@@ -123,7 +137,15 @@ export function SelectCityModal({ visible, onSelect, onRequestClose, ...props }:
             </Box>
           </Box>
           <Divider />
-          <FlatList data={suggestions.data} initialNumToRender={10} maxToRenderPerBatch={20} contentContainerStyle={styles.list} keyExtractor={keyExtractor} renderItem={renderItem} />
+          <FlatList
+            data={cities.data}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+            ListEmptyComponent={renderEmptyList}
+            initialNumToRender={10}
+            maxToRenderPerBatch={20}
+            contentContainerStyle={styles.list}
+          />
         </Animated.View>
       </KeyboardAvoidingView>
     </Modal>

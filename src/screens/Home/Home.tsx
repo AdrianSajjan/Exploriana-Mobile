@@ -5,10 +5,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Box } from "@exploriana/components/Box";
 import { CarouselDestinationCard, ServiceCard } from "@exploriana/components/Card";
-import { Bus, Flight, Hotel, Restro, Tours, Train } from "@exploriana/components/Icons";
+import { Flight, Hotel, Places, Tours, Train } from "@exploriana/components/Icons";
 import { SearchBar } from "@exploriana/components/Input";
 import { SectionHeader } from "@exploriana/components/Layout";
-import { Body, Caption, Heading, Text } from "@exploriana/components/Typography";
+import { Body, Heading, Text } from "@exploriana/components/Typography";
 
 import { IconButton } from "@exploriana/components/Button";
 import { theme } from "@exploriana/config";
@@ -16,6 +16,7 @@ import { AppStackParamList } from "@exploriana/interface/navigation";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { Weather } from "@exploriana/components/Icons/Weather";
 
 type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Home">;
 
@@ -75,8 +76,8 @@ export function HomeScreen() {
           <ServiceCard caption="Flights" icon={<Flight height={36} />} />
           <ServiceCard caption="Hotels" icon={<Hotel height={36} />} />
           <ServiceCard caption="Tours" icon={<Tours height={36} />} />
-          <ServiceCard caption="Places" icon={<Tours height={36} />} />
-          <ServiceCard caption="Weather" icon={<Tours height={36} />} />
+          <ServiceCard caption="Places" icon={<Places height={36} />} onPress={() => navigation.navigate("Places")} />
+          <ServiceCard caption="Weather" icon={<Weather height={36} />} />
         </Box>
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={24}>
           <ImageBackground source={require("assets/images/banner.jpeg")} style={styles.banner} borderRadius={theme.shapes.rounded.lg}>

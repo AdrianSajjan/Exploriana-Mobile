@@ -6,3 +6,4 @@ export * from "./Restro";
 export * from "./Tours";
 export * from "./Bus";
 export * from "./Train";
+export * from "./Places";

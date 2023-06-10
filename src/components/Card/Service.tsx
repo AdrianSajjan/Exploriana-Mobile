@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
-export function ServiceCard({ caption, icon, ...props }: ServiceCardProp) {
+export function ServiceCard({ caption, icon, style, ...props }: ServiceCardProp) {
   const scale = useSharedValue(1);
 
   const rStyle = useAnimatedStyle(() => {
@@ -40,7 +40,7 @@ export function ServiceCard({ caption, icon, ...props }: ServiceCardProp) {
   const onPressOut = () => (scale.value = 1);
 
   return (
-    <AnimatedPressable style={[styles.card, rStyle]} {...{ onPressIn, onPressOut, ...props }}>
+    <AnimatedPressable style={[styles.card, rStyle, style]} {...{ onPressIn, onPressOut, ...props }}>
       <Box marginBottom={8}>{icon}</Box>
       <Body size="sm">{caption}</Body>
     </AnimatedPressable>

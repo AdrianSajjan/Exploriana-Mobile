@@ -1,5 +1,5 @@
 import { useSQLiteDatabase } from "@exploriana/hooks/use-database";
-import { State, Station } from "@exploriana/interface/core";
+import { Location, State, Station } from "@exploriana/interface/core";
 import { createFactory } from "@exploriana/lib/core";
 import { useQuery } from "@tanstack/react-query";
 import utils from "lodash";
@@ -15,6 +15,35 @@ function createStateCode(state: string) {
 function createStationCode(city: string) {
   const mid = Math.floor(city.length / 2);
   return utils.toUpper(city.charAt(0) + city.charAt(mid) + city.charAt(city.length - 1));
+}
+
+export function useSearchCitiesQuery(query: string) {
+  const [database] = useSQLiteDatabase();
+  return useQuery(
+    ["cities", { query }],
+    async () => {
+      return await createFactory(Promise<Location[]>, (resolve, reject) =>
+        database!.transaction((sql) => {
+          sql.executeSql(
+            `SELECT * FROM cities WHERE cities.city LIKE ?;`,
+            ["%" + query + "%"],
+            (_, result) => {
+              resolve(result.rows._array);
+            },
+            (_, error) => {
+              reject(error.message);
+              return false;
+            }
+          );
+        })
+      );
+    },
+    {
+      initialData: [],
+      enabled: Boolean(database),
+      retry: false,
+    }
+  );
 }
 
 export function useFetchLocationFromAddressQuery(address: string) {

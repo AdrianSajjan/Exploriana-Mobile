@@ -19,6 +19,7 @@ import { sharedStyles } from "@exploriana/styles/shared";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { stripePublishableKey } from "@exploriana/config/stripe";
 import { BoardingPassScreen } from "@exploriana/screens/Booking";
+import { PlacesScreen } from "@exploriana/screens/Places";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -58,6 +59,7 @@ export default function App() {
                 <Stack.Screen name="Book-Trains" component={BookTrainScreen} />
                 <Stack.Screen name="Train-Checkout" component={TrainCheckoutScreen} />
                 <Stack.Screen name="Boarding-Pass" component={BoardingPassScreen} />
+                <Stack.Screen name="Places" component={PlacesScreen} />
               </Stack.Navigator>
             </NavigationContainer>
           </GestureHandlerRootView>

@@ -70,9 +70,6 @@ export function SearchTrainScreen() {
 
   const schedule = useScheduleStore();
 
-  const [isArrivalModalVisible, setArrivalModalVisible] = React.useState(false);
-  const [isDepartureModalVisible, setDepartureModalVisible] = React.useState(false);
-
   const { values, errors, touched, handleBlur, handleSubmit, handleChange, setFieldValue } = useFormik<FormState>({
     initialValues: {
       placeOfDeparture: schedule.selected?.placeOfDeparture ?? "",
@@ -88,16 +85,6 @@ export function SearchTrainScreen() {
       navigation.navigate("Book-Trains");
     },
   });
-
-  function handleSelectDepartureCity(value: string) {
-    setFieldValue("placeOfDeparture", value);
-    setDepartureModalVisible(false);
-  }
-
-  function handleSelectArrivalCity(value: string) {
-    setFieldValue("placeOfArrival", value);
-    setArrivalModalVisible(false);
-  }
 
   function handleSwitchArrivalAndDeparture() {
     const departure = values.placeOfDeparture;
@@ -123,8 +110,8 @@ export function SearchTrainScreen() {
             errorText={errorText(["placeOfDeparture", "placeOfArrival"], { errors, touched })}
             isInvalid={isInvalid(["placeOfDeparture", "placeOfArrival"], { errors, touched })}
             {...{
-              departure: { value: values.placeOfDeparture, onPress: () => setDepartureModalVisible(true), placeholder: "Where From?", onBlur: handleBlur("placeOfDeparture") },
-              arrival: { value: values.placeOfArrival, onPress: () => setArrivalModalVisible(true), placeholder: "Where To?", onBlur: handleBlur("placeOfArrival") },
+              arrival: { value: values.placeOfArrival, onChangeText: handleChange("placeOfArrival"), placeholder: "Where To?", onBlur: handleBlur("placeOfArrival") },
+              departure: { value: values.placeOfDeparture, onChangeText: handleChange("placeOfDeparture"), placeholder: "Where From?", onBlur: handleBlur("placeOfDeparture") },
             }}
           />
           <Box marginTop={20}>
@@ -154,8 +141,6 @@ export function SearchTrainScreen() {
           <PrimaryButton label="Search Trains" style={styles.button} onPress={() => handleSubmit()} />
         </Box>
       </ScrollView>
-      <SelectCityModal onSelect={handleSelectDepartureCity} visible={isDepartureModalVisible} onRequestClose={() => setDepartureModalVisible(false)} />
-      <SelectCityModal onSelect={handleSelectArrivalCity} visible={isArrivalModalVisible} onRequestClose={() => setArrivalModalVisible(false)} />
     </SafeAreaView>
   );
 }

@@ -8,6 +8,7 @@ export type AuthStackParamList = {
 
 export type AppStackParamList = {
   Home: undefined;
+  Places: undefined;
   "Book-Trains": undefined;
   "Search-Trains": undefined;
   "Train-Checkout": undefined;

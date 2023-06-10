@@ -1,19 +1,14 @@
+import { useSearchCitiesQuery } from "@exploriana/api/location";
 import { Box } from "@exploriana/components/Box";
-import { IconButton } from "@exploriana/components/Button";
 import { Divider } from "@exploriana/components/Divider";
-import { SearchBar } from "@exploriana/components/Input";
+import { SearchBar } from "@exploriana/components/Input/Search-Bar";
 import { ShimmerPlaceholder } from "@exploriana/components/Placeholder";
 import { Body } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config";
-import { useSQLiteDatabase } from "@exploriana/hooks/use-database";
 import { Location } from "@exploriana/interface/core";
-import { createFactory } from "@exploriana/lib/core";
 import { sharedStyles } from "@exploriana/styles/shared";
-import { Ionicons } from "@expo/vector-icons";
-import { useQuery } from "@tanstack/react-query";
-import * as SQLite from "expo-sqlite";
 import * as React from "react";
-import { ListRenderItem, Modal, ModalProps, StyleSheet, View, TouchableOpacity, FlatList, KeyboardAvoidingView } from "react-native";
+import { FlatList, KeyboardAvoidingView, ListRenderItem, Modal, ModalProps, StyleSheet, TouchableOpacity, View } from "react-native";
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withTiming } from "react-native-reanimated";
 
 interface SelectCityModalProps extends ModalProps {
@@ -51,44 +46,16 @@ export function SelectCityModal({ visible, onSelect, onRequestClose, ...props }:
 
   const [query, setQuery] = React.useState("");
 
-  const [database] = useSQLiteDatabase();
-
   React.useEffect(() => {
     if (visible) translateY.value = withDelay(150, withTiming(0, { duration: 300 }));
     else translateY.value = withDelay(150, withTiming(HEIGHT, { duration: 0 }));
   }, [visible]);
 
   const rStyle = useAnimatedStyle(() => {
-    return {
-      transform: [{ translateY: translateY.value }],
-    };
+    return { transform: [{ translateY: translateY.value }] };
   });
 
-  const cities = useQuery(
-    ["cities", { query }],
-    async () => {
-      const sql = await createFactory(Promise<SQLite.SQLTransaction>, (resolve) => database!.transaction(resolve));
-      const results = await createFactory(Promise<Location[]>, (resolve, reject) =>
-        sql.executeSql(
-          `SELECT * FROM cities WHERE cities.city LIKE ?;`,
-          ["%" + query + "%"],
-          (_, result) => {
-            resolve(result.rows._array);
-          },
-          (_, error) => {
-            reject(error.message);
-            return false;
-          }
-        )
-      );
-      return results;
-    },
-    {
-      initialData: [],
-      enabled: Boolean(database),
-      retry: false,
-    }
-  );
+  const cities = useSearchCitiesQuery(query);
 
   const renderItem: ListRenderItem<Location> = React.useCallback(({ item }) => {
     const handleSelect = () => onSelect?.([item.city, item.state].join(", "));
@@ -124,15 +91,12 @@ export function SelectCityModal({ visible, onSelect, onRequestClose, ...props }:
           <Box alignItems="center" justifyContent="center" paddingTop={12} paddingBottom={8}>
             <Box height={2} width={36} borderRadius={36} backgroundColor={theme.colors.divider} />
           </Box>
-          <Box alignItems="center" flexDirection="row" paddingRight={20}>
-            <SearchBar placeholder="Search for cities..." value={query} onChangeText={setQuery} style={sharedStyles.fullHeight} />
-            <Box marginLeft={24}>
-              <IconButton onPress={onRequestClose}>
-                <Ionicons name="close" size={20} />
-              </IconButton>
-            </Box>
+          <Box alignItems="center" flexDirection="row" paddingHorizontal={20} marginTop={12}>
+            <SearchBar placeholder="Search for cities..." value={query} onChangeText={setQuery} style={[sharedStyles.fullHeight, { backgroundColor: theme.colors.background }]} />
           </Box>
-          <Divider />
+          <Box marginTop={24}>
+            <Divider />
+          </Box>
           <FlatList
             data={cities.data}
             keyExtractor={keyExtractor}

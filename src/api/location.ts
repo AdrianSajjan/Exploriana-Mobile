@@ -46,6 +46,65 @@ export function useSearchCitiesQuery(query: string) {
   );
 }
 
+export function useFetchStationFromNameQuery(name: string) {
+  const [database] = useSQLiteDatabase();
+  return useQuery(
+    ["station", { name }],
+    async () => {
+      const station = await createFactory(Promise<Station>, (resolve, reject) =>
+        database!.transaction((sql) => {
+          sql.executeSql(
+            `SELECT * FROM stations AS station WHERE station.name LIKE ?;`,
+            [`%${name}%`],
+            (_, { rows }) => {
+              const station: Station = rows.length > 0 ? rows.item(0) : { code: createStationCode(name), name, city: "" };
+              resolve(station);
+            },
+            (_, error) => {
+              reject(error.message);
+              return false;
+            }
+          );
+        })
+      );
+      return station;
+    },
+    {
+      enabled: Boolean(name),
+    }
+  );
+}
+
+export function useFetchStateFromCity(city: string) {
+  const [database] = useSQLiteDatabase();
+
+  return useQuery(
+    ["cities", { city }],
+    async () => {
+      const state = await createFactory(Promise<State>, (resolve, reject) =>
+        database!.transaction((sql) => {
+          sql.executeSql(
+            `SELECT name, code FROM states INNER JOIN cities ON states.name = cities.state WHERE cities.city LIKE ?;`,
+            [`%${city}%`],
+            (_, { rows }) => {
+              const state: State = rows.length > 0 ? rows.item(0) : { code: "", name: "" };
+              resolve(state);
+            },
+            (_, error) => {
+              reject(error.message);
+              return false;
+            }
+          );
+        })
+      );
+      return state;
+    },
+    {
+      enabled: Boolean(city),
+    }
+  );
+}
+
 export function useFetchLocationFromAddressQuery(address: string) {
   const [database] = useSQLiteDatabase();
 
@@ -72,13 +131,13 @@ export function useFetchLocationFromAddressQuery(address: string) {
         })
       );
 
-      const station = await createFactory(Promise<State>, (resolve, reject) =>
+      const station = await createFactory(Promise<Omit<Station, "city">>, (resolve, reject) =>
         database!.transaction((sql) => {
           sql.executeSql(
             `SELECT name, code FROM stations AS station WHERE station.name LIKE ?;`,
             [`%${city}%`],
             (_, { rows }) => {
-              const station: Station = rows.length > 0 ? rows.item(0) : { code: createStationCode(city), name: city };
+              const station: Omit<Station, "city"> = rows.length > 0 ? rows.item(0) : { code: createStationCode(city), name: city };
               resolve(station);
             },
             (_, error) => {

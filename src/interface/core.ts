@@ -21,7 +21,21 @@ export interface Transport {
   type: "flight" | "train" | "bus";
 }
 
-export interface Booking {}
+export interface Booking {
+  id: string;
+  transport: string;
+  name: string;
+  placeOfDeparture: string;
+  placeOfArrival: string;
+  dateOfDeparture: string;
+  dateOfArrival: string;
+  dateOfReturn: string | null;
+  transportNumber: string | null;
+  seat: string;
+  transportID: string;
+  price: number;
+  createdAt: string;
+}
 
 export interface Location {
   city: string;
@@ -37,4 +51,5 @@ export interface State {
 export interface Station {
   code: string;
   name: string;
+  city: string;
 }

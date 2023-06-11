@@ -24,6 +24,11 @@ import { SelectPicker } from "@exploriana/components/Picker";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { AppStackParamList } from "@exploriana/interface/navigation";
+import { useCreateBooking } from "@exploriana/api/booking";
+import { useScheduleStore } from "@exploriana/store/schedule";
+import { initializeDate } from "@exploriana/lib/core";
+import { createBookingID, createSeatNumber, createTransportNumber } from "@exploriana/lib/uuid";
+import { useBookingStore } from "@exploriana/store/booking";
 
 type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Train-Checkout">;
 
@@ -79,9 +84,14 @@ export function TrainCheckoutScreen() {
   const [travelClass, setTravelClass] = React.useState("standard");
   const [isProcessingPayment, setProcessingPaymentStatus] = React.useState(false);
 
-  const stripe = useStripe();
-  const transport = useTransportStore();
   const navigation = useNavigation<NavigationProps>();
+
+  const stripe = useStripe();
+  const booking = useBookingStore();
+  const schedule = useScheduleStore();
+  const transport = useTransportStore();
+
+  const createBooking = useCreateBooking();
   const createPaymentIntent = useCreatePaymentIntent();
 
   const totalAmount = React.useMemo(() => {
@@ -102,7 +112,28 @@ export function TrainCheckoutScreen() {
       if (present.error) throw present.error;
       ToastAndroid.show(`Your booking for train number ${transport.selected.id} is created.`, ToastAndroid.LONG);
       setProcessingPaymentStatus(false);
-      navigation.navigate("Boarding-Pass");
+      try {
+        const result = await createBooking.mutateAsync({
+          id: createBookingID(),
+          name: transport.selected.name,
+          dateOfArrival: transport.selected.timeOfArrival,
+          dateOfDeparture: transport.selected.timeOfDeparture,
+          dateOfReturn: schedule.selected?.dateOfReturn ?? null,
+          placeOfArrival: transport.selected.placeOfArrival,
+          placeOfDeparture: transport.selected.placeOfDeparture,
+          price: transport.selected.price,
+          seat: createSeatNumber(),
+          transport: "train",
+          transportNumber: createTransportNumber(),
+          transportID: transport.selected.id,
+          createdAt: initializeDate().toISOString(),
+        });
+        booking.update(result);
+        setProcessingPaymentStatus(false);
+        navigation.navigate("Boarding-Pass");
+      } catch (error) {
+        setProcessingPaymentStatus(false);
+      }
     } catch (error) {
       setProcessingPaymentStatus(false);
       const message = isAxiosError(error) ? error.response?.data?.message ?? error.message : error?.message ?? "Unable to complete this payment";

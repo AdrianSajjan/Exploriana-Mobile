@@ -1,4 +1,5 @@
 import { SafeAreaView } from "react-native-safe-area-context";
+import * as Yup from "yup";
 import { Image, ScrollView, StyleSheet, View } from "react-native";
 
 import { StatusBar } from "expo-status-bar";
@@ -19,6 +20,7 @@ import { sharedStyles } from "@exploriana/styles/shared";
 
 import { AuthStackParamList } from "@exploriana/interface/navigation";
 import { TouchableOpacity } from "react-native";
+import { useFormik } from "formik";
 
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList, "Login">;
 
@@ -63,6 +65,19 @@ export function LoginScreen() {
   function handleLoginWithEmailAndPassword() {
     navigation.navigate("Home");
   }
+
+  const formik = useFormik({
+    initialValues: {
+      phoneNumber: "",
+      password: "",
+    },
+    validationSchema: Yup.object().shape({
+      phoneNumber: Yup.string()
+        .required("Phone Nu,ber is required")
+        .matches(/^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/, { message: "Please provide a valid phone number" }),
+    }),
+    onSubmit: (values) => {},
+  });
 
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>

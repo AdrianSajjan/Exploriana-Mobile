@@ -1,4 +1,4 @@
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
 import { ButtonProps } from "@exploriana/interface";

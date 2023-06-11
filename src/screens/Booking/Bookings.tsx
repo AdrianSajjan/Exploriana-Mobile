@@ -1,6 +1,6 @@
 import { Box } from "@exploriana/components/Box";
 import { PageHeader } from "@exploriana/components/Layout";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";

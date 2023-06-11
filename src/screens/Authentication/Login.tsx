@@ -14,7 +14,7 @@ import { Body, Heading } from "@exploriana/components/Typography";
 import { PasswordField, TextField } from "@exploriana/components/Input";
 import { LinkButton, PrimaryButton, TextButton } from "@exploriana/components/Button";
 
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { sharedStyles } from "@exploriana/styles/shared";
 
 import { AuthStackParamList } from "@exploriana/interface/navigation";

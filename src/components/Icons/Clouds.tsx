@@ -1,4 +1,4 @@
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { IconProps } from "@exploriana/interface";
 import * as React from "react";
 import Svg, { Path } from "react-native-svg";

@@ -1,4 +1,4 @@
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { StyleSheet } from "react-native";
 
 export const sharedStyles = StyleSheet.create({

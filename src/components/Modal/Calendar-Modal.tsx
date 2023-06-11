@@ -2,7 +2,7 @@ import { Box } from "@exploriana/components/Box";
 import { IconButton, PrimaryButton } from "@exploriana/components/Button";
 import { Divider } from "@exploriana/components/Divider";
 import { Text } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import * as React from "react";
 import { Modal, ModalProps, StyleSheet, View, KeyboardAvoidingView } from "react-native";
 import { Ionicons } from "@expo/vector-icons";

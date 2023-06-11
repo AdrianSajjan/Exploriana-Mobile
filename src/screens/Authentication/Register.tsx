@@ -4,7 +4,7 @@ import { Divider } from "@exploriana/components/Divider";
 import { Airplane } from "@exploriana/components/Icons";
 import { PasswordField, TextField } from "@exploriana/components/Input";
 import { Body, Heading } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { AuthStackParamList } from "@exploriana/interface/navigation";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { Ionicons, Zocial } from "@expo/vector-icons";

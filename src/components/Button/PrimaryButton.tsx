@@ -1,5 +1,5 @@
 import * as React from "react";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { Box } from "@exploriana/components/Box";
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { Platform, Pressable, StyleSheet, Text, ViewStyle } from "react-native";

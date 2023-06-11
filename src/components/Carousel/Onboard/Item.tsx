@@ -1,5 +1,5 @@
 import { Box } from "@exploriana/components/Box";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { ListImageItem } from "@exploriana/interface";
 import { useMemo } from "react";
 import { StyleSheet, useWindowDimensions } from "react-native";

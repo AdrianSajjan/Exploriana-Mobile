@@ -1,6 +1,6 @@
 import { Box } from "@exploriana/components/Box";
 import { Body } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 
 import { Feather } from "@expo/vector-icons";
 import { StyleProp, StyleSheet, TouchableOpacity, View, ViewStyle } from "react-native";

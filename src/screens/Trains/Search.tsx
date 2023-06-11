@@ -19,7 +19,7 @@ import { DatePicker } from "@exploriana/components/Picker";
 import { SelectCityModal } from "@exploriana/components/Modal";
 import { Body, Heading } from "@exploriana/components/Typography";
 
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { initializeDate } from "@exploriana/lib/core";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { errorText, isInvalid } from "@exploriana/lib/form";

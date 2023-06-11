@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Box } from "@exploriana/components/Box";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { Octicons } from "@expo/vector-icons";
 import { StyleProp, StyleSheet, Text, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle, TouchableOpacityProps } from "react-native";

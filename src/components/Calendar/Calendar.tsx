@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box } from "@exploriana/components/Box";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { initializeDate } from "@exploriana/lib/core";
 import { Body, Text } from "@exploriana/components/Typography";
 import { Ionicons } from "@expo/vector-icons";

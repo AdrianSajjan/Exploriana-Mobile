@@ -1,6 +1,6 @@
 import { Box } from "@exploriana/components/Box";
 import { Body } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 
 import { Fragment } from "react";
 import { Ionicons } from "@expo/vector-icons";

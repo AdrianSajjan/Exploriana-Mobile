@@ -15,7 +15,7 @@ import { useFetchLocationFromAddressQuery } from "@exploriana/api/location";
 import { useFetchTrainsByRouteQuery } from "@exploriana/api/trains";
 import { Navigate } from "@exploriana/components/Navigation";
 import { ShimmerPlaceholder } from "@exploriana/components/Placeholder";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { AppStackParamList } from "@exploriana/interface/navigation";
 import { initializeDate } from "@exploriana/lib/core";
 import { useScheduleStore } from "@exploriana/store/schedule";

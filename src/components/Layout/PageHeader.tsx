@@ -2,7 +2,7 @@ import { Box } from "@exploriana/components/Box";
 import { Ionicons } from "@expo/vector-icons";
 import { IconButton } from "@exploriana/components/Button";
 import { Text } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { useNavigation } from "@react-navigation/native";
 
 export function PageHeader({ title, color = theme.colors.heading }: { title: string; color?: string }) {

@@ -4,7 +4,7 @@ import { Box } from "@exploriana/components/Box";
 import { IconButton, PrimaryButton } from "@exploriana/components/Button";
 import { Connector, Divider } from "@exploriana/components/Divider";
 import { Body, Caption, Heading, Text } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { stripeSecretKey } from "@exploriana/config/app";
 import { Transport } from "@exploriana/interface/core";
 import { initializeDate } from "@exploriana/lib/core";

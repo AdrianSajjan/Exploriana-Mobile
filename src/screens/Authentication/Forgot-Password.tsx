@@ -12,7 +12,7 @@ import { Body, Heading } from "@exploriana/components/Typography";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { AuthStackParamList } from "@exploriana/interface/navigation";
 import { useNavigation } from "@react-navigation/native";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList, "Forgot-Password">;
 

@@ -1,6 +1,6 @@
 import { Box } from "@exploriana/components/Box";
 import { Text } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { useWindowDimensions } from "react-native";
 
 export function Connector({ icon, label }: { icon: React.ReactNode; label?: string }) {

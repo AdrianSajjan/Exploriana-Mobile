@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Image, StyleSheet } from "react-native";
 import { Box } from "@exploriana/components/Box";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";

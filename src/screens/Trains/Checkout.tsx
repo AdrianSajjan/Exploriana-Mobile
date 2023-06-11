@@ -7,7 +7,7 @@ import { Train } from "@exploriana/components/Icons";
 import { PageHeader } from "@exploriana/components/Layout";
 import { Navigate } from "@exploriana/components/Navigation";
 import { Body, Caption, Heading } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { formatToIndianLocale } from "@exploriana/lib/format";
 import { useTransportStore } from "@exploriana/store/transport";
 import { sharedStyles } from "@exploriana/styles/shared";

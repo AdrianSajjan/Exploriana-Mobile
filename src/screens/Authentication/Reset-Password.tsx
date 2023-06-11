@@ -3,7 +3,7 @@ import { PrimaryButton } from "@exploriana/components/Button";
 import { Airplane, Clouds } from "@exploriana/components/Icons";
 import { PasswordField, TextField } from "@exploriana/components/Input";
 import { Body, Heading } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { AuthStackParamList } from "@exploriana/interface/navigation";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { Ionicons } from "@expo/vector-icons";
@@ -48,12 +48,7 @@ export function ResetPasswordScreen() {
           </Body>
           <Box marginTop={32}>
             <PasswordField placeholder="New Password" helperText="Enter your new password" errorText="Please provide your new password" />
-            <PasswordField
-              style={styles.textField}
-              placeholder="Confirm Password"
-              helperText="Re-enter your new password"
-              errorText="Passwords doesn't match"
-            />
+            <PasswordField style={styles.textField} placeholder="Confirm Password" helperText="Re-enter your new password" errorText="Passwords doesn't match" />
             <PrimaryButton style={styles.button} label="Reset Password" onPress={handleResetPassword} />
           </Box>
         </View>

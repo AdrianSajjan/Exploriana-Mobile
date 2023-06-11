@@ -4,7 +4,7 @@ import { Divider } from "@exploriana/components/Divider";
 import { SearchBar } from "@exploriana/components/Input/Search-Bar";
 import { ShimmerPlaceholder } from "@exploriana/components/Placeholder";
 import { Body } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { Location } from "@exploriana/interface/core";
 import { sharedStyles } from "@exploriana/styles/shared";
 import * as React from "react";

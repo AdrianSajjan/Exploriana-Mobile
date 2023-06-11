@@ -1,4 +1,4 @@
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { useMemo } from "react";
 import { StyleSheet } from "react-native";
 import Animated, { interpolate, interpolateColor, useAnimatedStyle } from "react-native-reanimated";

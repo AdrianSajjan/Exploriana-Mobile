@@ -4,7 +4,12 @@ export interface User {
   name: string;
   email: string;
 }
-
+export interface Schedule {
+  placeOfArrival: string;
+  dateOfDeparture: string;
+  placeOfDeparture: string;
+  dateOfReturn: Nullable<string>;
+}
 export interface Transport {
   id: string;
   name: string;
@@ -17,13 +22,6 @@ export interface Transport {
 }
 
 export interface Booking {}
-
-export interface Schedule {
-  placeOfArrival: string;
-  dateOfDeparture: string;
-  placeOfDeparture: string;
-  dateOfReturn: Nullable<string>;
-}
 
 export interface Location {
   city: string;

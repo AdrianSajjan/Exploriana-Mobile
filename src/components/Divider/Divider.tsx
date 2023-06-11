@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { Box } from "@exploriana/components/Box";
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleProp, StyleSheet, Text, TextInput, TextInputProps, TouchableOpacity, View, ViewStyle } from "react-native";
 import { sharedStyles } from "@exploriana/styles/shared";

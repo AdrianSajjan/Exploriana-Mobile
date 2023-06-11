@@ -12,7 +12,7 @@ import { PrimaryButton } from "@exploriana/components/Button";
 import { Body, Heading } from "@exploriana/components/Typography";
 import { OnboardCarousel } from "@exploriana/components/Carousel";
 
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { onboardCarousel } from "@exploriana/constants";
 import { sharedStyles } from "@exploriana/styles/shared";
 

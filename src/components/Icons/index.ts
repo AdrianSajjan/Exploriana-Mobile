@@ -7,3 +7,6 @@ export * from "./Tours";
 export * from "./Bus";
 export * from "./Train";
 export * from "./Places";
+export * from "./Cafe";
+export * from "./Parks";
+export * from "./Tourist-Spots";

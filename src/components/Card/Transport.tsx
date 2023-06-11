@@ -1,7 +1,7 @@
 import { Box } from "@exploriana/components/Box";
 import { Connector, Divider } from "@exploriana/components/Divider";
 import { Body, Caption, Heading } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { Transport } from "@exploriana/interface/core";
 import { initializeDate } from "@exploriana/lib/core";
 import { formatTimeInterval, formatToIndianCurrency, formatToIndianLocale } from "@exploriana/lib/format";

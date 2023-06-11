@@ -1,4 +1,4 @@
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { TouchableOpacity } from "react-native";
 import { Box } from "@exploriana/components/Box";
 import { Body, Caption } from "@exploriana/components/Typography";

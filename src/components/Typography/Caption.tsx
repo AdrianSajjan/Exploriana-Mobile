@@ -1,14 +1,8 @@
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { TypographyProps } from "@exploriana/interface";
 import { Text, TextStyle } from "react-native";
 
-export function Caption({
-  textAlign = "left",
-  color = theme.colors.text,
-  fontWeight = "regular",
-  style,
-  ...props
-}: Omit<TypographyProps, "size" | "lineHeight">) {
+export function Caption({ textAlign = "left", color = theme.colors.text, fontWeight = "regular", style, ...props }: Omit<TypographyProps, "size" | "lineHeight">) {
   const pStyle: TextStyle = {
     fontSize: 12,
     fontFamily: theme.font[fontWeight],

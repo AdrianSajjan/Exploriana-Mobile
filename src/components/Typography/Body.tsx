@@ -1,4 +1,4 @@
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { TypographyProps } from "@exploriana/interface";
 import { Text, TextStyle } from "react-native";
 

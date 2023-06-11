@@ -1,7 +1,7 @@
 import { Image, StyleSheet, useWindowDimensions, View } from "react-native";
 import { Box } from "@exploriana/components/Box";
 import { Body, Caption } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 
 const styles = StyleSheet.create({
   card: {

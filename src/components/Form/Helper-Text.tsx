@@ -1,4 +1,4 @@
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { StyleSheet, Text } from "react-native";
 
 const styles = StyleSheet.create({

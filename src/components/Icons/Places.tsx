@@ -1,7 +1,7 @@
 import React from "react";
 import { IconProps } from "@exploriana/interface";
 import { Path, Svg } from "react-native-svg";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 
 export function Places({ height = 64, fill = theme.colors.text, width = 64 }: IconProps) {
   return (

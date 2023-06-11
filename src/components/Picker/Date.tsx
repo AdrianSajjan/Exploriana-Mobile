@@ -1,5 +1,5 @@
 import { CalendarModal } from "@exploriana/components/Modal";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { initializeDate } from "@exploriana/lib/core";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { Ionicons } from "@expo/vector-icons";

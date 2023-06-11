@@ -1,5 +1,5 @@
 import { Body } from "@exploriana/components/Typography";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { Modal, Pressable, StyleSheet, TouchableOpacity, View, useWindowDimensions } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Fragment, useState } from "react";

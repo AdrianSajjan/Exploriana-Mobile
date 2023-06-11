@@ -11,7 +11,7 @@ import { SectionHeader } from "@exploriana/components/Layout";
 import { Body, Heading, Text } from "@exploriana/components/Typography";
 
 import { IconButton } from "@exploriana/components/Button";
-import { theme } from "@exploriana/config";
+import { theme } from "@exploriana/config/theme";
 import { AppStackParamList } from "@exploriana/interface/navigation";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { useNavigation } from "@react-navigation/native";

@@ -9,7 +9,7 @@ import { useGeocoder, useLocationAutocompleteQuery, useReverseGeocode, useSearch
 import { Box } from "@exploriana/components/Box";
 import { ServiceCard } from "@exploriana/components/Card";
 import { Divider } from "@exploriana/components/Divider";
-import { Cafe, Parks, Restro, TouristSpots } from "@exploriana/components/Icons";
+import { Cafe, Hotel, Parks, Restro, TouristSpots } from "@exploriana/components/Icons";
 import { SearchBar } from "@exploriana/components/Input";
 import { PageHeader } from "@exploriana/components/Layout";
 import { ShimmerPlaceholder } from "@exploriana/components/Placeholder";
@@ -30,6 +30,7 @@ const mapTypeToCategory = {
   restaurants: "Show restaurants near",
   cafes: "Show cafes near",
   parks: "Show parks near",
+  hotels: "Show hotels near",
   "tourist-spots": "Show popular tourist spots near",
 };
 
@@ -66,6 +67,7 @@ export function PlacesScreen() {
   const reverseGeocoder = useReverseGeocode();
 
   const cafes = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "cafe" });
+  const hotels = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "hotel" });
   const parks = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "parks" });
   const tourism = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "tourism" });
   const restaurants = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "restaurant" });
@@ -78,12 +80,15 @@ export function PlacesScreen() {
       case "all":
         return array.concat(
           { title: "Restaurants", data: restaurants.data.slice(0, 8) },
+          { title: "Hotels", data: hotels.data.slice(0, 8) },
           { title: "Cafes", data: cafes.data.slice(0, 8) },
           { title: "Parks", data: parks.data.slice(0, 8) },
           { title: "Tourism", data: tourism.data.slice(0, 8) }
         );
       case "restaurants":
         return array.concat({ title: "Restaurants", data: restaurants.data });
+      case "hotels":
+        return array.concat({ title: "Hotels", data: hotels.data });
       case "cafes":
         return array.concat({ title: "Cafes", data: cafes.data });
       case "parks":
@@ -104,35 +109,46 @@ export function PlacesScreen() {
 
   const renderListHeaderComponent = React.useCallback(() => {
     return (
-      <Box flexWrap="wrap" flexDirection="row" marginHorizontal={-8} marginBottom={28}>
-        <ServiceCard
-          caption="Cafes"
-          icon={<Cafe height={36} fill={type === "cafes" ? theme.colors.surface : theme.colors.text} />}
-          color={type === "cafes" ? theme.colors.surface : theme.colors.text}
-          style={type === "cafes" ? styles.activeServices : styles.services}
-          onPress={() => handleTypeChange("cafes")}
-        />
-        <ServiceCard
-          caption="Parks"
-          icon={<Parks height={36} fill={type === "parks" ? theme.colors.surface : theme.colors.text} />}
-          color={type === "parks" ? theme.colors.surface : theme.colors.text}
-          style={type === "parks" ? styles.activeServices : styles.services}
-          onPress={() => handleTypeChange("parks")}
-        />
-        <ServiceCard
-          caption="Restaurants"
-          icon={<Restro height={36} fill={type === "restaurants" ? theme.colors.surface : theme.colors.text} />}
-          color={type === "restaurants" ? theme.colors.surface : theme.colors.text}
-          style={type === "restaurants" ? styles.activeServices : styles.services}
-          onPress={() => handleTypeChange("restaurants")}
-        />
-        <ServiceCard
-          caption="Tourist Spots"
-          icon={<TouristSpots height={36} fill={type === "tourist-spots" ? theme.colors.surface : theme.colors.text} />}
-          color={type === "tourist-spots" ? theme.colors.surface : theme.colors.text}
-          style={type === "tourist-spots" ? styles.activeServices : styles.services}
-          onPress={() => handleTypeChange("tourist-spots")}
-        />
+      <Box marginHorizontal={-8} marginBottom={28}>
+        <Box flexWrap="wrap" flexDirection="row">
+          <ServiceCard
+            caption="Hotels"
+            icon={<Hotel height={36} fill={type === "hotels" ? theme.colors.surface : theme.colors.text} />}
+            color={type === "hotels" ? theme.colors.surface : theme.colors.text}
+            style={type === "hotels" ? styles.activeServices : styles.services}
+            onPress={() => handleTypeChange("hotels")}
+          />
+          <ServiceCard
+            caption="Cafes"
+            icon={<Cafe height={36} fill={type === "cafes" ? theme.colors.surface : theme.colors.text} />}
+            color={type === "cafes" ? theme.colors.surface : theme.colors.text}
+            style={type === "cafes" ? styles.activeServices : styles.services}
+            onPress={() => handleTypeChange("cafes")}
+          />
+          <ServiceCard
+            caption="Parks"
+            icon={<Parks height={36} fill={type === "parks" ? theme.colors.surface : theme.colors.text} />}
+            color={type === "parks" ? theme.colors.surface : theme.colors.text}
+            style={type === "parks" ? styles.activeServices : styles.services}
+            onPress={() => handleTypeChange("parks")}
+          />
+        </Box>
+        <Box flexWrap="wrap" flexDirection="row">
+          <ServiceCard
+            caption="Restaurants"
+            icon={<Restro height={36} fill={type === "restaurants" ? theme.colors.surface : theme.colors.text} />}
+            color={type === "restaurants" ? theme.colors.surface : theme.colors.text}
+            style={type === "restaurants" ? styles.activeServices : styles.services}
+            onPress={() => handleTypeChange("restaurants")}
+          />
+          <ServiceCard
+            caption="Tourist Spots"
+            icon={<TouristSpots height={36} fill={type === "tourist-spots" ? theme.colors.surface : theme.colors.text} />}
+            color={type === "tourist-spots" ? theme.colors.surface : theme.colors.text}
+            style={type === "tourist-spots" ? styles.activeServices : styles.services}
+            onPress={() => handleTypeChange("tourist-spots")}
+          />
+        </Box>
       </Box>
     );
   }, [type]);
@@ -338,11 +354,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   services: {
-    minWidth: 120,
+    minWidth: 90,
     backgroundColor: theme.colors.background,
   },
   activeServices: {
-    minWidth: 120,
+    minWidth: 90,
     backgroundColor: theme.colors.secondary,
   },
 });

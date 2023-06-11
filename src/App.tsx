@@ -22,6 +22,7 @@ import { stripePublishableKey } from "@exploriana/config/stripe";
 import { BoardingPassScreen } from "@exploriana/screens/Booking";
 import { PlacesScreen } from "@exploriana/screens/Places";
 import { NotificationScreen } from "@exploriana/screens/Notifications";
+import { BookFlightScreen, FlightCheckoutScreen, SearchFlightScreen } from "@exploriana/screens/Flights";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -60,6 +61,9 @@ export default function App() {
                 <Stack.Screen name="Search-Trains" component={SearchTrainScreen} />
                 <Stack.Screen name="Book-Trains" component={BookTrainScreen} />
                 <Stack.Screen name="Train-Checkout" component={TrainCheckoutScreen} />
+                <Stack.Screen name="Search-Flights" component={SearchFlightScreen} />
+                <Stack.Screen name="Book-Flights" component={BookFlightScreen} />
+                <Stack.Screen name="Flight-Checkout" component={FlightCheckoutScreen} />
                 <Stack.Screen name="Boarding-Pass" component={BoardingPassScreen} />
                 <Stack.Screen name="Places" component={PlacesScreen} />
                 <Stack.Screen name="Notifications" component={NotificationScreen} />

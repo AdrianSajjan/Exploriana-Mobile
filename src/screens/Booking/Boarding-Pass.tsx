@@ -8,7 +8,7 @@ import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Body, Caption, Heading } from "@exploriana/components/Typography";
 import { Connector, Divider } from "@exploriana/components/Divider";
-import { Train } from "@exploriana/components/Icons";
+import { Flight, Train } from "@exploriana/components/Icons";
 import { PageHeader } from "@exploriana/components/Layout";
 import { PrimaryButton } from "@exploriana/components/Button";
 import { useBookingStore } from "@exploriana/store/booking";
@@ -16,7 +16,7 @@ import { Navigate } from "@exploriana/components/Navigation";
 import { format, intervalToDuration, parseISO } from "date-fns";
 import { initializeDate } from "@exploriana/lib/core";
 import { formatTimeInterval } from "@exploriana/lib/format";
-import { useFetchStateFromCity, useFetchStationFromNameQuery } from "@exploriana/api/location";
+import { useFetchAirportsByCityQuery, useFetchStateFromCity, useFetchStationFromNameQuery } from "@exploriana/api/location";
 
 const styles = StyleSheet.create({
   brand: {
@@ -33,18 +33,25 @@ const styles = StyleSheet.create({
   },
 });
 
-const TrainIcon = <Train height={20} width={20} fill={theme.colors.text} />;
+const mapTransportToIcon = {
+  flight: <Flight height={24} width={24} fill={theme.colors.text} />,
+  train: <Train height={20} width={20} fill={theme.colors.text} />,
+};
+
+const mapTransportToLogo = {
+  flight: require("assets/images/Flight.png"),
+  train: require("assets/images/IRCTC.png"),
+};
 
 export function BoardingPassScreen() {
   const booking = useBookingStore();
 
   const departureStation = useFetchStationFromNameQuery(booking.selected?.placeOfDeparture ?? "");
+  const departureAirport = useFetchAirportsByCityQuery(booking.selected?.placeOfDeparture ?? "");
   const departureState = useFetchStateFromCity(departureStation.data?.city ?? "");
 
-  console.log(departureStation.data);
-  console.log(departureState.data);
-
   const arrivalStation = useFetchStationFromNameQuery(booking.selected?.placeOfArrival ?? "");
+  const arrivalAirport = useFetchAirportsByCityQuery(booking.selected?.placeOfArrival ?? "");
   const arrivalState = useFetchStateFromCity(arrivalStation.data?.city ?? "");
 
   if (!booking.selected) return <Navigate to="Home" />;
@@ -57,7 +64,7 @@ export function BoardingPassScreen() {
         <Box flex={1} alignItems="stretch" justifyContent="center">
           <Box backgroundColor={theme.colors.surface} borderRadius={theme.shapes.rounded.lg} paddingVertical={24} paddingHorizontal={24}>
             <Box flexDirection="row" alignItems="center" marginBottom={24}>
-              <Image source={require("assets/images/IRCTC.png")} style={styles.brand} />
+              <Image source={mapTransportToLogo[booking.selected.transport]} style={styles.brand} />
               <Body color={theme.colors.secondary} size="lg" fontWeight="medium" style={styles.name}>
                 {booking.selected.name}
               </Body>
@@ -73,11 +80,11 @@ export function BoardingPassScreen() {
             </Box>
             <Box flexDirection="row" alignItems="center" justifyContent="space-between" marginTop={10}>
               <Heading fontWeight="medium" size="sm" color={theme.colors.secondary}>
-                {departureStation.data?.code}
+                {booking.selected.transport === "train" ? departureStation.data?.code : departureAirport.data?.iata}
               </Heading>
-              <Connector icon={TrainIcon} />
+              <Connector icon={mapTransportToIcon[booking.selected.transport]} />
               <Heading fontWeight="medium" size="sm" color={theme.colors.secondary}>
-                {arrivalStation.data?.code}
+                {booking.selected.transport === "train" ? arrivalStation.data?.code : arrivalAirport.data?.iata}
               </Heading>
             </Box>
             <Box flexDirection="row" alignItems="center" justifyContent="space-between" marginTop={12} marginBottom={24}>

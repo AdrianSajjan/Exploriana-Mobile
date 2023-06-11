@@ -1,5 +1,5 @@
 import { useSQLiteDatabase } from "@exploriana/hooks/use-database";
-import { Location, State, Station } from "@exploriana/interface/core";
+import { Airport, Location, State, Station } from "@exploriana/interface/core";
 import { createFactory } from "@exploriana/lib/core";
 import { useQuery } from "@tanstack/react-query";
 import utils from "lodash";
@@ -75,11 +75,40 @@ export function useFetchStationFromNameQuery(name: string) {
   );
 }
 
+export function useFetchAirportsByCityQuery(city: string) {
+  const [database] = useSQLiteDatabase();
+  return useQuery(
+    ["airports", { city }],
+    async () => {
+      const airport = await createFactory(Promise<Airport>, (resolve, reject) =>
+        database!.transaction((sql) => {
+          sql.executeSql(
+            `SELECT * FROM airports AS airport WHERE airport.city LIKE ?;`,
+            [`%${city}%`],
+            (_, { rows }) => {
+              const airport: Airport = rows.item(0);
+              resolve(airport);
+            },
+            (_, error) => {
+              reject(error.message);
+              return false;
+            }
+          );
+        })
+      );
+      return airport;
+    },
+    {
+      enabled: Boolean(city),
+    }
+  );
+}
+
 export function useFetchStateFromCity(city: string) {
   const [database] = useSQLiteDatabase();
 
   return useQuery(
-    ["cities", { city }],
+    ["state", { city }],
     async () => {
       const state = await createFactory(Promise<State>, (resolve, reject) =>
         database!.transaction((sql) => {
@@ -112,7 +141,7 @@ export function useFetchLocationFromAddressQuery(address: string) {
   const name = address.split(",")[1].trim();
 
   return useQuery(
-    ["cities", { address }],
+    ["location", { address }],
     async () => {
       const state = await createFactory(Promise<State>, (resolve, reject) =>
         database!.transaction((sql) => {
@@ -152,6 +181,59 @@ export function useFetchLocationFromAddressQuery(address: string) {
     },
     {
       initialData: { city, state: initial, station: initial },
+      enabled: Boolean(database) && Boolean(city) && Boolean(name),
+      retry: false,
+    }
+  );
+}
+
+export function useFetchAirportLocationFromAddressQuery(address: string) {
+  const [database] = useSQLiteDatabase();
+
+  const city = address.split(",")[0].trim();
+  const name = address.split(",")[1].trim();
+
+  return useQuery(
+    ["location", { address }],
+    async () => {
+      const state = await createFactory(Promise<State>, (resolve, reject) =>
+        database!.transaction((sql) => {
+          sql.executeSql(
+            `SELECT name, code FROM states AS state WHERE state.name = ?;`,
+            [name],
+            (_, { rows }) => {
+              const state: State = rows.length > 0 ? rows.item(0) : { code: createStateCode(name), name };
+              resolve(state);
+            },
+            (_, error) => {
+              reject(error.message);
+              return false;
+            }
+          );
+        })
+      );
+
+      const airport = await createFactory(Promise<Airport>, (resolve, reject) =>
+        database!.transaction((sql) => {
+          sql.executeSql(
+            `SELECT * FROM airports AS airport WHERE airport.city LIKE ?;`,
+            [`%${city}%`],
+            (_, { rows }) => {
+              const airport: Airport = rows.length > 0 ? rows.item(0) : { city: "", iata: "", icao: "", name: "", state: "" };
+              resolve(airport);
+            },
+            (_, error) => {
+              reject(error.message);
+              return false;
+            }
+          );
+        })
+      );
+
+      return { city, state, airport };
+    },
+    {
+      initialData: { city, state: initial, airport: { city: "", iata: "", icao: "", name: "", state: "" } },
       enabled: Boolean(database) && Boolean(city) && Boolean(name),
       retry: false,
     }

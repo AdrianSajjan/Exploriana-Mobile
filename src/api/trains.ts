@@ -9,7 +9,7 @@ export function useFetchTrainsByRouteQuery(placeOfDeparture: string, placeOfArri
   const [database] = useSQLiteDatabase();
 
   return useQuery(
-    ["cities", { placeOfArrival, placeOfDeparture }] as const,
+    ["trains", { placeOfArrival, placeOfDeparture }] as const,
     async () => {
       return createFactory(Promise<Transport[]>, (resolve, reject) =>
         database!.transaction((sql) => {

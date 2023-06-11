@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
-import { ImageBackground, ScrollView, StyleSheet, View } from "react-native";
+import { ImageBackground, Pressable, ScrollView, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Box } from "@exploriana/components/Box";
@@ -69,15 +69,15 @@ export function HomeScreen() {
           </Box>
         </Box>
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={24}>
-          <SearchBar editable={false} placeholder="Search for places, hotels, flights ..." />
+          <Pressable onPress={() => navigation.navigate("Places")}>
+            <SearchBar editable={false} placeholder="Search for places, hotels, restaurants..." />
+          </Pressable>
         </Box>
         <Box flexWrap="wrap" flexDirection="row" paddingHorizontal={16} paddingTop={8}>
-          <ServiceCard caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
-          <ServiceCard caption="Flights" icon={<Flight height={36} />} />
-          <ServiceCard caption="Hotels" icon={<Hotel height={36} />} />
-          <ServiceCard caption="Tours" icon={<Tours height={36} />} />
-          <ServiceCard caption="Places" icon={<Places height={36} />} onPress={() => navigation.navigate("Places")} />
-          <ServiceCard caption="Weather" icon={<Weather height={36} />} />
+          <ServiceCard style={{ minWidth: 120 }} caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
+          <ServiceCard style={{ minWidth: 120 }} caption="Flights" icon={<Flight height={36} />} onPress={() => navigation.navigate("Search-Flights")} />
+          <ServiceCard style={{ minWidth: 120 }} caption="Tours" icon={<Tours height={36} />} />
+          <ServiceCard style={{ minWidth: 120 }} caption="Places" icon={<Places height={36} />} onPress={() => navigation.navigate("Places")} />
         </Box>
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={24}>
           <ImageBackground source={require("assets/images/banner.jpeg")} style={styles.banner} borderRadius={theme.shapes.rounded.lg}>

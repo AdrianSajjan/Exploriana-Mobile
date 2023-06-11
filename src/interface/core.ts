@@ -53,3 +53,11 @@ export interface Station {
   name: string;
   city: string;
 }
+
+export interface Airport {
+  iata: string;
+  icao: string;
+  name: string;
+  city: string;
+  state: string;
+}

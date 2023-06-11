@@ -63,7 +63,7 @@ export function HomeScreen() {
             <Heading color={theme.colors.secondary}>Adrian Sajjan</Heading>
           </Box>
           <Box flexDirection="row" alignItems="center">
-            <IconButton style={styles.notification}>
+            <IconButton style={styles.notification} onPress={() => navigation.navigate("Notifications")}>
               <Ionicons name="notifications" size={20} color={theme.colors.text} />
             </IconButton>
           </Box>

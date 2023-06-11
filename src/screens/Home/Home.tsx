@@ -94,7 +94,6 @@ export function HomeScreen() {
         <SectionHeader button="See All" title="Ongoing Tours" marginTop={24} />
         <ScrollView horizontal overScrollMode="never" style={styles.container} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.content}>
           <CarouselDestinationCard />
-          <CarouselDestinationCard />
         </ScrollView>
       </ScrollView>
     </SafeAreaView>

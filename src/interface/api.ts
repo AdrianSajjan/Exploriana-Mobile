@@ -23,6 +23,22 @@ export interface Geocode {
   scoring: Scoring;
 }
 
+export interface PlacesByCategory {
+  title: string;
+  id: string;
+  ontologyId: string;
+  resultType: string;
+  address: Address;
+  position: Position;
+  access: Access[];
+  distance: number;
+  categories: Category[];
+  references: Reference[];
+  foodTypes?: FoodType[];
+  contacts: Contact[];
+  openingHours?: OpeningHour[];
+}
+
 export interface Address {
   label: string;
   countryCode: string;
@@ -43,10 +59,69 @@ export interface Position {
   lng: number;
 }
 
+export interface Access {
+  lat: number;
+  lng: number;
+}
+
 export interface Category {
   id: string;
   name: string;
-  primary: boolean;
+  primary?: boolean;
+}
+
+export interface Reference {
+  supplier: Supplier;
+  id: string;
+}
+
+export interface Supplier {
+  id: string;
+}
+
+export interface FoodType {
+  id: string;
+  name: string;
+  primary?: boolean;
+}
+
+export interface Contact {
+  phone: Phone[];
+  fax: Fax[];
+  www: WWW[];
+  email: Email[];
+}
+
+export interface Phone {
+  value: string;
+}
+
+export interface Fax {
+  value: string;
+}
+
+export interface WWW {
+  value: string;
+}
+
+export interface Email {
+  value: string;
+}
+
+export interface OpeningHour {
+  text: string[];
+  isOpen: boolean;
+  structured: Structured[];
+}
+
+export interface Structured {
+  start: string;
+  duration: string;
+  recurrence: string;
+}
+export interface Position {
+  lat: number;
+  lng: number;
 }
 
 export interface MapView {

@@ -1,3 +1,4 @@
+import * as React from "react";
 import { theme } from "@exploriana/config/theme";
 import { Feather } from "@expo/vector-icons";
 import { StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from "react-native";
@@ -36,13 +37,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export function SearchBar({ style, Input = TextInput, ...props }: SearchBarProps) {
+export const SearchBar = React.forwardRef<TextInput, SearchBarProps>(({ style, Input = TextInput, ...props }, ref) => {
   return (
     <View style={[styles.wrapper, style]}>
       <View style={styles.icon}>
         <Feather name="search" size={18} color={theme.colors.placeholder} />
       </View>
-      <Input returnKeyType="search" placeholderTextColor={theme.colors.placeholder} style={styles.input} {...props} />
+      <Input ref={ref} returnKeyType="search" placeholderTextColor={theme.colors.placeholder} style={styles.input} {...props} />
     </View>
   );
-}
+});

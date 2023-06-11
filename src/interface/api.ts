@@ -39,6 +39,15 @@ export interface PlacesByCategory {
   openingHours?: OpeningHour[];
 }
 
+export interface LocationAutocomplete {
+  title: string;
+  id: string;
+  language: string;
+  resultType: string;
+  address: Address;
+  highlights: Highlights;
+}
+
 export interface Address {
   label: string;
   countryCode: string;
@@ -106,6 +115,15 @@ export interface WWW {
 
 export interface Email {
   value: string;
+}
+
+export interface Highlights {
+  title: Array<{ start: number; end: number }>;
+  address: {
+    label: Array<{ start: number; end: number }>;
+    city: Array<{ start: number; end: number }>;
+    street: Array<{ start: number; end: number }>;
+  };
 }
 
 export interface OpeningHour {

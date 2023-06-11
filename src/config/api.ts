@@ -25,3 +25,10 @@ export const hereSDKReverseGeocode = axios.create({
     apiKey: hereSDKApiKey,
   },
 });
+
+export const hereSDKAutocomplete = axios.create({
+  baseURL: "https://autocomplete.search.hereapi.com/v1/autocomplete",
+  params: {
+    apiKey: hereSDKApiKey,
+  },
+});

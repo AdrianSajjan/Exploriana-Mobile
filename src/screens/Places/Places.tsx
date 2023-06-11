@@ -1,25 +1,27 @@
 import { Ionicons } from "@expo/vector-icons";
-import BottomSheet, { BottomSheetSectionList, BottomSheetView } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetSectionList } from "@gorhom/bottom-sheet";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import { Alert, ListRenderItem, SectionList, SectionListData, StyleSheet, ToastAndroid, TouchableOpacity, useWindowDimensions } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { Alert, ListRenderItem, SectionListData, StyleSheet, ToastAndroid, TouchableOpacity, useWindowDimensions } from "react-native";
+import MapView, { MapPressEvent, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
-import { useReverseGeocode, useSearchPlacesByCategoryQuery } from "@exploriana/api/here-sdk";
+import { useGeocoder, useLocationAutocompleteQuery, useReverseGeocode, useSearchPlacesByCategoryQuery } from "@exploriana/api/here-sdk";
 import { Box } from "@exploriana/components/Box";
 import { ServiceCard } from "@exploriana/components/Card";
+import { Divider } from "@exploriana/components/Divider";
 import { Cafe, Parks, Restro, TouristSpots } from "@exploriana/components/Icons";
 import { SearchBar } from "@exploriana/components/Input";
 import { PageHeader } from "@exploriana/components/Layout";
-import { Body, Heading, Text } from "@exploriana/components/Typography";
+import { ShimmerPlaceholder } from "@exploriana/components/Placeholder";
+import { Body, Text } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config/theme";
+import useDebounceState from "@exploriana/hooks/use-debounced-state";
+import { PlacesByCategory } from "@exploriana/interface/api";
 import { useLocationStore } from "@exploriana/store/location";
 import { sharedStyles } from "@exploriana/styles/shared";
 import * as LocationServices from "expo-location";
-import { FlatList } from "react-native-gesture-handler";
+import { TextInput } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ShimmerPlaceholder } from "@exploriana/components/Placeholder";
-import { PlacesByCategory } from "@exploriana/interface/api";
 
 const initialRegion = { latitude: 22.5726, longitude: 88.3639, latitudeDelta: 0.2, longitudeDelta: 0 };
 
@@ -34,9 +36,14 @@ const mapTypeToCategory = {
 type Category = keyof typeof mapTypeToCategory;
 
 export function PlacesScreen() {
+  const searchBar = React.useRef<TextInput | null>(null);
   const bottomSheet = React.useRef<BottomSheet | null>(null);
 
+  const [search, setSearch] = React.useState("");
   const [type, setType] = React.useState<Category>("all");
+  const [showResults, setShowResults] = React.useState(false);
+
+  const query = useDebounceState(search, 300);
 
   const dimensions = useWindowDimensions();
   const locationStore = useLocationStore();
@@ -51,16 +58,19 @@ export function PlacesScreen() {
   }, [location]);
 
   const markers = React.useMemo(() => {
-    if (!location) return [{ key: Date.now(), coordinate: { latitude: initialRegion.latitude, longitude: initialRegion.longitude } }];
+    if (!location) return [{ key: String(Date.now()), coordinate: { latitude: initialRegion.latitude, longitude: initialRegion.longitude } }];
     return [{ key: location.id, coordinate: { latitude: location.position.lat, longitude: location.position.lng } }];
   }, [location]);
 
+  const geocoder = useGeocoder();
   const reverseGeocoder = useReverseGeocode();
 
   const cafes = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "cafe" });
   const parks = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "parks" });
   const tourism = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "tourism" });
   const restaurants = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "restaurant" });
+
+  const autocomplete = useLocationAutocompleteQuery(query, 7);
 
   const places = React.useMemo(() => {
     const array: Array<{ title: string; data: PlacesByCategory[] }> = [];
@@ -92,6 +102,41 @@ export function PlacesScreen() {
     return ["30%", "50%", dimensions.height - 92];
   }, [dimensions]);
 
+  const renderListHeaderComponent = React.useCallback(() => {
+    return (
+      <Box flexWrap="wrap" flexDirection="row" marginHorizontal={-8} marginBottom={28}>
+        <ServiceCard
+          caption="Cafes"
+          icon={<Cafe height={36} fill={type === "cafes" ? theme.colors.surface : theme.colors.text} />}
+          color={type === "cafes" ? theme.colors.surface : theme.colors.text}
+          style={type === "cafes" ? styles.activeServices : styles.services}
+          onPress={() => handleTypeChange("cafes")}
+        />
+        <ServiceCard
+          caption="Parks"
+          icon={<Parks height={36} fill={type === "parks" ? theme.colors.surface : theme.colors.text} />}
+          color={type === "parks" ? theme.colors.surface : theme.colors.text}
+          style={type === "parks" ? styles.activeServices : styles.services}
+          onPress={() => handleTypeChange("parks")}
+        />
+        <ServiceCard
+          caption="Restaurants"
+          icon={<Restro height={36} fill={type === "restaurants" ? theme.colors.surface : theme.colors.text} />}
+          color={type === "restaurants" ? theme.colors.surface : theme.colors.text}
+          style={type === "restaurants" ? styles.activeServices : styles.services}
+          onPress={() => handleTypeChange("restaurants")}
+        />
+        <ServiceCard
+          caption="Tourist Spots"
+          icon={<TouristSpots height={36} fill={type === "tourist-spots" ? theme.colors.surface : theme.colors.text} />}
+          color={type === "tourist-spots" ? theme.colors.surface : theme.colors.text}
+          style={type === "tourist-spots" ? styles.activeServices : styles.services}
+          onPress={() => handleTypeChange("tourist-spots")}
+        />
+      </Box>
+    );
+  }, [type]);
+
   const itemSeparatorComponent = React.useCallback(() => {
     return <Box height={16} />;
   }, []);
@@ -103,7 +148,7 @@ export function PlacesScreen() {
   const renderSectionList = React.useCallback(
     ({ section }: { section: SectionListData<PlacesByCategory, { title: string; data: PlacesByCategory[] }> }) => {
       return (
-        <Box>
+        <Box marginBottom={-16} paddingTop={6} paddingBottom={10} backgroundColor={theme.colors.surface}>
           <Text size={17} fontWeight="medium" color={theme.colors.heading}>
             {section.title} near&nbsp;
             <Text size={17} fontWeight="bold" color={theme.colors.heading}>
@@ -118,7 +163,7 @@ export function PlacesScreen() {
 
   const renderItem: ListRenderItem<PlacesByCategory> = React.useCallback(({ item }) => {
     return (
-      <Box>
+      <Box backgroundColor={theme.colors.background} borderRadius={theme.shapes.rounded.lg} paddingHorizontal={20} paddingVertical={16}>
         <Body fontWeight="medium" color={theme.colors.secondary}>
           {item.title}
         </Body>
@@ -146,6 +191,25 @@ export function PlacesScreen() {
     setType(value);
   }
 
+  async function handleSelectSearchResult(address: string) {
+    setShowResults(false);
+    searchBar.current?.blur();
+    const result = await geocoder.fetchAsync(address);
+    locationStore.updateSelected(result);
+  }
+
+  async function handleMapPress(event: MapPressEvent) {
+    const coordinate = event.nativeEvent.coordinate;
+    try {
+      const address = await reverseGeocoder.fetchAsync({ ...coordinate });
+      locationStore.updateSelected(address);
+      ToastAndroid.show(address.title, ToastAndroid.SHORT);
+    } catch (error) {
+      const message = error.response?.data?.message ?? error.message ?? "Unable to fetch location due to some error";
+      Alert.alert("Unable to fetch location", message);
+    }
+  }
+
   async function initializeLocationServices() {
     const { granted } = await LocationServices.requestForegroundPermissionsAsync();
     let coordinates = initialRegion as Pick<LocationServices.LocationObjectCoords, "latitude" | "longitude">;
@@ -170,7 +234,8 @@ export function PlacesScreen() {
       locationStore.updateCurrent(address);
       ToastAndroid.show(address.title, ToastAndroid.SHORT);
     } catch (error) {
-      console.log(error.response?.data?.message ?? error.message);
+      const message = error.response?.data?.message ?? error.message ?? "Unable to fetch location due to some error";
+      Alert.alert("Unable to fetch location", message);
     }
   }
 
@@ -181,39 +246,56 @@ export function PlacesScreen() {
   return (
     <SafeAreaView style={[sharedStyles.fullHeight]}>
       <StatusBar backgroundColor={theme.colors.surface} />
-      <Box backgroundColor={theme.colors.surface} paddingHorizontal={16} paddingTop={12} paddingBottom={16} zIndex={10} elevation={2}>
+      <Box backgroundColor={theme.colors.surface} position="relative" paddingHorizontal={16} paddingTop={12} paddingBottom={16} zIndex={10} elevation={2}>
         <PageHeader title="Search Places" />
         <Box flexDirection="row" alignItems="center" marginTop={12}>
-          <SearchBar placeholder="Search for places..." style={styles.searchBar} />
+          <SearchBar ref={searchBar} placeholder="Search for places..." style={styles.searchBar} value={search} onChangeText={setSearch} onFocus={() => setShowResults(true)} />
           <Box height={56} width={56} backgroundColor={theme.colors.background} borderTopRightRadius={theme.shapes.rounded.lg} borderBottomRightRadius={theme.shapes.rounded.lg}>
             <TouchableOpacity style={styles.userLocation} activeOpacity={0.6} onPress={fetchUserLocation}>
               <Ionicons name="location" color={theme.colors.secondary} size={18} />
             </TouchableOpacity>
           </Box>
         </Box>
+        {query.length >= 3 && showResults && (
+          <Box position="absolute" width={dimensions.width} left={0} top={126} minHeight={200} elevation={5} zIndex={5} backgroundColor={theme.colors.surface}>
+            {autocomplete.isLoading || autocomplete.isFetching ? (
+              <Box paddingHorizontal={16}>
+                {[...Array(3).keys()].map((key) => (
+                  <ShimmerPlaceholder width="100%" height={32} key={key} style={{ marginTop: 16 }} borderRadius={theme.shapes.rounded.sm} />
+                ))}
+              </Box>
+            ) : autocomplete.data.length ? (
+              autocomplete.data.map((data) => (
+                <Box>
+                  <TouchableOpacity key={data.id} style={styles.searchResult} onPress={() => handleSelectSearchResult(data.address.label)}>
+                    <Body style={styles.searchResultText}>{data.address.label}</Body>
+                  </TouchableOpacity>
+                  <Divider />
+                </Box>
+              ))
+            ) : (
+              <Box height="100%" alignItems="center" justifyContent="center" paddingHorizontal={16}>
+                <Body color={theme.colors.error}>No results found. Please try a different keyword.</Body>
+              </Box>
+            )}
+          </Box>
+        )}
       </Box>
-      <MapView style={styles.map} mapType="standard" provider={PROVIDER_GOOGLE} region={region}>
+      <MapView style={styles.map} mapType="standard" provider={PROVIDER_GOOGLE} region={region} onPress={handleMapPress}>
         {markers.map((props) => (
           <Marker {...props} />
         ))}
       </MapView>
       <BottomSheet ref={bottomSheet} snapPoints={snapPoints} index={0} style={styles.container} handleIndicatorStyle={styles.indicator}>
-        <BottomSheetView>
-          <Box flexWrap="wrap" flexDirection="row" paddingHorizontal={12} marginBottom={36}>
-            <ServiceCard caption="Cafes" icon={<Cafe height={36} />} style={styles.services} onPress={() => handleTypeChange("cafes")} />
-            <ServiceCard caption="Parks" icon={<Parks height={36} />} style={styles.services} onPress={() => handleTypeChange("parks")} />
-            <ServiceCard caption="Restaurants" icon={<Restro height={36} />} style={styles.services} onPress={() => handleTypeChange("restaurants")} />
-            <ServiceCard caption="Tourist Spots" icon={<TouristSpots height={36} />} style={styles.services} onPress={() => handleTypeChange("tourist-spots")} />
-          </Box>
-        </BottomSheetView>
         <BottomSheetSectionList
           sections={places}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           renderSectionHeader={renderSectionList}
+          ListHeaderComponent={renderListHeaderComponent}
           ItemSeparatorComponent={itemSeparatorComponent}
           SectionSeparatorComponent={sectionSeparatorComponent}
-          contentContainerStyle={{ paddingHorizontal: 20, paddingBottom: 24 }}
+          contentContainerStyle={styles.content}
         />
       </BottomSheet>
     </SafeAreaView>
@@ -228,6 +310,16 @@ const styles = StyleSheet.create({
   container: {
     zIndex: 5,
     elevation: 2,
+  },
+  content: {
+    paddingHorizontal: 20,
+  },
+  searchResult: {
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+  },
+  searchResultText: {
+    textTransform: "capitalize",
   },
   indicator: {
     width: 48,
@@ -248,5 +340,9 @@ const styles = StyleSheet.create({
   services: {
     minWidth: 120,
     backgroundColor: theme.colors.background,
+  },
+  activeServices: {
+    minWidth: 120,
+    backgroundColor: theme.colors.secondary,
   },
 });

@@ -102,6 +102,7 @@ export function LoginScreen() {
           <Body textAlign="center">Login to your account</Body>
           <Box marginTop={36}>
             <TextField
+              keyboardType="number-pad"
               value={values.phoneNumber}
               onChangeText={handleChange("phoneNumber")}
               placeholder="Phone Number"

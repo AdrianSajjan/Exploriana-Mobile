@@ -24,6 +24,7 @@ import { PlacesScreen } from "@exploriana/screens/Places";
 import { NotificationScreen } from "@exploriana/screens/Notifications";
 import { BookFlightScreen, FlightCheckoutScreen, SearchFlightScreen } from "@exploriana/screens/Flights";
 import { useAuthStore } from "@exploriana/store/auth";
+import { WeatherScreen } from "@exploriana/screens/Weather";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -74,6 +75,7 @@ export default function App() {
                   <AppStack.Screen name="Flight-Checkout" component={FlightCheckoutScreen} />
                   <AppStack.Screen name="Boarding-Pass" component={BoardingPassScreen} />
                   <AppStack.Screen name="Places" component={PlacesScreen} />
+                  <AppStack.Screen name="Weather" component={WeatherScreen} />
                   <AppStack.Screen name="Notifications" component={NotificationScreen} />
                 </AppStack.Navigator>
               )}

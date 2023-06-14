@@ -10,3 +10,4 @@ export * from "./Places";
 export * from "./Cafe";
 export * from "./Parks";
 export * from "./Tourist-Spots";
+export * from "./Malls";

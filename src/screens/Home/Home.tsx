@@ -4,20 +4,19 @@ import { ImageBackground, Pressable, ScrollView, StyleSheet, View } from "react-
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Box } from "@exploriana/components/Box";
-import { CarouselDestinationCard, ServiceCard, ServiceCardLarge } from "@exploriana/components/Card";
-import { Flight, Hotel, Places, Tours, Train } from "@exploriana/components/Icons";
+import { ServiceCardLarge } from "@exploriana/components/Card";
+import { Flight, Places, Train } from "@exploriana/components/Icons";
 import { SearchBar } from "@exploriana/components/Input";
-import { SectionHeader } from "@exploriana/components/Layout";
 import { Body, Heading, Text } from "@exploriana/components/Typography";
 
 import { IconButton } from "@exploriana/components/Button";
+import { Weather } from "@exploriana/components/Icons/Weather";
 import { theme } from "@exploriana/config/theme";
 import { AppStackParamList } from "@exploriana/interface/navigation";
+import { useAuthStore } from "@exploriana/store/auth";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { Weather } from "@exploriana/components/Icons/Weather";
-import { useAuthStore } from "@exploriana/store/auth";
 
 type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Home">;
 
@@ -85,6 +84,7 @@ export function HomeScreen() {
           <ServiceCardLarge title="Book Trains" caption="Book trains at competitive prices" icon={<Train height={42} />} onPress={() => navigation.navigate("Search-Trains")} />
           <ServiceCardLarge title="Book Flights" caption="Book flights at competitive prices" icon={<Flight height={42} />} onPress={() => navigation.navigate("Search-Flights")} />
           <ServiceCardLarge title="Search Places" caption="Search places at ease" icon={<Places height={42} />} onPress={() => navigation.navigate("Places")} />
+          <ServiceCardLarge title="Weather" caption="Search places at ease" icon={<Weather height={42} />} onPress={() => navigation.navigate("Weather")} />
         </Box>
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={24}>
           <ImageBackground source={require("assets/images/banner.jpeg")} style={styles.banner} borderRadius={theme.shapes.rounded.lg}>

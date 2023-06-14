@@ -89,6 +89,7 @@ export function RegisterScreen() {
           <Body textAlign="center">Create your account to continue</Body>
           <Box marginTop={36}>
             <TextField
+              keyboardType="number-pad"
               value={values.fullName}
               onChangeText={handleChange("fullName")}
               placeholder="Full Name"

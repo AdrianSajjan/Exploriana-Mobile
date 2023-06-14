@@ -1,38 +1,77 @@
-import { Ionicons } from "@expo/vector-icons";
-import BottomSheet, { BottomSheetSectionList } from "@gorhom/bottom-sheet";
-import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import { Alert, ListRenderItem, Pressable, SectionListData, StyleSheet, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from "react-native";
-import MapView, { Callout, CalloutSubview, MapPressEvent, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { StatusBar } from "expo-status-bar";
+import { Ionicons } from "@expo/vector-icons";
+export * as FileSystem from "expo-file-system";
+import * as LocationServices from "expo-location";
+import { TextInput } from "react-native-gesture-handler";
+import { SafeAreaView } from "react-native-safe-area-context";
+import BottomSheet, { BottomSheetFlatList, BottomSheetSectionList } from "@gorhom/bottom-sheet";
+import MapView, { Callout, MapPressEvent, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { Alert, FlatList, Image, ListRenderItem, ScrollView, SectionListData, StyleSheet, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from "react-native";
 
-import { useGeocoder, useLocationAutocompleteQuery, useReverseGeocode, useSearchPlacesByCategoryQuery } from "@exploriana/api/here-sdk";
 import { Box } from "@exploriana/components/Box";
 import { ServiceCard } from "@exploriana/components/Card";
 import { Divider } from "@exploriana/components/Divider";
-import { Cafe, Hotel, Parks, Restro, TouristSpots } from "@exploriana/components/Icons";
+import { Cafe, Hotel, Mall, Parks, Restro, TouristSpots } from "@exploriana/components/Icons";
 import { SearchBar } from "@exploriana/components/Input";
 import { PageHeader } from "@exploriana/components/Layout";
 import { ShimmerPlaceholder } from "@exploriana/components/Placeholder";
 import { Body, Text } from "@exploriana/components/Typography";
+
 import { theme } from "@exploriana/config/theme";
-import useDebounceState from "@exploriana/hooks/use-debounced-state";
-import { PlacesByCategory } from "@exploriana/interface/api";
-import { useLocationStore } from "@exploriana/store/location";
 import { sharedStyles } from "@exploriana/styles/shared";
-import * as LocationServices from "expo-location";
-import { TextInput } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { PlacesByCategory } from "@exploriana/interface/api";
+
+import { useLocationStore } from "@exploriana/store/location";
+import useDebounceState from "@exploriana/hooks/use-debounced-state";
+import { useGeocoder, useLocationAutocompleteQuery, useReverseGeocode, useSearchPlacesByCategoryQuery } from "@exploriana/api/here-sdk";
+import { useFetchGooglePlaceImageByReference, useGooglePlaceSearch } from "@exploriana/api/places";
+import { googleApiKey } from "@exploriana/config/app";
 
 const initialRegion = { latitude: 22.5726, longitude: 88.3639, latitudeDelta: 0.2, longitudeDelta: 0 };
 
 const mapTypeToCategory = {
   all: "Show places near",
-  restaurants: "Show restaurants near",
   cafes: "Show cafes near",
   parks: "Show parks near",
   hotels: "Show hotels near",
-  "tourist-spots": "Show popular tourist spots near",
+  malls: "Show shopping malls near me",
+  restaurants: "Show restaurants near",
+  tourism: "Show popular tourist spots near",
 };
+
+const services = [
+  {
+    name: "Hotels",
+    value: "hotels",
+    Icon: Hotel,
+  },
+  {
+    name: "Restaurants",
+    value: "restaurants",
+    Icon: Restro,
+  },
+  {
+    name: "Cafes",
+    value: "cafes",
+    Icon: Cafe,
+  },
+  {
+    name: "Malls",
+    value: "malls",
+    Icon: Mall,
+  },
+  {
+    name: "Parks",
+    value: "parks",
+    Icon: Parks,
+  },
+  {
+    name: "Tourisms",
+    value: "tourism",
+    Icon: TouristSpots,
+  },
+] as const;
 
 type Category = keyof typeof mapTypeToCategory;
 
@@ -70,6 +109,7 @@ export function PlacesScreen() {
   const cafes = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "cafe" });
   const hotels = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "hotel" });
   const parks = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "parks" });
+  const malls = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "malls" });
   const tourism = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "tourism" });
   const restaurants = useSearchPlacesByCategoryQuery({ latitude: region.latitude, longitude: region.longitude, query: "restaurant" });
 
@@ -83,19 +123,22 @@ export function PlacesScreen() {
           { title: "Restaurants", data: restaurants.data.slice(0, 8) },
           { title: "Hotels", data: hotels.data.slice(0, 8) },
           { title: "Cafes", data: cafes.data.slice(0, 8) },
+          { title: "Malls", data: malls.data.slice(0, 8) },
           { title: "Parks", data: parks.data.slice(0, 8) },
           { title: "Tourism", data: tourism.data.slice(0, 8) }
         );
-      case "restaurants":
-        return array.concat({ title: "Restaurants", data: restaurants.data });
       case "hotels":
         return array.concat({ title: "Hotels", data: hotels.data });
       case "cafes":
         return array.concat({ title: "Cafes", data: cafes.data });
+      case "malls":
+        return array.concat({ title: "Malls", data: malls.data });
       case "parks":
         return array.concat({ title: "Parks", data: parks.data });
-      case "tourist-spots":
+      case "tourism":
         return array.concat({ title: "Tourism", data: tourism.data });
+      case "restaurants":
+        return array.concat({ title: "Restaurants", data: restaurants.data });
     }
   }, [cafes.data, parks.data, tourism.data, restaurants.data, type]);
 
@@ -112,43 +155,16 @@ export function PlacesScreen() {
     return (
       <Box marginHorizontal={-8} marginBottom={28}>
         <Box flexWrap="wrap" flexDirection="row">
-          <ServiceCard
-            caption="Hotels"
-            icon={<Hotel height={36} fill={type === "hotels" ? theme.colors.surface : theme.colors.text} />}
-            color={type === "hotels" ? theme.colors.surface : theme.colors.text}
-            style={type === "hotels" ? styles.activeServices : styles.services}
-            onPress={() => handleTypeChange("hotels")}
-          />
-          <ServiceCard
-            caption="Cafes"
-            icon={<Cafe height={36} fill={type === "cafes" ? theme.colors.surface : theme.colors.text} />}
-            color={type === "cafes" ? theme.colors.surface : theme.colors.text}
-            style={type === "cafes" ? styles.activeServices : styles.services}
-            onPress={() => handleTypeChange("cafes")}
-          />
-          <ServiceCard
-            caption="Parks"
-            icon={<Parks height={36} fill={type === "parks" ? theme.colors.surface : theme.colors.text} />}
-            color={type === "parks" ? theme.colors.surface : theme.colors.text}
-            style={type === "parks" ? styles.activeServices : styles.services}
-            onPress={() => handleTypeChange("parks")}
-          />
-        </Box>
-        <Box flexWrap="wrap" flexDirection="row">
-          <ServiceCard
-            caption="Restaurants"
-            icon={<Restro height={36} fill={type === "restaurants" ? theme.colors.surface : theme.colors.text} />}
-            color={type === "restaurants" ? theme.colors.surface : theme.colors.text}
-            style={type === "restaurants" ? styles.activeServices : styles.services}
-            onPress={() => handleTypeChange("restaurants")}
-          />
-          <ServiceCard
-            caption="Tourist Spots"
-            icon={<TouristSpots height={36} fill={type === "tourist-spots" ? theme.colors.surface : theme.colors.text} />}
-            color={type === "tourist-spots" ? theme.colors.surface : theme.colors.text}
-            style={type === "tourist-spots" ? styles.activeServices : styles.services}
-            onPress={() => handleTypeChange("tourist-spots")}
-          />
+          {services.map(({ Icon, name, value }) => (
+            <ServiceCard
+              key={value}
+              caption={name}
+              onPress={() => handleTypeChange(value)}
+              style={type === value ? styles.activeServices : styles.services}
+              color={type === value ? theme.colors.surface : theme.colors.text}
+              icon={<Icon height={36} fill={type === value ? theme.colors.surface : theme.colors.text} />}
+            />
+          ))}
         </Box>
       </Box>
     );
@@ -183,47 +199,7 @@ export function PlacesScreen() {
       setDestination([{ key: String(Date.now()), coordinate: { latitude: item.access[0].lat, longitude: item.access[0].lng }, title: item.title }]);
       bottomSheet.current?.snapToIndex(1);
     }
-
-    return (
-      <TouchableOpacity activeOpacity={0.6} onPress={onClick}>
-        <Box backgroundColor={theme.colors.background} borderRadius={theme.shapes.rounded.lg} paddingHorizontal={20} paddingVertical={16}>
-          <Body fontWeight="medium" color={theme.colors.secondary}>
-            {item.title}
-          </Body>
-          <Body size="md">
-            {[item.address.street, item.address.subdistrict, item.address.district, item.address.city].filter(Boolean).join(", ")} - {item.address.postalCode}
-          </Body>
-          {
-            <Box marginTop={6} marginBottom={6}>
-              <Body size="md">
-                <Body size="md" color={theme.colors.secondary} fontWeight="medium">
-                  {item.distance ?? 0} meters
-                </Body>
-                &nbsp;from your location
-              </Body>
-              <Body size="md">
-                <Body size="md" color={theme.colors.secondary} fontWeight="medium">
-                  {(item.distance > 1000 ? item.distance / 1204 : item.distance / 517).toFixed(2)} minutes
-                </Body>
-                &nbsp;{item.distance > 1000 ? "by car" : "by walking"}
-              </Body>
-            </Box>
-          }
-          {Boolean(item.foodTypes?.length) && (
-            <Body size="md">
-              Specialty: <Body fontWeight="medium">{item.foodTypes!.map(({ name }) => name).join(", ")}</Body>
-            </Body>
-          )}
-          {Boolean(item.openingHours?.length) && (
-            <Box flexDirection="row" alignItems="center">
-              <Body size="md">
-                Opening Hours: <Body fontWeight="medium">{item.openingHours![0].text}</Body>
-              </Body>
-            </Box>
-          )}
-        </Box>
-      </TouchableOpacity>
-    );
+    return <ListResult item={item} onClick={onClick} />;
   }, []);
 
   function handleTypeChange(value: Category) {
@@ -355,6 +331,97 @@ export function PlacesScreen() {
         />
       </BottomSheet>
     </SafeAreaView>
+  );
+}
+
+function ListResult({ item, onClick }: { onClick?: () => void; item: PlacesByCategory }) {
+  const [photos, setPhotos] = React.useState<any[]>([]);
+
+  const places = useGooglePlaceSearch();
+  const { width } = useWindowDimensions();
+
+  React.useEffect(() => {
+    places.mutate(item.address.label, {
+      onSuccess: async (value) => {
+        const references = value[0]?.photos ?? [];
+        for (const data of references) {
+          const reference = data.photo_reference;
+          setPhotos((state) => [...state, reference]);
+        }
+      },
+    });
+  }, []);
+
+  return (
+    <Box>
+      <BottomSheetFlatList
+        data={photos}
+        pagingEnabled
+        overScrollMode="never"
+        keyExtractor={(item, index) => item + index}
+        renderItem={({ item }) => (
+          <Image
+            source={{ uri: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${item}&key=${googleApiKey}` }}
+            style={{ width: width - 40, aspectRatio: 16 / 9, resizeMode: "cover" }}
+            borderTopRightRadius={theme.shapes.rounded.lg}
+            borderTopLeftRadius={theme.shapes.rounded.lg}
+          />
+        )}
+        horizontal
+      />
+      <TouchableOpacity activeOpacity={0.6} onPress={onClick}>
+        <Box
+          backgroundColor={theme.colors.background}
+          borderTopRightRadius={Boolean(photos.length) ? 0 : theme.shapes.rounded.lg}
+          borderTopLeftRadius={Boolean(photos.length) ? 0 : theme.shapes.rounded.lg}
+          borderBottomLeftRadius={theme.shapes.rounded.lg}
+          borderBottomRightRadius={theme.shapes.rounded.lg}
+          paddingHorizontal={20}
+          paddingVertical={16}
+        >
+          <Body fontWeight="medium" color={theme.colors.secondary}>
+            {item.title}
+          </Body>
+          <Body size="md">
+            {[item.address.street, item.address.subdistrict, item.address.district, item.address.city].filter(Boolean).join(", ")} - {item.address.postalCode}
+          </Body>
+          {item.distance !== undefined && (
+            <Box marginTop={6} marginBottom={6}>
+              <Body size="md">
+                <Body size="md" color={theme.colors.secondary} fontWeight="medium">
+                  {item.distance ?? 0} meters
+                </Body>
+                &nbsp;from your location
+              </Body>
+              <Body size="md">
+                <Body size="md" color={theme.colors.secondary} fontWeight="medium">
+                  {(item.distance > 1000 ? (60 / 40000) * item.distance : (60 / 4000) * item.distance).toFixed(2)} minutes
+                </Body>
+                &nbsp;{item.distance > 1000 ? "by car or bike" : "by walking or cycling"}
+              </Body>
+            </Box>
+          )}
+          {Boolean(item.foodTypes?.length) && (
+            <Body size="md">
+              Specialty:&nbsp;
+              <Body fontWeight="medium" color={theme.colors.secondary}>
+                {item.foodTypes!.map(({ name }) => name).join(", ")}
+              </Body>
+            </Body>
+          )}
+          {Boolean(item.openingHours?.length) && (
+            <Box flexDirection="row" alignItems="center">
+              <Body size="md">
+                Opening Hours:&nbsp;
+                <Body fontWeight="medium" color={theme.colors.secondary}>
+                  {item.openingHours![0].text}
+                </Body>
+              </Body>
+            </Box>
+          )}
+        </Box>
+      </TouchableOpacity>
+    </Box>
   );
 }
 

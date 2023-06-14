@@ -89,7 +89,6 @@ export function RegisterScreen() {
           <Body textAlign="center">Create your account to continue</Body>
           <Box marginTop={36}>
             <TextField
-              keyboardType="number-pad"
               value={values.fullName}
               onChangeText={handleChange("fullName")}
               placeholder="Full Name"
@@ -98,6 +97,7 @@ export function RegisterScreen() {
               icon={<Ionicons name="call" style={sharedStyles.inputIcon} />}
             />
             <TextField
+              keyboardType="number-pad"
               value={values.phoneNumber}
               onChangeText={handleChange("phoneNumber")}
               style={styles.textField}

@@ -61,7 +61,7 @@ export function PlacesScreen() {
 
   const markers = React.useMemo(() => {
     if (!location) return [{ key: String(Date.now()), coordinate: { latitude: initialRegion.latitude, longitude: initialRegion.longitude }, title: "Kolkata" }];
-    return [{ key: location.id, coordinate: { latitude: location.position.lat, longitude: location.position.lng }, title: location.title }];
+    return [{ key: location.id, coordinate: { latitude: location.position.lat, longitude: location.position.lng }, title: location.address.subdistrict }];
   }, [location]);
 
   const geocoder = useGeocoder();

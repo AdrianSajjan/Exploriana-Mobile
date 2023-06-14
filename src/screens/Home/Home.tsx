@@ -4,7 +4,7 @@ import { ImageBackground, Pressable, ScrollView, StyleSheet, View } from "react-
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Box } from "@exploriana/components/Box";
-import { CarouselDestinationCard, ServiceCard } from "@exploriana/components/Card";
+import { CarouselDestinationCard, ServiceCard, ServiceCardLarge } from "@exploriana/components/Card";
 import { Flight, Hotel, Places, Tours, Train } from "@exploriana/components/Icons";
 import { SearchBar } from "@exploriana/components/Input";
 import { SectionHeader } from "@exploriana/components/Layout";
@@ -81,10 +81,10 @@ export function HomeScreen() {
             <SearchBar editable={false} placeholder="Search for places, hotels, restaurants..." />
           </Pressable>
         </Box>
-        <Box flexWrap="wrap" flexDirection="row" paddingHorizontal={16} paddingTop={8}>
-          <ServiceCard caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
-          <ServiceCard caption="Flights" icon={<Flight height={36} />} onPress={() => navigation.navigate("Search-Flights")} />
-          <ServiceCard caption="Places" icon={<Places height={36} />} onPress={() => navigation.navigate("Places")} />
+        <Box paddingHorizontal={16} paddingTop={8}>
+          <ServiceCardLarge title="Book Trains" caption="Book trains at competitive prices" icon={<Train height={42} />} onPress={() => navigation.navigate("Search-Trains")} />
+          <ServiceCardLarge title="Book Flights" caption="Book flights at competitive prices" icon={<Flight height={42} />} onPress={() => navigation.navigate("Search-Flights")} />
+          <ServiceCardLarge title="Search Places" caption="Search places at ease" icon={<Places height={42} />} onPress={() => navigation.navigate("Places")} />
         </Box>
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={24}>
           <ImageBackground source={require("assets/images/banner.jpeg")} style={styles.banner} borderRadius={theme.shapes.rounded.lg}>

@@ -15,7 +15,7 @@ import { BookTrainScreen, SearchTrainScreen, TrainCheckoutScreen } from "@explor
 import { ForgotPasswordScreen, LoginScreen, RegisterScreen, ResetPasswordScreen } from "@exploriana/screens/Authentication";
 
 import { createFactory } from "@exploriana/lib/core";
-import { AuthStackParamList } from "@exploriana/interface/navigation";
+import { AppStackParamList, AuthStackParamList } from "@exploriana/interface/navigation";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { StripeProvider } from "@stripe/stripe-react-native";
 import { stripePublishableKey } from "@exploriana/config/stripe";
@@ -27,7 +27,8 @@ import { BookFlightScreen, FlightCheckoutScreen, SearchFlightScreen } from "@exp
 SplashScreen.preventAutoHideAsync();
 
 const client = createFactory(QueryClient);
-const Stack = createNativeStackNavigator<AuthStackParamList>();
+const AuthStack = createNativeStackNavigator<AuthStackParamList>();
+const AppStack = createNativeStackNavigator<AppStackParamList>();
 
 const screenOptions: NativeStackNavigationOptions = { headerShown: false };
 
@@ -51,23 +52,25 @@ export default function App() {
         <QueryClientProvider client={client}>
           <GestureHandlerRootView style={sharedStyles.fullHeight}>
             <NavigationContainer>
-              <Stack.Navigator screenOptions={screenOptions}>
-                <Stack.Screen name="Onboard" component={OnboardingScreen} />
-                <Stack.Screen name="Login" component={LoginScreen} />
-                <Stack.Screen name="Register" component={RegisterScreen} />
-                <Stack.Screen name="Forgot-Password" component={ForgotPasswordScreen} />
-                <Stack.Screen name="Reset-Password" component={ResetPasswordScreen} />
-                <Stack.Screen name="Home" component={HomeScreen} />
-                <Stack.Screen name="Search-Trains" component={SearchTrainScreen} />
-                <Stack.Screen name="Book-Trains" component={BookTrainScreen} />
-                <Stack.Screen name="Train-Checkout" component={TrainCheckoutScreen} />
-                <Stack.Screen name="Search-Flights" component={SearchFlightScreen} />
-                <Stack.Screen name="Book-Flights" component={BookFlightScreen} />
-                <Stack.Screen name="Flight-Checkout" component={FlightCheckoutScreen} />
-                <Stack.Screen name="Boarding-Pass" component={BoardingPassScreen} />
-                <Stack.Screen name="Places" component={PlacesScreen} />
-                <Stack.Screen name="Notifications" component={NotificationScreen} />
-              </Stack.Navigator>
+              <AuthStack.Navigator screenOptions={screenOptions}>
+                <AuthStack.Screen name="Onboard" component={OnboardingScreen} />
+                <AuthStack.Screen name="Login" component={LoginScreen} />
+                <AuthStack.Screen name="Register" component={RegisterScreen} />
+                <AuthStack.Screen name="Forgot-Password" component={ForgotPasswordScreen} />
+                <AuthStack.Screen name="Reset-Password" component={ResetPasswordScreen} />
+              </AuthStack.Navigator>
+              <AppStack.Navigator>
+                <AppStack.Screen name="Home" component={HomeScreen} />
+                <AppStack.Screen name="Search-Trains" component={SearchTrainScreen} />
+                <AppStack.Screen name="Book-Trains" component={BookTrainScreen} />
+                <AppStack.Screen name="Train-Checkout" component={TrainCheckoutScreen} />
+                <AppStack.Screen name="Search-Flights" component={SearchFlightScreen} />
+                <AppStack.Screen name="Book-Flights" component={BookFlightScreen} />
+                <AppStack.Screen name="Flight-Checkout" component={FlightCheckoutScreen} />
+                <AppStack.Screen name="Boarding-Pass" component={BoardingPassScreen} />
+                <AppStack.Screen name="Places" component={PlacesScreen} />
+                <AppStack.Screen name="Notifications" component={NotificationScreen} />
+              </AppStack.Navigator>
             </NavigationContainer>
           </GestureHandlerRootView>
         </QueryClientProvider>

@@ -17,6 +17,7 @@ import { sharedStyles } from "@exploriana/styles/shared";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Weather } from "@exploriana/components/Icons/Weather";
+import { useAuthStore } from "@exploriana/store/auth";
 
 type NavigationProps = NativeStackNavigationProp<AppStackParamList, "Home">;
 
@@ -40,6 +41,9 @@ const styles = StyleSheet.create({
     position: "relative",
     height: 180,
   },
+  card: {
+    minWidth: 120,
+  },
   overlay: {
     padding: 20,
     alignItems: "center",
@@ -51,6 +55,7 @@ const styles = StyleSheet.create({
 });
 
 export function HomeScreen() {
+  const auth = useAuthStore();
   const navigation = useNavigation<NavigationProps>();
 
   return (
@@ -60,7 +65,7 @@ export function HomeScreen() {
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} flexDirection="row" alignItems="center" justifyContent="space-between">
           <Box>
             <Body>Welcome back,</Body>
-            <Heading color={theme.colors.secondary}>Adrian Sajjan</Heading>
+            <Heading color={theme.colors.secondary}>{auth.user?.fullName}</Heading>
           </Box>
           <Box flexDirection="row" alignItems="center">
             <IconButton style={styles.notification} onPress={() => navigation.navigate("Notifications")}>
@@ -74,10 +79,10 @@ export function HomeScreen() {
           </Pressable>
         </Box>
         <Box flexWrap="wrap" flexDirection="row" paddingHorizontal={16} paddingTop={8}>
-          <ServiceCard style={{ minWidth: 120 }} caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
-          <ServiceCard style={{ minWidth: 120 }} caption="Flights" icon={<Flight height={36} />} onPress={() => navigation.navigate("Search-Flights")} />
-          <ServiceCard style={{ minWidth: 120 }} caption="Tours" icon={<Tours height={36} />} />
-          <ServiceCard style={{ minWidth: 120 }} caption="Places" icon={<Places height={36} />} onPress={() => navigation.navigate("Places")} />
+          <ServiceCard style={styles.card} caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
+          <ServiceCard style={styles.card} caption="Flights" icon={<Flight height={36} />} onPress={() => navigation.navigate("Search-Flights")} />
+          <ServiceCard style={styles.card} caption="Tours" icon={<Tours height={36} />} />
+          <ServiceCard style={styles.card} caption="Places" icon={<Places height={36} />} onPress={() => navigation.navigate("Places")} />
         </Box>
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={24}>
           <ImageBackground source={require("assets/images/banner.jpeg")} style={styles.banner} borderRadius={theme.shapes.rounded.lg}>

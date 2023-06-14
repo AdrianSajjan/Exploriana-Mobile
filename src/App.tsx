@@ -23,6 +23,7 @@ import { BoardingPassScreen } from "@exploriana/screens/Booking";
 import { PlacesScreen } from "@exploriana/screens/Places";
 import { NotificationScreen } from "@exploriana/screens/Notifications";
 import { BookFlightScreen, FlightCheckoutScreen, SearchFlightScreen } from "@exploriana/screens/Flights";
+import { useAuthStore } from "@exploriana/store/auth";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -39,6 +40,8 @@ export default function App() {
     "Montserrat-Bold": require("assets/fonts/montserrat_bold.ttf"),
   });
 
+  const auth = useAuthStore();
+
   const onInitialize = React.useCallback(() => {
     if (!isFontsLoaded) return;
     SplashScreen.hideAsync();
@@ -52,25 +55,28 @@ export default function App() {
         <QueryClientProvider client={client}>
           <GestureHandlerRootView style={sharedStyles.fullHeight}>
             <NavigationContainer>
-              <AuthStack.Navigator screenOptions={screenOptions}>
-                <AuthStack.Screen name="Onboard" component={OnboardingScreen} />
-                <AuthStack.Screen name="Login" component={LoginScreen} />
-                <AuthStack.Screen name="Register" component={RegisterScreen} />
-                <AuthStack.Screen name="Forgot-Password" component={ForgotPasswordScreen} />
-                <AuthStack.Screen name="Reset-Password" component={ResetPasswordScreen} />
-              </AuthStack.Navigator>
-              <AppStack.Navigator>
-                <AppStack.Screen name="Home" component={HomeScreen} />
-                <AppStack.Screen name="Search-Trains" component={SearchTrainScreen} />
-                <AppStack.Screen name="Book-Trains" component={BookTrainScreen} />
-                <AppStack.Screen name="Train-Checkout" component={TrainCheckoutScreen} />
-                <AppStack.Screen name="Search-Flights" component={SearchFlightScreen} />
-                <AppStack.Screen name="Book-Flights" component={BookFlightScreen} />
-                <AppStack.Screen name="Flight-Checkout" component={FlightCheckoutScreen} />
-                <AppStack.Screen name="Boarding-Pass" component={BoardingPassScreen} />
-                <AppStack.Screen name="Places" component={PlacesScreen} />
-                <AppStack.Screen name="Notifications" component={NotificationScreen} />
-              </AppStack.Navigator>
+              {!auth.user ? (
+                <AuthStack.Navigator screenOptions={screenOptions}>
+                  <AuthStack.Screen name="Onboard" component={OnboardingScreen} />
+                  <AuthStack.Screen name="Login" component={LoginScreen} />
+                  <AuthStack.Screen name="Register" component={RegisterScreen} />
+                  <AuthStack.Screen name="Forgot-Password" component={ForgotPasswordScreen} />
+                  <AuthStack.Screen name="Reset-Password" component={ResetPasswordScreen} />
+                </AuthStack.Navigator>
+              ) : (
+                <AppStack.Navigator>
+                  <AppStack.Screen name="Home" component={HomeScreen} />
+                  <AppStack.Screen name="Search-Trains" component={SearchTrainScreen} />
+                  <AppStack.Screen name="Book-Trains" component={BookTrainScreen} />
+                  <AppStack.Screen name="Train-Checkout" component={TrainCheckoutScreen} />
+                  <AppStack.Screen name="Search-Flights" component={SearchFlightScreen} />
+                  <AppStack.Screen name="Book-Flights" component={BookFlightScreen} />
+                  <AppStack.Screen name="Flight-Checkout" component={FlightCheckoutScreen} />
+                  <AppStack.Screen name="Boarding-Pass" component={BoardingPassScreen} />
+                  <AppStack.Screen name="Places" component={PlacesScreen} />
+                  <AppStack.Screen name="Notifications" component={NotificationScreen} />
+                </AppStack.Navigator>
+              )}
             </NavigationContainer>
           </GestureHandlerRootView>
         </QueryClientProvider>

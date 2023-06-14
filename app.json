@@ -30,6 +30,7 @@
       }
     },
     "android": {
+      "package": "com.exploriana",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyC4-GJwtpUaMp0u2sp75yzaYwLPOmYIplU"

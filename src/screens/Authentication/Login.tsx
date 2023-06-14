@@ -1,6 +1,6 @@
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as Yup from "yup";
-import { Image, ScrollView, StyleSheet, View } from "react-native";
+import { Alert, Image, ScrollView, StyleSheet, View } from "react-native";
 
 import { StatusBar } from "expo-status-bar";
 import { Ionicons, Zocial } from "@expo/vector-icons";
@@ -21,6 +21,9 @@ import { sharedStyles } from "@exploriana/styles/shared";
 import { AuthStackParamList } from "@exploriana/interface/navigation";
 import { TouchableOpacity } from "react-native";
 import { useFormik } from "formik";
+import { useLogin } from "@exploriana/api/auth";
+import { useAuthStore } from "@exploriana/store/auth";
+import { User } from "@exploriana/interface/core";
 
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList, "Login">;
 
@@ -62,11 +65,10 @@ const GoogleIconSource = { uri: "https://assets.stickpng.com/images/5847f9cbcef1
 export function LoginScreen() {
   const navigation = useNavigation<NavigationProps>();
 
-  function handleLoginWithEmailAndPassword() {
-    navigation.navigate("Home");
-  }
+  const login = useLogin();
+  const auth = useAuthStore();
 
-  const formik = useFormik({
+  const { values, handleChange, handleSubmit } = useFormik({
     initialValues: {
       phoneNumber: "",
       password: "",
@@ -76,7 +78,14 @@ export function LoginScreen() {
         .required("Phone Nu,ber is required")
         .matches(/^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/, { message: "Please provide a valid phone number" }),
     }),
-    onSubmit: (values) => {},
+    onSubmit: async ({ password, phoneNumber }) => {
+      try {
+        const user = await login.mutateAsync({ password, phoneNumber });
+        auth.update(user);
+      } catch (e) {
+        Alert.alert("Error", "The provided credentials are invalid");
+      }
+    },
   });
 
   return (
@@ -93,13 +102,22 @@ export function LoginScreen() {
           <Body textAlign="center">Login to your account</Body>
           <Box marginTop={36}>
             <TextField
+              value={values.phoneNumber}
+              onChangeText={handleChange("phoneNumber")}
               placeholder="Phone Number"
               helperText="Enter your registered phone number"
               errorText="Please provide a valid phone number"
               icon={<Ionicons name="call" style={sharedStyles.inputIcon} />}
             />
-            <PasswordField style={styles.textField} placeholder="Password" helperText="Enter your password" errorText="Please provide your password" />
-            <PrimaryButton style={styles.login} label="Login" onPress={handleLoginWithEmailAndPassword} />
+            <PasswordField
+              value={values.password}
+              onChangeText={handleChange("password")}
+              style={styles.textField}
+              placeholder="Password"
+              helperText="Enter your password"
+              errorText="Please provide your password"
+            />
+            <PrimaryButton disabled={login.isLoading} style={styles.login} label="Login" onPress={() => handleSubmit()} />
           </Box>
           <TouchableOpacity style={styles.forgotPassword} onPress={() => navigation.navigate("Forgot-Password")}>
             <Body size="sm" color={theme.colors.secondary}>

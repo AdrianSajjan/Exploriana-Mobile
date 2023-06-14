@@ -9,9 +9,11 @@ export interface User {
 export interface AuthState {
   user: Nullable<User>;
   update: (data: User) => void;
+  logout: () => void;
 }
 
 export const useAuthStore = create<AuthState>()((set) => ({
   user: null,
   update: (data) => set({ user: data }),
+  logout: () => set({ user: null }),
 }));

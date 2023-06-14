@@ -1,3 +1,5 @@
+import { useRegister } from "@exploriana/api/auth";
+import * as Yup from "yup";
 import { Box } from "@exploriana/components/Box";
 import { LinkButton, PrimaryButton } from "@exploriana/components/Button";
 import { Divider } from "@exploriana/components/Divider";
@@ -6,12 +8,14 @@ import { PasswordField, TextField } from "@exploriana/components/Input";
 import { Body, Heading } from "@exploriana/components/Typography";
 import { theme } from "@exploriana/config/theme";
 import { AuthStackParamList } from "@exploriana/interface/navigation";
+import { useAuthStore } from "@exploriana/store/auth";
 import { sharedStyles } from "@exploriana/styles/shared";
 import { Ionicons, Zocial } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StatusBar } from "expo-status-bar";
-import { Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { useFormik } from "formik";
+import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type NavigationProps = NativeStackNavigationProp<AuthStackParamList, "Register">;
@@ -47,9 +51,29 @@ const GoogleIconSource = { uri: "https://assets.stickpng.com/images/5847f9cbcef1
 export function RegisterScreen() {
   const navigation = useNavigation<NavigationProps>();
 
-  function handleRegisterWithEmailAndPassword() {
-    navigation.navigate("Home");
-  }
+  const auth = useAuthStore();
+  const register = useRegister();
+
+  const { values, handleChange, handleSubmit } = useFormik({
+    initialValues: {
+      fullName: "",
+      password: "",
+      phoneNumber: "",
+    },
+    validationSchema: Yup.object().shape({
+      phoneNumber: Yup.string()
+        .required("Phone Nu,ber is required")
+        .matches(/^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/, { message: "Please provide a valid phone number" }),
+    }),
+    onSubmit: async ({ password, phoneNumber, fullName }) => {
+      try {
+        const user = await register.mutateAsync({ password, phoneNumber, fullName });
+        auth.update(user);
+      } catch (e) {
+        Alert.alert("Error", "Something went wrong please try again.");
+      }
+    },
+  });
 
   return (
     <SafeAreaView style={sharedStyles.fullHeight}>
@@ -64,17 +88,33 @@ export function RegisterScreen() {
           </Heading>
           <Body textAlign="center">Create your account to continue</Body>
           <Box marginTop={36}>
-            <TextField placeholder="Full Name" helperText="Enter your full name" errorText="Please provide a your full name" icon={<Ionicons name="call" style={sharedStyles.inputIcon} />} />
             <TextField
+              value={values.fullName}
+              onChangeText={handleChange("fullName")}
+              placeholder="Full Name"
+              helperText="Enter your full name"
+              errorText="Please provide a your full name"
+              icon={<Ionicons name="call" style={sharedStyles.inputIcon} />}
+            />
+            <TextField
+              value={values.phoneNumber}
+              onChangeText={handleChange("phoneNumber")}
               style={styles.textField}
               placeholder="Phone Number"
               helperText="Enter your registered phone number"
               errorText="Please provide a valid phone number"
               icon={<Ionicons name="call" style={sharedStyles.inputIcon} />}
             />
-            <PasswordField style={styles.textField} placeholder="Password" helperText="Enter your password" errorText="Please provide your password" />
+            <PasswordField
+              value={values.password}
+              onChangeText={handleChange("password")}
+              style={styles.textField}
+              placeholder="Password"
+              helperText="Enter your password"
+              errorText="Please provide your password"
+            />
             <PasswordField style={styles.textField} placeholder="Confirm Password" helperText="Re-enter your password" errorText="Passwords doesn't match" />
-            <PrimaryButton style={styles.register} label="Register" onPress={handleRegisterWithEmailAndPassword} />
+            <PrimaryButton style={styles.register} label="Register" onPress={() => handleSubmit()} />
           </Box>
           <Divider style={{ marginTop: 24 }} caption="Or Register With" />
           <Box flexDirection="row" marginTop={24}>

@@ -64,7 +64,7 @@ export default function App() {
                   <AuthStack.Screen name="Reset-Password" component={ResetPasswordScreen} />
                 </AuthStack.Navigator>
               ) : (
-                <AppStack.Navigator>
+                <AppStack.Navigator screenOptions={screenOptions}>
                   <AppStack.Screen name="Home" component={HomeScreen} />
                   <AppStack.Screen name="Search-Trains" component={SearchTrainScreen} />
                   <AppStack.Screen name="Book-Trains" component={BookTrainScreen} />

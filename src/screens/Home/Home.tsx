@@ -68,6 +68,9 @@ export function HomeScreen() {
             <Heading color={theme.colors.secondary}>{auth.user?.fullName}</Heading>
           </Box>
           <Box flexDirection="row" alignItems="center">
+            <IconButton style={styles.notification} onPress={auth.logout}>
+              <Ionicons name="log-out" size={22} color={theme.colors.text} />
+            </IconButton>
             <IconButton style={styles.notification} onPress={() => navigation.navigate("Notifications")}>
               <Ionicons name="notifications" size={20} color={theme.colors.text} />
             </IconButton>
@@ -79,10 +82,9 @@ export function HomeScreen() {
           </Pressable>
         </Box>
         <Box flexWrap="wrap" flexDirection="row" paddingHorizontal={16} paddingTop={8}>
-          <ServiceCard style={styles.card} caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
-          <ServiceCard style={styles.card} caption="Flights" icon={<Flight height={36} />} onPress={() => navigation.navigate("Search-Flights")} />
-          <ServiceCard style={styles.card} caption="Tours" icon={<Tours height={36} />} />
-          <ServiceCard style={styles.card} caption="Places" icon={<Places height={36} />} onPress={() => navigation.navigate("Places")} />
+          <ServiceCard caption="Trains" icon={<Train height={36} />} onPress={() => navigation.navigate("Search-Trains")} />
+          <ServiceCard caption="Flights" icon={<Flight height={36} />} onPress={() => navigation.navigate("Search-Flights")} />
+          <ServiceCard caption="Places" icon={<Places height={36} />} onPress={() => navigation.navigate("Places")} />
         </Box>
         <Box paddingHorizontal={sharedStyles.ph.paddingHorizontal} marginTop={24}>
           <ImageBackground source={require("assets/images/banner.jpeg")} style={styles.banner} borderRadius={theme.shapes.rounded.lg}>
@@ -96,10 +98,6 @@ export function HomeScreen() {
             </View>
           </ImageBackground>
         </Box>
-        <SectionHeader button="See All" title="Ongoing Tours" marginTop={24} />
-        <ScrollView horizontal overScrollMode="never" style={styles.container} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.content}>
-          <CarouselDestinationCard />
-        </ScrollView>
       </ScrollView>
     </SafeAreaView>
   );

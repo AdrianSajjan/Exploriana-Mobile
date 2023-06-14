@@ -1,8 +1,9 @@
 import { Nullable } from "@exploriana/interface/helper";
 
 export interface User {
-  name: string;
-  email: string;
+  id: string;
+  fullName: string;
+  phoneNumber: string;
 }
 export interface Schedule {
   placeOfArrival: string;

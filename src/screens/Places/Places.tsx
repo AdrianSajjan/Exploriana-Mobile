@@ -2,8 +2,8 @@ import { Ionicons } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetSectionList } from "@gorhom/bottom-sheet";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import { Alert, ListRenderItem, SectionListData, StyleSheet, ToastAndroid, TouchableOpacity, useWindowDimensions } from "react-native";
-import MapView, { MapPressEvent, Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import { Alert, ListRenderItem, Pressable, SectionListData, StyleSheet, ToastAndroid, TouchableOpacity, View, useWindowDimensions } from "react-native";
+import MapView, { Callout, CalloutSubview, MapPressEvent, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 
 import { useGeocoder, useLocationAutocompleteQuery, useReverseGeocode, useSearchPlacesByCategoryQuery } from "@exploriana/api/here-sdk";
 import { Box } from "@exploriana/components/Box";
@@ -43,6 +43,7 @@ export function PlacesScreen() {
   const [search, setSearch] = React.useState("");
   const [type, setType] = React.useState<Category>("all");
   const [showResults, setShowResults] = React.useState(false);
+  const [destination, setDestination] = React.useState<Array<{ key: string; coordinate: { latitude: number; longitude: number }; title: string }>>([]);
 
   const query = useDebounceState(search, 300);
 
@@ -59,8 +60,8 @@ export function PlacesScreen() {
   }, [location]);
 
   const markers = React.useMemo(() => {
-    if (!location) return [{ key: String(Date.now()), coordinate: { latitude: initialRegion.latitude, longitude: initialRegion.longitude } }];
-    return [{ key: location.id, coordinate: { latitude: location.position.lat, longitude: location.position.lng } }];
+    if (!location) return [{ key: String(Date.now()), coordinate: { latitude: initialRegion.latitude, longitude: initialRegion.longitude }, title: "Kolkata" }];
+    return [{ key: location.id, coordinate: { latitude: location.position.lat, longitude: location.position.lng }, title: location.title }];
   }, [location]);
 
   const geocoder = useGeocoder();
@@ -178,27 +179,50 @@ export function PlacesScreen() {
   );
 
   const renderItem: ListRenderItem<PlacesByCategory> = React.useCallback(({ item }) => {
+    function onClick() {
+      setDestination([{ key: String(Date.now()), coordinate: { latitude: item.access[0].lat, longitude: item.access[0].lng }, title: item.title }]);
+      bottomSheet.current?.snapToIndex(1);
+    }
+
     return (
-      <Box backgroundColor={theme.colors.background} borderRadius={theme.shapes.rounded.lg} paddingHorizontal={20} paddingVertical={16}>
-        <Body fontWeight="medium" color={theme.colors.secondary}>
-          {item.title}
-        </Body>
-        <Body size="md">
-          {[item.address.street, item.address.subdistrict, item.address.district, item.address.city].filter(Boolean).join(", ")} - {item.address.postalCode}
-        </Body>
-        {Boolean(item.foodTypes?.length) && (
-          <Body size="md">
-            Specialty: <Body fontWeight="medium">{item.foodTypes!.map(({ name }) => name).join(", ")}</Body>
+      <TouchableOpacity activeOpacity={0.6} onPress={onClick}>
+        <Box backgroundColor={theme.colors.background} borderRadius={theme.shapes.rounded.lg} paddingHorizontal={20} paddingVertical={16}>
+          <Body fontWeight="medium" color={theme.colors.secondary}>
+            {item.title}
           </Body>
-        )}
-        {Boolean(item.openingHours?.length) && (
-          <Box flexDirection="row" alignItems="center">
+          <Body size="md">
+            {[item.address.street, item.address.subdistrict, item.address.district, item.address.city].filter(Boolean).join(", ")} - {item.address.postalCode}
+          </Body>
+          {
+            <Box marginTop={6} marginBottom={6}>
+              <Body size="md">
+                <Body size="md" color={theme.colors.secondary} fontWeight="medium">
+                  {item.distance ?? 0} meters
+                </Body>
+                &nbsp;from your location
+              </Body>
+              <Body size="md">
+                <Body size="md" color={theme.colors.secondary} fontWeight="medium">
+                  {(item.distance > 1000 ? item.distance / 1204 : item.distance / 517).toFixed(2)} minutes
+                </Body>
+                &nbsp;{item.distance > 1000 ? "by car" : "by walking"}
+              </Body>
+            </Box>
+          }
+          {Boolean(item.foodTypes?.length) && (
             <Body size="md">
-              Opening Hours: <Body fontWeight="medium">{item.openingHours![0].text}</Body>
+              Specialty: <Body fontWeight="medium">{item.foodTypes!.map(({ name }) => name).join(", ")}</Body>
             </Body>
-          </Box>
-        )}
-      </Box>
+          )}
+          {Boolean(item.openingHours?.length) && (
+            <Box flexDirection="row" alignItems="center">
+              <Body size="md">
+                Opening Hours: <Body fontWeight="medium">{item.openingHours![0].text}</Body>
+              </Body>
+            </Box>
+          )}
+        </Box>
+      </TouchableOpacity>
     );
   }, []);
 
@@ -299,8 +323,24 @@ export function PlacesScreen() {
       </Box>
       <MapView style={styles.map} mapType="standard" provider={PROVIDER_GOOGLE} region={region} onPress={handleMapPress}>
         {markers.map((props) => (
-          <Marker {...props} />
+          <Marker {...props}>
+            <Callout tooltip>
+              <View style={{ flexDirection: "row", alignSelf: "flex-start", backgroundColor: "#fff", borderRadius: 6, borderWidth: 0.5, padding: 15 }}>
+                <Body>{props.title}</Body>
+              </View>
+            </Callout>
+          </Marker>
         ))}
+        {destination.map((props) => (
+          <Marker {...props}>
+            <Callout tooltip>
+              <View style={{ backgroundColor: "#fff", borderRadius: 6, borderWidth: 0.5, padding: 15 }}>
+                <Body>{props.title}</Body>
+              </View>
+            </Callout>
+          </Marker>
+        ))}
+        <Callout />
       </MapView>
       <BottomSheet ref={bottomSheet} snapPoints={snapPoints} index={0} style={styles.container} handleIndicatorStyle={styles.indicator}>
         <BottomSheetSectionList

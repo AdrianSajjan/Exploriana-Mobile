@@ -3,19 +3,18 @@
     "version": ">= 2.8.0"
   },
   "build": {
-    "development": {
-      "distribution": "internal",
+    "preview": {
       "android": {
+        "buildType": "apk"
+      }
+    },
+    "development": {
+      "android": {
+        "buildType": "apk",
         "gradleCommand": ":app:assembleDebug"
       },
       "ios": {
         "buildConfiguration": "Debug"
-      }
-    },
-    "preview": {
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk"
       }
     },
     "production": {}
